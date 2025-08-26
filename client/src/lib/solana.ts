@@ -19,11 +19,15 @@ export async function mintNFT(
   name: string
 ): Promise<string> {
   try {
+    console.log('🔍 Checking wallet connection...');
+    console.log('Wallet publicKey:', walletAdapter.publicKey?.toBase58());
+    console.log('Wallet signTransaction available:', !!walletAdapter.signTransaction);
+    
     if (!walletAdapter.publicKey || !walletAdapter.signTransaction) {
-      throw new Error('Wallet not properly connected');
+      throw new Error('Wallet not properly connected. Please connect your wallet first.');
     }
 
-    console.log('Starting real NFT minting on Solana mainnet...');
+    console.log('🚀 Starting real NFT minting on Solana mainnet...');
     
     // Generate new mint keypair
     const mint = Keypair.generate();

@@ -13,6 +13,7 @@ export function WalletProvider({ children }: WalletProviderProps) {
   // Use Solana mainnet
   const endpoint = useMemo(() => 'https://api.mainnet-beta.solana.com', []);
   
+  // Use empty array for now - modern browsers will auto-detect wallets
   const wallets = useMemo(() => [], []);
 
   return (
