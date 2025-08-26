@@ -78,9 +78,9 @@ export default function PaintPage() {
         </div>
       </header>
 
-      <main className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-4 flex-1 overflow-hidden">
+      <main className="max-w-7xl mx-auto px-2 sm:px-4 lg:px-6 py-3 flex-1 overflow-hidden">
         {appState === 'drawing' && (
-          <div className="grid lg:grid-cols-12 gap-6 h-full">
+          <div className="grid lg:grid-cols-12 gap-4 h-full">
             {/* Drawing Toolbar */}
             <div className="lg:col-span-3 order-2 lg:order-1">
               <DrawingToolbar

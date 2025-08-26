@@ -40,20 +40,15 @@ export function PaintCanvas({
     
     if (!ctx) return;
 
-    // Make canvas responsive to container size
+    // Make canvas large like classic Paint
     const container = canvasElement.parentElement;
     if (container) {
-      const containerWidth = container.clientWidth - 32; // Account for padding
-      const maxHeight = Math.min(500, window.innerHeight - 200); // Responsive height
-      const aspectRatio = 4/3; // 4:3 aspect ratio
+      const containerWidth = container.clientWidth - 24; // Minimal padding
+      const maxHeight = window.innerHeight - 180; // Use most of screen height
       
-      let canvasWidth = Math.min(containerWidth, 700);
-      let canvasHeight = canvasWidth / aspectRatio;
-      
-      if (canvasHeight > maxHeight) {
-        canvasHeight = maxHeight;
-        canvasWidth = canvasHeight * aspectRatio;
-      }
+      // Make canvas much larger - use most available space
+      let canvasWidth = Math.min(containerWidth, 900);
+      let canvasHeight = Math.min(maxHeight - 80, 600); // Larger height
       
       canvasElement.width = canvasWidth;
       canvasElement.height = canvasHeight;
@@ -194,28 +189,27 @@ export function PaintCanvas({
   };
 
   return (
-    <Card className="p-4 h-full flex flex-col" data-testid="card-paint-canvas">
-      <div className="flex items-center justify-between mb-4">
-        <h2 className="text-lg font-medium text-gray-900 flex items-center">
-          <span className="material-icons mr-2">create</span>
-          Canvas
-        </h2>
-        <div className="flex items-center space-x-3">
-          <span className="text-sm text-gray-500" data-testid="text-canvas-size">{canvas ? `${canvas.width}x${canvas.height}` : 'Canvas'}</span>
-          <Button
-            className="bg-secondary hover:bg-orange-600 text-white flex items-center space-x-2"
-            onClick={handleSave}
-            data-testid="button-save-artwork"
-          >
-            <span className="material-icons text-sm">save</span>
-            <span>Save Artwork</span>
-          </Button>
+    <div className="h-full flex flex-col bg-gray-100 border border-gray-300" data-testid="card-paint-canvas">
+      {/* Classic Paint-style toolbar */}
+      <div className="flex items-center justify-between bg-gray-200 border-b border-gray-300 px-3 py-2">
+        <div className="flex items-center space-x-2">
+          <span className="text-sm font-medium text-gray-800">Canvas</span>
+          <span className="text-xs text-gray-600" data-testid="text-canvas-size">
+            {canvas ? `${canvas.width}x${canvas.height}` : 'Canvas'}
+          </span>
         </div>
+        <Button
+          className="bg-orange-500 hover:bg-orange-600 text-white text-sm px-3 py-1 h-7"
+          onClick={handleSave}
+          data-testid="button-save-artwork"
+        >
+          Save Artwork
+        </Button>
       </div>
       
-      {/* Canvas Area */}
-      <div className="flex-1 flex items-center justify-center overflow-hidden">
-        <div className="canvas-container bg-white border rounded-lg">
+      {/* Classic Paint canvas area - fills most space */}
+      <div className="flex-1 p-3 bg-gray-100">
+        <div className="h-full w-full bg-white border-2 border-gray-400" style={{ borderStyle: 'inset' }}>
           <canvas 
             ref={canvasRef}
             className="drawing-canvas cursor-crosshair block"
@@ -229,11 +223,10 @@ export function PaintCanvas({
         </div>
       </div>
       
-      {/* Canvas Instructions */}
-      <div className="mt-2 text-center text-sm text-gray-500">
-        <span className="material-icons text-sm align-middle mr-1">touch_app</span>
+      {/* Status bar like classic Paint */}
+      <div className="bg-gray-200 border-t border-gray-300 px-3 py-1 text-xs text-gray-600">
         Click and drag to draw • Touch supported on mobile
       </div>
-    </Card>
+    </div>
   );
 }
