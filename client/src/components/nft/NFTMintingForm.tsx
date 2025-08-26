@@ -58,11 +58,16 @@ export function NFTMintingForm({ imageData, onMintSuccess, onMintStart }: NFTMin
     onMintStart();
 
     try {
+      console.log('Starting NFT minting process...');
+      
       // Convert base64 to blob
       const imageBlob = dataURLtoBlob(imageData);
+      console.log('Image blob created, size:', imageBlob.size);
       
       // Upload image to IPFS
+      console.log('Uploading image to IPFS...');
       const imageUri = await uploadToIPFS(imageBlob, 'image');
+      console.log('Image uploaded to:', imageUri);
       
       // Create metadata
       const metadata = {
@@ -86,22 +91,26 @@ export function NFTMintingForm({ imageData, onMintSuccess, onMintStart }: NFTMin
       };
       
       // Upload metadata to IPFS
+      console.log('Uploading metadata to IPFS...');
       const metadataBlob = new Blob([JSON.stringify(metadata)], { type: 'application/json' });
       const metadataUri = await uploadToIPFS(metadataBlob, 'metadata');
+      console.log('Metadata uploaded to:', metadataUri);
       
       // Mint NFT
+      console.log('Minting NFT...');
       const mintAddress = await mintNFT(
         connection,
         publicKey,
         metadataUri,
         nftName.trim()
       );
+      console.log('NFT minted with address:', mintAddress);
       
       onMintSuccess(mintAddress);
       
       toast({
         title: "NFT Minted Successfully!",
-        description: `Your artwork is now an NFT on Solana mainnet.`,
+        description: `Your artwork is now an NFT (Demo Mode).`,
       });
       
     } catch (error: any) {
