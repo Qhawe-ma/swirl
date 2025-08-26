@@ -237,13 +237,14 @@ export function PaintCanvas({
             {canvas ? `${canvas.width}×${canvas.height}` : 'Loading...'}
           </span>
         </div>
-        <Button
-          className="bg-orange-500 hover:bg-orange-600 text-white text-sm px-3 py-1 h-7"
+        <button
+          className="bg-orange-500 hover:bg-orange-400 active:bg-orange-600 text-white text-sm px-3 py-1 h-7 border-2 border-orange-600 font-medium"
+          style={{ borderStyle: 'outset', borderRadius: '0' }}
           onClick={handleSave}
           data-testid="button-save-artwork"
         >
           Save Artwork
-        </Button>
+        </button>
       </div>
       
       {/* Classic Paint canvas area - fills most space */}
