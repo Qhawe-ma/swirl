@@ -12,18 +12,20 @@ export async function uploadToIPFS(blob: Blob, type: 'image' | 'metadata'): Prom
   console.log(`🔑 Using API key: ${apiKey ? apiKey.substring(0, 8) + '...' : 'NOT FOUND'}`);
   
   if (!apiKey) {
-    console.log(`❌ No API key found, using placeholder for ${type}`);
-    return getPlaceholderUrl(type);
+    throw new Error('NFT Storage API key not found. Please set VITE_NFT_STORAGE_KEY.');
   }
   
   try {
-    console.log(`⏳ Attempting upload to NFT.storage...`);
+    console.log(`⏳ Uploading ${type} to NFT.storage with paid storage...`);
     
-    // Create client and try upload
+    // Create client and try upload with longer timeout for paid storage
     const uploadClient = new NFTStorage({ token: apiKey });
     const uploadPromise = uploadClient.storeBlob(blob);
     const timeoutPromise = new Promise<never>((_, reject) => 
-      setTimeout(() => reject(new Error('Upload timeout')), 5000)
+      setTimeout(() => {
+        console.log(`⏰ ${type} upload timed out after 60 seconds`);
+        reject(new Error(`${type} upload timeout after 60 seconds`));
+      }, 60000) // 60 second timeout for paid storage
     );
     
     const cid = await Promise.race([uploadPromise, timeoutPromise]);
@@ -34,8 +36,17 @@ export async function uploadToIPFS(blob: Blob, type: 'image' | 'metadata'): Prom
     
   } catch (error: any) {
     console.error(`❌ IPFS upload failed for ${type}:`, error);
-    console.log(`⚠️ Using placeholder URL for ${type} to continue with Solana minting`);
-    return getPlaceholderUrl(type);
+    
+    // Provide specific error messages
+    if (error.message?.includes('timeout')) {
+      throw new Error(`${type} upload timed out. Please check your connection and try again.`);
+    } else if (error.message?.includes('401') || error.message?.includes('unauthorized')) {
+      throw new Error('Invalid NFT Storage API key. Please check your configuration.');
+    } else if (error.message?.includes('quota') || error.message?.includes('storage')) {
+      throw new Error('Storage quota issue. Please check your NFT.Storage account.');
+    } else {
+      throw new Error(`Failed to upload ${type} to IPFS: ${error.message || 'Unknown error'}`);
+    }
   }
 }
 
