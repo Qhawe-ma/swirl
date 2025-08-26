@@ -78,11 +78,11 @@ export default function PaintPage() {
         </div>
       </header>
 
-      <main className="max-w-7xl mx-auto px-2 sm:px-4 lg:px-6 py-3 flex-1 overflow-hidden">
+      <main className="flex-1 overflow-hidden bg-gray-200" style={{ background: 'linear-gradient(145deg, #e0e0e0, #c0c0c0)' }}>
         {appState === 'drawing' && (
-          <div className="grid lg:grid-cols-12 gap-4 h-full">
-            {/* Drawing Toolbar */}
-            <div className="lg:col-span-3 order-2 lg:order-1">
+          <div className="flex h-full">
+            {/* Drawing Toolbar - MS Paint Style */}
+            <div className="w-64 bg-gray-300 border-r-2 border-gray-400 flex-shrink-0" style={{ borderStyle: 'outset' }}>
               <DrawingToolbar
                 selectedColor={selectedColor}
                 onColorChange={setSelectedColor}
@@ -98,8 +98,8 @@ export default function PaintPage() {
               />
             </div>
             
-            {/* Paint Canvas */}
-            <div className="lg:col-span-9 order-1 lg:order-2">
+            {/* Paint Canvas - MS Paint Style */}
+            <div className="flex-1 bg-gray-100 p-2">
               <PaintCanvas
                 selectedColor={selectedColor}
                 brushSize={brushSize}
@@ -112,7 +112,7 @@ export default function PaintPage() {
                 onActionComplete={handleActionComplete}
               />
             </div>
-            </div>
+          </div>
         )}
 
         {appState === 'minting-form' && (

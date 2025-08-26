@@ -19,8 +19,9 @@ interface DrawingToolbarProps {
 }
 
 const COLOR_PRESETS = [
-  '#000000', '#ef4444', '#3b82f6', 
-  '#10b981', '#fbbf24', '#8b5cf6'
+  '#000000', '#ff0000', '#00ff00', 
+  '#0000ff', '#ffff00', '#ff00ff',
+  '#00ffff', '#ffffff'
 ];
 
 export function DrawingToolbar({
@@ -39,61 +40,69 @@ export function DrawingToolbar({
   const [showColorPicker, setShowColorPicker] = useState(false);
 
   return (
-    <Card className="p-6 sticky top-8" data-testid="toolbar-drawing-tools">
-      <h2 className="text-lg font-medium text-gray-900 mb-6 flex items-center">
-        <span className="material-icons mr-2">build</span>
+    <div className="bg-gray-300 border-2 border-gray-400 p-3" style={{ borderStyle: 'outset', borderWidth: '2px' }} data-testid="toolbar-drawing-tools">
+      <h2 className="text-sm font-bold text-gray-800 mb-3 flex items-center">
+        <span className="mr-2">🖌️</span>
         Drawing Tools
       </h2>
       
-      {/* Drawing Mode Selection */}
-      <div className="space-y-4 mb-6">
-        <div className="flex space-x-2">
-          <Button
-            variant={drawingMode === 'brush' ? 'default' : 'outline'}
-            className="toolbar-item flex-1 flex flex-col items-center space-y-1 h-auto py-3"
+      {/* Drawing Mode Selection - MS Paint Style */}
+      <div className="mb-4">
+        <div className="flex space-x-1">
+          <button
+            className={`px-3 py-2 text-xs font-medium border-2 flex flex-col items-center space-y-1 min-w-[60px] ${
+              drawingMode === 'brush' 
+                ? 'bg-blue-200 border-blue-400' 
+                : 'bg-gray-200 hover:bg-gray-100 border-gray-400'
+            }`}
+            style={{ borderStyle: drawingMode === 'brush' ? 'inset' : 'outset' }}
             onClick={() => onModeChange('brush')}
             data-testid="button-select-brush"
           >
-            <span className="material-icons">brush</span>
-            <span className="text-xs">Brush</span>
-          </Button>
-          <Button
-            variant={drawingMode === 'eraser' ? 'default' : 'outline'}
-            className="toolbar-item flex-1 flex flex-col items-center space-y-1 h-auto py-3"
+            <span className="text-lg">🖌️</span>
+            <span>Brush</span>
+          </button>
+          <button
+            className={`px-3 py-2 text-xs font-medium border-2 flex flex-col items-center space-y-1 min-w-[60px] ${
+              drawingMode === 'eraser' 
+                ? 'bg-blue-200 border-blue-400' 
+                : 'bg-gray-200 hover:bg-gray-100 border-gray-400'
+            }`}
+            style={{ borderStyle: drawingMode === 'eraser' ? 'inset' : 'outset' }}
             onClick={() => onModeChange('eraser')}
             data-testid="button-select-eraser"
           >
-            <span className="material-icons">auto_fix_high</span>
-            <span className="text-xs">Eraser</span>
-          </Button>
+            <span className="text-lg">🧽</span>
+            <span>Eraser</span>
+          </button>
         </div>
       </div>
       
-      {/* Color Selection */}
-      <div className="mb-6">
-        <label className="block text-sm font-medium text-gray-700 mb-3">Color</label>
-        <div className="flex items-center space-x-3 mb-3">
+      {/* Color Selection - MS Paint Style */}
+      <div className="mb-4">
+        <label className="block text-xs font-bold text-gray-800 mb-2">Color</label>
+        <div className="flex items-center space-x-2 mb-2">
           <div 
-            className="color-swatch" 
-            style={{ backgroundColor: selectedColor }}
+            className="w-8 h-8 border-2 border-gray-600 cursor-pointer" 
+            style={{ backgroundColor: selectedColor, borderStyle: 'inset' }}
             onClick={() => setShowColorPicker(true)}
             data-testid="swatch-selected-color"
           />
-          <Button 
-            variant="ghost" 
-            className="text-sm text-primary hover:text-blue-700 flex items-center p-0"
+          <button 
+            className="text-xs text-blue-600 hover:text-blue-800 underline"
             onClick={() => setShowColorPicker(true)}
             data-testid="button-open-color-picker"
           >
-            <span className="material-icons text-sm mr-1">palette</span>
             Choose Color
-          </Button>
+          </button>
         </div>
-        <div className="grid grid-cols-6 gap-2">
+        <div className="grid grid-cols-4 gap-1 p-2 bg-gray-200 border-2 border-gray-400" style={{ borderStyle: 'inset' }}>
           {COLOR_PRESETS.map((color) => (
             <div 
               key={color}
-              className="color-swatch cursor-pointer" 
+              className={`w-6 h-6 border cursor-pointer ${
+                selectedColor === color ? 'border-2 border-black' : 'border border-gray-500'
+              }`}
               style={{ backgroundColor: color }}
               onClick={() => onColorChange(color)}
               data-testid={`swatch-preset-${color.replace('#', '')}`}
@@ -102,64 +111,75 @@ export function DrawingToolbar({
         </div>
       </div>
       
-      {/* Brush Size */}
-      <div className="mb-6">
-        <label className="block text-sm font-medium text-gray-700 mb-3">
+      {/* Brush Size - MS Paint Style */}
+      <div className="mb-4">
+        <label className="block text-xs font-bold text-gray-800 mb-2">
           Brush Size: <span className="font-normal" data-testid="text-brush-size">{brushSize}</span>px
         </label>
-        <Slider
-          value={[brushSize]}
-          onValueChange={([value]) => onBrushSizeChange(value)}
-          max={50}
-          min={1}
-          step={1}
-          className="w-full"
-          data-testid="slider-brush-size"
-        />
-        <div className="flex justify-center mt-2">
-          <div 
-            className="brush-preview bg-black rounded-full"
-            style={{ 
-              width: `${brushSize}px`, 
-              height: `${brushSize}px`,
-              backgroundColor: drawingMode === 'brush' ? selectedColor : '#ffffff'
-            }}
-            data-testid="preview-brush-size"
+        <div className="bg-gray-200 border-2 border-gray-400 p-2" style={{ borderStyle: 'inset' }}>
+          <input
+            type="range"
+            value={brushSize}
+            onChange={(e) => onBrushSizeChange(Number(e.target.value))}
+            max={50}
+            min={1}
+            step={1}
+            className="w-full"
+            data-testid="slider-brush-size"
           />
+          <div className="flex justify-center mt-2">
+            <div 
+              className="border border-gray-600 rounded-full"
+              style={{ 
+                width: `${Math.max(brushSize, 4)}px`, 
+                height: `${Math.max(brushSize, 4)}px`,
+                backgroundColor: drawingMode === 'brush' ? selectedColor : '#ffffff'
+              }}
+              data-testid="preview-brush-size"
+            />
+          </div>
         </div>
       </div>
       
-      {/* Actions */}
-      <div className="space-y-3">
-        <Button 
-          variant="outline" 
-          className="w-full flex items-center justify-center space-x-2"
+      {/* Actions - MS Paint Style */}
+      <div className="space-y-2">
+        <button 
+          className={`w-full flex items-center justify-center space-x-2 px-3 py-2 text-xs font-medium border-2 ${
+            !canUndo 
+              ? 'bg-gray-100 border-gray-300 text-gray-400 cursor-not-allowed' 
+              : 'bg-gray-200 border-gray-400 text-gray-800 hover:bg-gray-100'
+          }`}
+          style={{ borderStyle: 'outset' }}
           onClick={onUndo}
           disabled={!canUndo}
           data-testid="button-undo"
         >
-          <span className="material-icons text-sm">undo</span>
+          <span>↶</span>
           <span>Undo</span>
-        </Button>
-        <Button 
-          variant="outline" 
-          className="w-full flex items-center justify-center space-x-2"
+        </button>
+        <button 
+          className={`w-full flex items-center justify-center space-x-2 px-3 py-2 text-xs font-medium border-2 ${
+            !canRedo 
+              ? 'bg-gray-100 border-gray-300 text-gray-400 cursor-not-allowed' 
+              : 'bg-gray-200 border-gray-400 text-gray-800 hover:bg-gray-100'
+          }`}
+          style={{ borderStyle: 'outset' }}
           onClick={onRedo}
           disabled={!canRedo}
           data-testid="button-redo"
         >
-          <span className="material-icons text-sm">redo</span>
+          <span>↷</span>
           <span>Redo</span>
-        </Button>
-        <Button 
-          variant="destructive" 
-          className="w-full flex items-center justify-center space-x-2"
+        </button>
+        <button 
+          className="w-full flex items-center justify-center space-x-2 px-3 py-2 text-xs font-medium border-2 bg-gray-200 border-gray-400 text-gray-800 hover:bg-gray-100"
+          style={{ borderStyle: 'outset' }}
           onClick={onClear}
           data-testid="button-clear-canvas"
         >
-          <span className="material-icons text-sm">clear</span>
+          <span>🗑️</span>
           <span>Clear Canvas</span>
-        </Button>
+        </button>
       </div>
 
       <ColorPicker
@@ -168,6 +188,6 @@ export function DrawingToolbar({
         open={showColorPicker}
         onOpenChange={setShowColorPicker}
       />
-    </Card>
+    </div>
   );
 }
