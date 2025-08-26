@@ -96,11 +96,12 @@ export function NFTMintingForm({ imageData, onMintSuccess, onMintStart }: NFTMin
       const metadataUri = await uploadToIPFS(metadataBlob, 'metadata');
       console.log('Metadata uploaded to:', metadataUri);
       
-      // Mint NFT
-      console.log('Minting NFT...');
+      // Mint NFT on mainnet - this will require wallet signature and SOL fees
+      console.log('Minting real NFT on Solana mainnet...');
+      const walletAdapter = { publicKey, signTransaction };
       const mintAddress = await mintNFT(
         connection,
-        publicKey,
+        walletAdapter,
         metadataUri,
         nftName.trim()
       );
@@ -110,7 +111,7 @@ export function NFTMintingForm({ imageData, onMintSuccess, onMintStart }: NFTMin
       
       toast({
         title: "NFT Minted Successfully!",
-        description: `Your artwork is now an NFT (Demo Mode).`,
+        description: `Your artwork is now a real NFT on Solana mainnet!`,
       });
       
     } catch (error: any) {

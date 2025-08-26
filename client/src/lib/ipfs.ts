@@ -21,11 +21,6 @@ export async function uploadToIPFS(blob: Blob, type: 'image' | 'metadata'): Prom
     return uri;
   } catch (error) {
     console.error(`Failed to upload ${type} to IPFS:`, error);
-    
-    // For demo purposes, return a mock IPFS URL if upload fails
-    const mockCid = 'bafybei' + Math.random().toString(36).substring(2, 15);
-    const mockUri = `https://ipfs.io/ipfs/${mockCid}`;
-    console.warn(`Using mock IPFS URL for demo: ${mockUri}`);
-    return mockUri;
+    throw new Error(`Failed to upload ${type} to IPFS. Please check your API key and try again.`);
   }
 }
