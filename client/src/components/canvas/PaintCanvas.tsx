@@ -49,9 +49,14 @@ export function PaintCanvas({
     
     setCanvas(canvasElement);
     setContext(ctx);
-    setHistory([canvasElement.toDataURL()]);
+    const initialData = canvasElement.toDataURL();
+    setHistory([initialData]);
     setHistoryIndex(0);
-    onUndoRedoChange(false, false);
+    
+    // Use setTimeout to avoid calling setState during render
+    setTimeout(() => {
+      onUndoRedoChange(false, false);
+    }, 0);
   }, []);
 
   // Update brush properties
