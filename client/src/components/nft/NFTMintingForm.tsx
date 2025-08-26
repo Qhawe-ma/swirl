@@ -97,6 +97,12 @@ export function NFTMintingForm({ imageData, onMintSuccess, onMintStart }: NFTMin
         const metadataUri = await uploadToIPFS(metadataBlob, 'metadata');
         console.log('✅ Metadata uploaded to:', metadataUri);
         
+        // Update UI to show wallet confirmation step
+        toast({
+          title: "Ready to Mint!",
+          description: "Please confirm the transaction in your wallet to mint on Solana mainnet.",
+        });
+        
         // Mint NFT on mainnet - this will require wallet signature and SOL fees
         console.log('🚀 Requesting wallet signature for Solana mainnet minting...');
         const walletAdapter = { publicKey, signTransaction };
