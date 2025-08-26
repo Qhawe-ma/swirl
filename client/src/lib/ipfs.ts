@@ -3,25 +3,46 @@ export async function uploadToIPFS(blob: Blob, type: 'image' | 'metadata'): Prom
   console.log(`📤 Starting ${type} upload to IPFS (size: ${blob.size} bytes)...`);
   
   try {
+    // Check if we have the API key
+    const apiKey = import.meta.env.VITE_PINATA_JWT;
+    console.log(`🔑 Pinata API key present: ${apiKey ? 'Yes' : 'No'}`);
+    
+    if (!apiKey) {
+      throw new Error('Pinata API key not found');
+    }
+    
     // Try uploading to Pinata first
     const formData = new FormData();
     formData.append('file', blob, `${type}.${type === 'image' ? 'png' : 'json'}`);
     
     console.log(`⏳ Uploading ${type} to Pinata IPFS...`);
+    console.log(`📊 File size: ${blob.size} bytes`);
+    
+    // Add timeout to prevent hanging
+    const controller = new AbortController();
+    const timeoutId = setTimeout(() => controller.abort(), 30000); // 30 second timeout
     
     const response = await fetch('https://api.pinata.cloud/pinning/pinFileToIPFS', {
       method: 'POST',
       body: formData,
       headers: {
-        'Authorization': `Bearer ${import.meta.env.VITE_PINATA_JWT || ''}`,
-      }
+        'Authorization': `Bearer ${apiKey}`,
+      },
+      signal: controller.signal
     });
     
+    clearTimeout(timeoutId);
+    
+    console.log(`📡 Response status: ${response.status} ${response.statusText}`);
+    
     if (!response.ok) {
-      throw new Error(`Pinata upload failed: ${response.status} ${response.statusText}`);
+      const errorText = await response.text();
+      console.error(`❌ Pinata error response:`, errorText);
+      throw new Error(`Pinata upload failed: ${response.status} ${response.statusText} - ${errorText}`);
     }
     
     const result = await response.json();
+    console.log(`📋 Pinata response:`, result);
     
     if (!result.IpfsHash) {
       throw new Error('Upload successful but no IPFS hash returned from Pinata');
@@ -39,24 +60,46 @@ export async function uploadToIPFS(blob: Blob, type: 'image' | 'metadata'): Prom
     
     // Fallback to other IPFS services
     try {
-      // Try using a public IPFS gateway
+      console.log(`🔄 Trying Web3.Storage as fallback...`);
       const formData = new FormData();
       formData.append('file', blob, `${type}.${type === 'image' ? 'png' : 'json'}`);
       
-      const fallbackResponse = await fetch('https://ipfs.infura.io:5001/api/v0/add', {
+      const fallbackResponse = await fetch('https://api.web3.storage/upload', {
         method: 'POST',
-        body: formData
+        body: formData,
+        headers: {
+          'Authorization': `Bearer ${import.meta.env.VITE_WEB3_STORAGE_TOKEN || ''}`,
+        }
       });
       
       if (fallbackResponse.ok) {
         const result = await fallbackResponse.json();
+        const uri = `https://ipfs.io/ipfs/${result.cid}`;
+        console.log(`✅ Successfully uploaded ${type} to IPFS via Web3.Storage fallback!`);
+        console.log(`🔗 IPFS URI: ${uri}`);
+        return uri;
+      }
+      
+      console.log(`⚠️ Web3.Storage fallback also failed, trying public gateway...`);
+      
+      // Try a completely different approach - use a public IPFS API
+      const publicFormData = new FormData();
+      publicFormData.append('file', blob);
+      
+      const publicResponse = await fetch('https://ipfs.infura.io:5001/api/v0/add', {
+        method: 'POST',
+        body: publicFormData
+      });
+      
+      if (publicResponse.ok) {
+        const result = await publicResponse.json();
         const uri = `https://ipfs.io/ipfs/${result.Hash}`;
-        console.log(`✅ Successfully uploaded ${type} to IPFS via fallback service!`);
+        console.log(`✅ Successfully uploaded ${type} to IPFS via public gateway!`);
         console.log(`🔗 IPFS URI: ${uri}`);
         return uri;
       }
     } catch (fallbackError) {
-      console.error(`❌ Fallback IPFS upload also failed:`, fallbackError);
+      console.error(`❌ All fallback IPFS uploads failed:`, fallbackError);
     }
     
     // Final fallback - create data URLs for metadata
