@@ -1,119 +1,64 @@
-// Using Pinata for IPFS uploads, with optional NFT.storage preservation
+// Simple and reliable Pinata IPFS upload
 export async function uploadToIPFS(blob: Blob, type: 'image' | 'metadata'): Promise<string> {
-  console.log(`📤 Starting ${type} upload to IPFS (size: ${blob.size} bytes)...`);
+  console.log(`🚀 STARTING ${type.toUpperCase()} UPLOAD TO PINATA`);
+  console.log(`📊 Blob size: ${blob.size} bytes`);
+  console.log(`📊 Blob type: ${blob.type}`);
+  
+  // Hardcoded API key for testing - your JWT token
+  const PINATA_JWT = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VySW5mb3JtYXRpb24iOnsiaWQiOiI0ZmNjODdkNi00MDMxLTRjZjItOWQ3Zi04MjQ1NmExYWE4MTIiLCJlbWFpbCI6InFxaGF3ZTIyQGdtYWlsLmNvbSIsImVtYWlsX3ZlcmlmaWVkIjp0cnVlLCJwaW5fcG9saWN5Ijp7InJlZ2lvbnMiOlt7ImRlc2lyZWRSZXBsaWNhdGlvbkNvdW50IjoxLCJpZCI6IkZSQTEifSx7ImRlc2lyZWRSZXBsaWNhdGlvbkNvdW50IjoxLCJpZCI6Ik5ZQzEifV0sInZlcnNpb24iOjF9LCJtZmFfZW5hYmxlZCI6ZmFsc2UsInN0YXR1cyI6IkFDVElWRSJ9LCJhdXRoZW50aWNhdGlvblR5cGUiOiJzY29wZWRLZXkiLCJzY29wZWRLZXlLZXkiOiIxMGM0ZTk5MzNlMTIxMTc3ZWY0YyIsInNjb3BlZEtleVNlY3JldCI6IjMyM2U2MmQ3MGM3MmVkMzYyYmVjNTUzMzlhMGE5MDBkYTdhNjI1YTcxZjcxNWI5MzZmNmZlZmRmMTBiNmE4NTYiLCJleHAiOjE3ODc3Mzk0NzN9.AzNufiaTM6OP_r2Ows0iDnFDjPVq2W-mQeh2GT5da7Y';
   
   try {
-    // Check if we have the API key
-    const apiKey = import.meta.env.VITE_PINATA_JWT;
-    console.log(`🔑 Pinata API key present: ${apiKey ? 'Yes' : 'No'}`);
+    console.log(`🔑 Using hardcoded Pinata JWT token`);
     
-    if (!apiKey) {
-      throw new Error('Pinata API key not found');
-    }
-    
-    // Try uploading to Pinata first
+    // Create form data
     const formData = new FormData();
-    formData.append('file', blob, `${type}.${type === 'image' ? 'png' : 'json'}`);
+    const fileName = `nft-${type}-${Date.now()}.${type === 'image' ? 'png' : 'json'}`;
+    formData.append('file', blob, fileName);
     
-    console.log(`⏳ Uploading ${type} to Pinata IPFS...`);
-    console.log(`📊 File size: ${blob.size} bytes`);
-    
-    // Add timeout to prevent hanging
-    const controller = new AbortController();
-    const timeoutId = setTimeout(() => controller.abort(), 30000); // 30 second timeout
+    console.log(`📤 Making request to Pinata API...`);
+    console.log(`📝 File name: ${fileName}`);
     
     const response = await fetch('https://api.pinata.cloud/pinning/pinFileToIPFS', {
       method: 'POST',
       body: formData,
       headers: {
-        'Authorization': `Bearer ${apiKey}`,
+        'Authorization': `Bearer ${PINATA_JWT}`,
       },
-      signal: controller.signal
     });
     
-    clearTimeout(timeoutId);
-    
-    console.log(`📡 Response status: ${response.status} ${response.statusText}`);
+    console.log(`📡 Pinata response status: ${response.status}`);
+    console.log(`📡 Response headers:`, Object.fromEntries(response.headers.entries()));
     
     if (!response.ok) {
       const errorText = await response.text();
-      console.error(`❌ Pinata error response:`, errorText);
-      throw new Error(`Pinata upload failed: ${response.status} ${response.statusText} - ${errorText}`);
+      console.error(`❌ Pinata API error:`, errorText);
+      throw new Error(`HTTP ${response.status}: ${errorText}`);
     }
     
     const result = await response.json();
-    console.log(`📋 Pinata response:`, result);
+    console.log(`📦 Pinata response data:`, result);
     
     if (!result.IpfsHash) {
-      throw new Error('Upload successful but no IPFS hash returned from Pinata');
+      throw new Error('No IPFS hash in response');
     }
     
-    const uri = `https://gateway.pinata.cloud/ipfs/${result.IpfsHash}`;
-    console.log(`✅ Successfully uploaded ${type} to IPFS via Pinata!`);
-    console.log(`🔗 IPFS URI: ${uri}`);
+    const ipfsUrl = `https://gateway.pinata.cloud/ipfs/${result.IpfsHash}`;
+    console.log(`✅ SUCCESS! IPFS URL: ${ipfsUrl}`);
     
-    return uri;
+    return ipfsUrl;
     
   } catch (error: any) {
-    console.error(`❌ Pinata upload failed for ${type}:`, error);
-    console.log(`🔄 Trying alternative IPFS upload methods...`);
+    console.error(`💥 UPLOAD FAILED:`, error);
     
-    // Fallback to other IPFS services
-    try {
-      console.log(`🔄 Trying Web3.Storage as fallback...`);
-      const formData = new FormData();
-      formData.append('file', blob, `${type}.${type === 'image' ? 'png' : 'json'}`);
-      
-      const fallbackResponse = await fetch('https://api.web3.storage/upload', {
-        method: 'POST',
-        body: formData,
-        headers: {
-          'Authorization': `Bearer ${import.meta.env.VITE_WEB3_STORAGE_TOKEN || ''}`,
-        }
-      });
-      
-      if (fallbackResponse.ok) {
-        const result = await fallbackResponse.json();
-        const uri = `https://ipfs.io/ipfs/${result.cid}`;
-        console.log(`✅ Successfully uploaded ${type} to IPFS via Web3.Storage fallback!`);
-        console.log(`🔗 IPFS URI: ${uri}`);
-        return uri;
-      }
-      
-      console.log(`⚠️ Web3.Storage fallback also failed, trying public gateway...`);
-      
-      // Try a completely different approach - use a public IPFS API
-      const publicFormData = new FormData();
-      publicFormData.append('file', blob);
-      
-      const publicResponse = await fetch('https://ipfs.infura.io:5001/api/v0/add', {
-        method: 'POST',
-        body: publicFormData
-      });
-      
-      if (publicResponse.ok) {
-        const result = await publicResponse.json();
-        const uri = `https://ipfs.io/ipfs/${result.Hash}`;
-        console.log(`✅ Successfully uploaded ${type} to IPFS via public gateway!`);
-        console.log(`🔗 IPFS URI: ${uri}`);
-        return uri;
-      }
-    } catch (fallbackError) {
-      console.error(`❌ All fallback IPFS uploads failed:`, fallbackError);
-    }
-    
-    // Final fallback - create data URLs for metadata
-    if (type === 'metadata') {
-      console.log(`📄 Creating data URL for ${type} as final fallback...`);
+    // Simple fallback - just use a mock URL for now to test the rest of the flow
+    if (type === 'image') {
+      console.log(`🔄 Using placeholder image URL as fallback`);
+      return 'https://via.placeholder.com/400x300/0066cc/ffffff?text=NFT+Art';
+    } else {
+      console.log(`🔄 Creating data URL for metadata as fallback`);
       const text = await blob.text();
-      const dataUrl = `data:application/json;base64,${btoa(text)}`;
-      console.log(`✅ Created data URL for ${type}`);
-      return dataUrl;
+      return `data:application/json;base64,${btoa(text)}`;
     }
-    
-    // For images, use a placeholder but continue with real Solana minting
-    console.log(`⚠️ Using placeholder for ${type} but continuing with real Solana minting`);
-    return `https://via.placeholder.com/400x300.png?text=${encodeURIComponent(type)}`;
   }
 }
 
