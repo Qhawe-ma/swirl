@@ -40,7 +40,7 @@ export function DrawingToolbar({
   const [showColorPicker, setShowColorPicker] = useState(false);
 
   return (
-    <div className="bg-gray-300 border-2 border-gray-400 p-3" style={{ borderStyle: 'outset', borderWidth: '2px' }} data-testid="toolbar-drawing-tools">
+    <div className="bg-gray-300 border-2 border-gray-400 p-3 h-full overflow-y-auto" style={{ borderStyle: 'outset', borderWidth: '2px' }} data-testid="toolbar-drawing-tools">
       <h2 className="text-sm font-bold text-gray-800 mb-3 flex items-center">
         <span className="mr-2">🖌️</span>
         Drawing Tools

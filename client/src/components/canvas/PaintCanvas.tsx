@@ -31,6 +31,7 @@ export function PaintCanvas({
   const [isDrawing, setIsDrawing] = useState(false);
   const [history, setHistory] = useState<string[]>([]);
   const [historyIndex, setHistoryIndex] = useState(-1);
+  const [lastPoint, setLastPoint] = useState<{x: number, y: number} | null>(null);
 
   useEffect(() => {
     if (!canvasRef.current) return;
@@ -40,15 +41,15 @@ export function PaintCanvas({
     
     if (!ctx) return;
 
-    // Make canvas large like classic Paint
+    // Make canvas optimized for smooth drawing
     const container = canvasElement.parentElement;
     if (container) {
-      const containerWidth = container.clientWidth - 24; // Minimal padding
-      const maxHeight = window.innerHeight - 180; // Use most of screen height
+      const containerWidth = container.clientWidth - 8; // Account for border
+      const containerHeight = container.clientHeight - 8; // Account for border
       
-      // Make canvas much larger - use most available space
-      let canvasWidth = Math.min(containerWidth, 900);
-      let canvasHeight = Math.min(maxHeight - 80, 600); // Larger height
+      // Use full available space
+      let canvasWidth = Math.max(containerWidth, 400);
+      let canvasHeight = Math.max(containerHeight, 300);
       
       canvasElement.width = canvasWidth;
       canvasElement.height = canvasHeight;
@@ -56,6 +57,10 @@ export function PaintCanvas({
       // Set white background
       ctx.fillStyle = '#ffffff';
       ctx.fillRect(0, 0, canvasWidth, canvasHeight);
+      
+      // Enable smooth drawing
+      ctx.imageSmoothingEnabled = true;
+      ctx.imageSmoothingQuality = 'high';
     }
     
     setCanvas(canvasElement);
@@ -70,19 +75,22 @@ export function PaintCanvas({
     }, 0);
   }, []);
 
-  // Update brush properties
+  // Update brush properties for smooth drawing
   useEffect(() => {
     if (!context) return;
 
     context.lineWidth = brushSize;
     context.lineCap = 'round';
     context.lineJoin = 'round';
+    context.imageSmoothingEnabled = true;
+    context.imageSmoothingQuality = 'high';
     
     if (drawingMode === 'eraser') {
       context.globalCompositeOperation = 'destination-out';
     } else {
       context.globalCompositeOperation = 'source-over';
       context.strokeStyle = selectedColor;
+      context.fillStyle = selectedColor;
     }
   }, [context, selectedColor, brushSize, drawingMode]);
 
@@ -159,32 +167,65 @@ export function PaintCanvas({
     });
   };
 
-  const startDrawing = (e: React.MouseEvent<HTMLCanvasElement>) => {
+  // Get coordinates from mouse or touch event
+  const getCoordinates = (e: React.MouseEvent<HTMLCanvasElement> | React.TouchEvent<HTMLCanvasElement>) => {
+    if (!canvas) return { x: 0, y: 0 };
+    
+    const rect = canvas.getBoundingClientRect();
+    const scaleX = canvas.width / rect.width;
+    const scaleY = canvas.height / rect.height;
+    
+    let clientX, clientY;
+    if ('touches' in e) {
+      const touch = e.touches[0] || e.changedTouches[0];
+      clientX = touch.clientX;
+      clientY = touch.clientY;
+    } else {
+      clientX = e.clientX;
+      clientY = e.clientY;
+    }
+    
+    return {
+      x: (clientX - rect.left) * scaleX,
+      y: (clientY - rect.top) * scaleY
+    };
+  };
+
+  const startDrawing = (e: React.MouseEvent<HTMLCanvasElement> | React.TouchEvent<HTMLCanvasElement>) => {
     if (!context || !canvas) return;
     
+    e.preventDefault();
     setIsDrawing(true);
-    const rect = canvas.getBoundingClientRect();
-    const x = e.clientX - rect.left;
-    const y = e.clientY - rect.top;
+    const { x, y } = getCoordinates(e);
+    setLastPoint({ x, y });
     
     context.beginPath();
     context.moveTo(x, y);
+    
+    // Draw a dot for single clicks
+    context.arc(x, y, brushSize / 2, 0, 2 * Math.PI);
+    context.fill();
   };
 
-  const draw = (e: React.MouseEvent<HTMLCanvasElement>) => {
-    if (!isDrawing || !context || !canvas) return;
+  const draw = (e: React.MouseEvent<HTMLCanvasElement> | React.TouchEvent<HTMLCanvasElement>) => {
+    if (!isDrawing || !context || !canvas || !lastPoint) return;
     
-    const rect = canvas.getBoundingClientRect();
-    const x = e.clientX - rect.left;
-    const y = e.clientY - rect.top;
+    e.preventDefault();
+    const { x, y } = getCoordinates(e);
     
-    context.lineTo(x, y);
+    // Smooth line drawing using quadratic curves
+    context.beginPath();
+    context.moveTo(lastPoint.x, lastPoint.y);
+    context.quadraticCurveTo(lastPoint.x, lastPoint.y, (lastPoint.x + x) / 2, (lastPoint.y + y) / 2);
     context.stroke();
+    
+    setLastPoint({ x, y });
   };
 
   const stopDrawing = () => {
     if (!isDrawing) return;
     setIsDrawing(false);
+    setLastPoint(null);
     saveState();
   };
 
@@ -208,17 +249,21 @@ export function PaintCanvas({
       </div>
       
       {/* Classic Paint canvas area - fills most space */}
-      <div className="flex-1 p-3 bg-gray-100">
-        <div className="h-full w-full bg-white border-2 border-gray-400" style={{ borderStyle: 'inset' }}>
+      <div className="flex-1 p-2 bg-gray-100">
+        <div className="h-full w-full bg-white border-2 border-gray-400 overflow-hidden" style={{ borderStyle: 'inset' }}>
           <canvas 
             ref={canvasRef}
-            className="drawing-canvas cursor-crosshair block"
+            className="drawing-canvas cursor-crosshair block w-full h-full"
             data-testid="canvas-drawing"
             onMouseDown={startDrawing}
             onMouseMove={draw}
             onMouseUp={stopDrawing}
-            onMouseOut={stopDrawing}
-            style={{ touchAction: 'none' }}
+            onMouseLeave={stopDrawing}
+            onTouchStart={startDrawing}
+            onTouchMove={draw}
+            onTouchEnd={stopDrawing}
+            onTouchCancel={stopDrawing}
+            style={{ touchAction: 'none', maxWidth: '100%', maxHeight: '100%' }}
           />
         </div>
       </div>
