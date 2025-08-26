@@ -1,5 +1,4 @@
 import { useEffect, useRef, useState } from 'react';
-import * as fabric from 'fabric';
 import { Button } from "@/components/ui/button";
 import { Card } from "@/components/ui/card";
 
@@ -27,121 +26,147 @@ export function PaintCanvas({
   onActionComplete
 }: PaintCanvasProps) {
   const canvasRef = useRef<HTMLCanvasElement>(null);
-  const [canvas, setCanvas] = useState<fabric.Canvas | null>(null);
+  const [canvas, setCanvas] = useState<HTMLCanvasElement | null>(null);
+  const [context, setContext] = useState<CanvasRenderingContext2D | null>(null);
+  const [isDrawing, setIsDrawing] = useState(false);
   const [history, setHistory] = useState<string[]>([]);
   const [historyIndex, setHistoryIndex] = useState(-1);
 
   useEffect(() => {
     if (!canvasRef.current) return;
 
-    const fabricCanvas = new fabric.Canvas(canvasRef.current, {
-      width: 800,
-      height: 600,
-      backgroundColor: '#ffffff',
-      isDrawingMode: true,
-    });
+    const canvasElement = canvasRef.current;
+    const ctx = canvasElement.getContext('2d');
+    
+    if (!ctx) return;
 
-    // Configure drawing brush
-    if (fabricCanvas.freeDrawingBrush) {
-      fabricCanvas.freeDrawingBrush.width = brushSize;
-      fabricCanvas.freeDrawingBrush.color = selectedColor;
-    }
-
-    // Save initial state
-    const initialState = fabricCanvas.toJSON();
-    setHistory([JSON.stringify(initialState)]);
+    canvasElement.width = 800;
+    canvasElement.height = 600;
+    
+    // Set white background
+    ctx.fillStyle = '#ffffff';
+    ctx.fillRect(0, 0, 800, 600);
+    
+    setCanvas(canvasElement);
+    setContext(ctx);
+    setHistory([canvasElement.toDataURL()]);
     setHistoryIndex(0);
-
-    // Add history tracking
-    const saveState = () => {
-      const currentState = JSON.stringify(fabricCanvas.toJSON());
-      const newHistory = history.slice(0, historyIndex + 1);
-      newHistory.push(currentState);
-      setHistory(newHistory);
-      setHistoryIndex(newHistory.length - 1);
-      onUndoRedoChange(true, false);
-    };
-
-    fabricCanvas.on('path:created', saveState);
-    fabricCanvas.on('object:added', saveState);
-    fabricCanvas.on('object:removed', saveState);
-
-    setCanvas(fabricCanvas);
-
-    return () => {
-      fabricCanvas.dispose();
-    };
+    onUndoRedoChange(false, false);
   }, []);
 
   // Update brush properties
   useEffect(() => {
-    if (!canvas || !canvas.freeDrawingBrush) return;
+    if (!context) return;
 
-    canvas.freeDrawingBrush.width = brushSize;
+    context.lineWidth = brushSize;
+    context.lineCap = 'round';
+    context.lineJoin = 'round';
     
     if (drawingMode === 'eraser') {
-      canvas.freeDrawingBrush.color = '#ffffff';
+      context.globalCompositeOperation = 'destination-out';
     } else {
-      canvas.freeDrawingBrush.color = selectedColor;
+      context.globalCompositeOperation = 'source-over';
+      context.strokeStyle = selectedColor;
     }
-  }, [canvas, selectedColor, brushSize, drawingMode]);
+  }, [context, selectedColor, brushSize, drawingMode]);
 
   // Handle undo
   useEffect(() => {
-    if (!shouldUndo || !canvas || historyIndex <= 0) return;
+    if (!shouldUndo || !canvas || !context || historyIndex <= 0) return;
 
     const newIndex = historyIndex - 1;
-    const state = JSON.parse(history[newIndex]);
+    const imageData = history[newIndex];
     
-    canvas.loadFromJSON(state, () => {
-      canvas.renderAll();
+    const img = new Image();
+    img.onload = () => {
+      context.clearRect(0, 0, 800, 600);
+      context.drawImage(img, 0, 0);
       setHistoryIndex(newIndex);
       onUndoRedoChange(newIndex > 0, newIndex < history.length - 1);
       onActionComplete();
-    });
-  }, [shouldUndo, canvas, history, historyIndex, onUndoRedoChange, onActionComplete]);
+    };
+    img.src = imageData;
+  }, [shouldUndo, canvas, context, history, historyIndex, onUndoRedoChange, onActionComplete]);
 
   // Handle redo
   useEffect(() => {
-    if (!shouldRedo || !canvas || historyIndex >= history.length - 1) return;
+    if (!shouldRedo || !canvas || !context || historyIndex >= history.length - 1) return;
 
     const newIndex = historyIndex + 1;
-    const state = JSON.parse(history[newIndex]);
+    const imageData = history[newIndex];
     
-    canvas.loadFromJSON(state, () => {
-      canvas.renderAll();
+    const img = new Image();
+    img.onload = () => {
+      context.clearRect(0, 0, 800, 600);
+      context.drawImage(img, 0, 0);
       setHistoryIndex(newIndex);
       onUndoRedoChange(newIndex > 0, newIndex < history.length - 1);
       onActionComplete();
-    });
-  }, [shouldRedo, canvas, history, historyIndex, onUndoRedoChange, onActionComplete]);
+    };
+    img.src = imageData;
+  }, [shouldRedo, canvas, context, history, historyIndex, onUndoRedoChange, onActionComplete]);
 
   // Handle clear
   useEffect(() => {
-    if (!shouldClear || !canvas) return;
+    if (!shouldClear || !canvas || !context) return;
 
-    canvas.clear();
-    canvas.backgroundColor = '#ffffff';
-    canvas.renderAll();
+    context.fillStyle = '#ffffff';
+    context.fillRect(0, 0, 800, 600);
     
     // Reset history
-    const initialState = canvas.toJSON();
-    setHistory([JSON.stringify(initialState)]);
+    const newState = canvas.toDataURL();
+    setHistory([newState]);
     setHistoryIndex(0);
     onUndoRedoChange(false, false);
     onActionComplete();
-  }, [shouldClear, canvas, onUndoRedoChange, onActionComplete]);
+  }, [shouldClear, canvas, context, onUndoRedoChange, onActionComplete]);
 
   const handleSave = () => {
     if (!canvas) return;
     
-    const dataURL = canvas.toDataURL({
-      format: 'png',
-      quality: 1.0,
-      multiplier: 1
-    });
-    
+    const dataURL = canvas.toDataURL('image/png');
     onSave(dataURL);
+  };
+
+  const saveState = () => {
+    if (!canvas) return;
+    const newState = canvas.toDataURL();
+    setHistory(prev => {
+      const newHistory = prev.slice(0, historyIndex + 1);
+      newHistory.push(newState);
+      setHistoryIndex(newHistory.length - 1);
+      onUndoRedoChange(newHistory.length > 1, false);
+      return newHistory;
+    });
+  };
+
+  const startDrawing = (e: React.MouseEvent<HTMLCanvasElement>) => {
+    if (!context || !canvas) return;
+    
+    setIsDrawing(true);
+    const rect = canvas.getBoundingClientRect();
+    const x = e.clientX - rect.left;
+    const y = e.clientY - rect.top;
+    
+    context.beginPath();
+    context.moveTo(x, y);
+  };
+
+  const draw = (e: React.MouseEvent<HTMLCanvasElement>) => {
+    if (!isDrawing || !context || !canvas) return;
+    
+    const rect = canvas.getBoundingClientRect();
+    const x = e.clientX - rect.left;
+    const y = e.clientY - rect.top;
+    
+    context.lineTo(x, y);
+    context.stroke();
+  };
+
+  const stopDrawing = () => {
+    if (!isDrawing) return;
+    setIsDrawing(false);
+    saveState();
   };
 
   return (
@@ -169,8 +194,13 @@ export function PaintCanvas({
         <div className="canvas-container w-full max-w-4xl bg-white">
           <canvas 
             ref={canvasRef}
-            className="drawing-canvas w-full h-full"
+            className="drawing-canvas w-full h-full cursor-crosshair"
             data-testid="canvas-drawing"
+            onMouseDown={startDrawing}
+            onMouseMove={draw}
+            onMouseUp={stopDrawing}
+            onMouseOut={stopDrawing}
+            style={{ touchAction: 'none' }}
           />
         </div>
       </div>
