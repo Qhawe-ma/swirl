@@ -6,6 +6,31 @@
     <title>Solana Paint NFT - Create & Mint Digital Art</title>
     <meta name="description" content="Create digital artwork and mint it as real NFTs on Solana mainnet. Professional drawing tools with blockchain integration.">
     
+    <!-- Node.js polyfills for browser compatibility -->
+    <script>
+      if (typeof globalThis.process === 'undefined') {
+        globalThis.process = {
+          env: {},
+          browser: true,
+          version: '',
+          versions: { node: '16.0.0' },
+          platform: 'browser',
+          argv: [],
+          cwd: function() { return '/'; },
+          nextTick: function(fn) { setTimeout(fn, 0); },
+          title: 'browser',
+          pid: 1,
+          ppid: 1,
+          umask: function() { return 0; },
+          uptime: function() { return 0; },
+          hrtime: function() { return [0, 0]; }
+        };
+      }
+      if (typeof globalThis.global === 'undefined') {
+        globalThis.global = globalThis;
+      }
+    </script>
+    
     <!-- Google Fonts -->
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
