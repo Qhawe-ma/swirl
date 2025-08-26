@@ -11,7 +11,7 @@ interface WalletProviderProps {
 
 export function WalletProvider({ children }: WalletProviderProps) {
   // Use Helius RPC for better reliability and higher rate limits
-  const endpoint = useMemo(() => 'https://mainnet.helius-rpc.com/?api-key=ee57b5b0-b40d-4044-8e24-9e1c8e0b7b7b', []);
+  const endpoint = useMemo(() => 'https://mainnet.helius-rpc.com/?api-key=9dd10d7f-c54e-4893-af4f-72b966920d94', []);
   
   // Use empty array for now - modern browsers will auto-detect wallets
   const wallets = useMemo(() => [], []);
