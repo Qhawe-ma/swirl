@@ -1,6 +1,4 @@
-// Add Buffer polyfill for browser
-import { Buffer } from 'buffer';
-window.Buffer = Buffer;
+// Buffer polyfill is handled in main polyfills.ts
 
 import { Connection, PublicKey, Keypair, SystemProgram, Transaction } from '@solana/web3.js';
 import { 

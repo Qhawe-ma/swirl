@@ -19,7 +19,7 @@ export function NFTMintingForm({ imageData, onMintSuccess, onMintStart }: NFTMin
   const [nftName, setNftName] = useState('');
   const [nftDescription, setNftDescription] = useState('');
   const [isLoading, setIsLoading] = useState(false);
-  const { connected, publicKey } = useWallet();
+  const { connected, publicKey, signTransaction } = useWallet();
   const { connection } = useConnection();
   const { toast } = useToast();
 
