@@ -70,7 +70,7 @@ export default function PaintPage() {
               <div className="w-8 h-8 bg-primary rounded-lg flex items-center justify-center">
                 <span className="material-icons text-white text-lg">palette</span>
               </div>
-              <h1 className="text-xl font-medium text-gray-900">Solana Paint NFT</h1>
+              <h1 className="text-xl font-medium text-gray-900">Paint NFT</h1>
             </div>
             
             <WalletConnection />
