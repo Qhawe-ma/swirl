@@ -11,6 +11,9 @@ export function useWallet() {
     if (wallet.publicKey && wallet.connected) {
       connection.getBalance(wallet.publicKey).then((lamports) => {
         setBalance(lamports / LAMPORTS_PER_SOL);
+      }).catch((error) => {
+        console.warn('Failed to fetch balance:', error);
+        setBalance(null);
       });
     } else {
       setBalance(null);

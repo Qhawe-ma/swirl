@@ -12,6 +12,9 @@ export function WalletConnection() {
     if (publicKey && connected) {
       connection.getBalance(publicKey).then((lamports) => {
         setBalance(lamports / LAMPORTS_PER_SOL);
+      }).catch((error) => {
+        console.warn('Failed to fetch balance:', error);
+        setBalance(null);
       });
     } else {
       setBalance(null);
@@ -43,7 +46,7 @@ export function WalletConnection() {
             <div className="text-sm">
               <div className="font-medium" data-testid="text-wallet-address">{shortAddress}</div>
               <div className="opacity-90" data-testid="text-wallet-balance">
-                {balance !== null ? `${balance.toFixed(3)} SOL` : 'Loading...'}
+                {balance !== null ? `${balance.toFixed(3)} SOL` : 'Connected'}
               </div>
             </div>
           </div>
