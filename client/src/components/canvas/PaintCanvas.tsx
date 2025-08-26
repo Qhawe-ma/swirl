@@ -201,10 +201,8 @@ export function PaintCanvas({
     
     context.beginPath();
     context.moveTo(x, y);
-    
-    // Draw a dot for single clicks
-    context.arc(x, y, brushSize / 2, 0, 2 * Math.PI);
-    context.fill();
+    context.lineTo(x, y);
+    context.stroke();
   };
 
   const draw = (e: React.MouseEvent<HTMLCanvasElement> | React.TouchEvent<HTMLCanvasElement>) => {
@@ -213,11 +211,11 @@ export function PaintCanvas({
     e.preventDefault();
     const { x, y } = getCoordinates(e);
     
-    // Smooth line drawing using quadratic curves
-    context.beginPath();
-    context.moveTo(lastPoint.x, lastPoint.y);
-    context.quadraticCurveTo(lastPoint.x, lastPoint.y, (lastPoint.x + x) / 2, (lastPoint.y + y) / 2);
+    // Draw smooth continuous line
+    context.lineTo(x, y);
     context.stroke();
+    context.beginPath();
+    context.moveTo(x, y);
     
     setLastPoint({ x, y });
   };
