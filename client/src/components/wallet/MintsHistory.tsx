@@ -34,36 +34,36 @@ export function MintsHistory() {
 
   if (!publicKey) {
     return (
-      <Card className="p-6 text-center" data-testid="card-connect-wallet">
+      <div className="p-6 text-center" data-testid="card-connect-wallet">
         <div className="text-gray-500">
           <span className="material-icons text-4xl mb-2 block">account_balance_wallet</span>
           <p className="text-lg font-medium mb-2">Connect Your Wallet</p>
           <p className="text-sm">Connect your wallet to view your NFT mint history</p>
         </div>
-      </Card>
+      </div>
     );
   }
 
   if (loading) {
     return (
-      <Card className="p-6" data-testid="card-loading-mints">
+      <div className="p-6 text-center" data-testid="card-loading-mints">
         <div className="text-center">
           <span className="material-icons animate-spin text-2xl mb-2 block">refresh</span>
           <p className="text-gray-500">Loading your mints...</p>
         </div>
-      </Card>
+      </div>
     );
   }
 
   if (mints.length === 0) {
     return (
-      <Card className="p-6 text-center" data-testid="card-no-mints">
+      <div className="p-6 text-center" data-testid="card-no-mints">
         <div className="text-gray-500">
           <span className="material-icons text-4xl mb-2 block">palette</span>
           <p className="text-lg font-medium mb-2">No NFTs Minted Yet</p>
           <p className="text-sm">Create your first artwork and mint it as an NFT to see it here!</p>
         </div>
-      </Card>
+      </div>
     );
   }
 
@@ -82,12 +82,8 @@ export function MintsHistory() {
   };
 
   return (
-    <Card className="p-6" data-testid="card-mints-history">
+    <div data-testid="card-mints-history">
       <div className="flex items-center justify-between mb-6">
-        <h2 className="text-lg font-medium text-gray-900 flex items-center">
-          <span className="material-icons mr-2">history</span>
-          Your NFT Mints
-        </h2>
         <Badge variant="secondary" data-testid="badge-mint-count">
           {mints.length} {mints.length === 1 ? 'NFT' : 'NFTs'}
         </Badge>
@@ -163,6 +159,6 @@ export function MintsHistory() {
           </div>
         ))}
       </div>
-    </Card>
+    </div>
   );
 }

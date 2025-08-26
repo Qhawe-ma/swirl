@@ -2,6 +2,7 @@ import { useWallet, useConnection } from '@solana/wallet-adapter-react';
 import { WalletMultiButton } from '@solana/wallet-adapter-react-ui';
 import { LAMPORTS_PER_SOL } from '@solana/web3.js';
 import { useEffect, useState } from 'react';
+import { MintsHistoryModal } from './MintsHistoryModal';
 
 export function WalletConnection() {
   const { publicKey, connected } = useWallet();
@@ -27,10 +28,10 @@ export function WalletConnection() {
 
   return (
     <div className="flex items-center space-x-4">
-      <div className="hidden sm:block text-sm text-gray-600">
-        <span className="material-icons text-sm align-middle mr-1">info</span>
-        Mainnet • Real SOL Required
-      </div>
+      {/* View Mints Button - Only show when connected */}
+      {connected && (
+        <MintsHistoryModal />
+      )}
       
       {!connected ? (
         <WalletMultiButton 

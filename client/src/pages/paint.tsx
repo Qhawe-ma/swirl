@@ -80,46 +80,39 @@ export default function PaintPage() {
 
       <main className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
         {appState === 'drawing' && (
-          <div className="space-y-8">
-            {/* Mints History - Show when wallet is connected */}
-            {connected && (
-              <MintsHistory />
-            )}
-            
-            <div className="grid lg:grid-cols-12 gap-8">
-              {/* Drawing Toolbar */}
-              <div className="lg:col-span-3 order-2 lg:order-1">
-                <DrawingToolbar
-                  selectedColor={selectedColor}
-                  onColorChange={setSelectedColor}
-                  brushSize={brushSize}
-                  onBrushSizeChange={setBrushSize}
-                  drawingMode={drawingMode}
-                  onModeChange={setDrawingMode}
-                  onUndo={handleUndo}
-                  onRedo={handleRedo}
-                  onClear={handleClear}
-                  canUndo={canUndo}
-                  canRedo={canRedo}
-                />
-              </div>
-              
-              {/* Paint Canvas */}
-              <div className="lg:col-span-9 order-1 lg:order-2">
-                <PaintCanvas
-                  selectedColor={selectedColor}
-                  brushSize={brushSize}
-                  drawingMode={drawingMode}
-                  onSave={handleSaveImage}
-                  onUndoRedoChange={handleUndoRedoChange}
-                  shouldUndo={shouldUndo}
-                  shouldRedo={shouldRedo}
-                  shouldClear={shouldClear}
-                  onActionComplete={handleActionComplete}
-                />
-              </div>
+          <div className="grid lg:grid-cols-12 gap-8">
+            {/* Drawing Toolbar */}
+            <div className="lg:col-span-3 order-2 lg:order-1">
+              <DrawingToolbar
+                selectedColor={selectedColor}
+                onColorChange={setSelectedColor}
+                brushSize={brushSize}
+                onBrushSizeChange={setBrushSize}
+                drawingMode={drawingMode}
+                onModeChange={setDrawingMode}
+                onUndo={handleUndo}
+                onRedo={handleRedo}
+                onClear={handleClear}
+                canUndo={canUndo}
+                canRedo={canRedo}
+              />
             </div>
-          </div>
+            
+            {/* Paint Canvas */}
+            <div className="lg:col-span-9 order-1 lg:order-2">
+              <PaintCanvas
+                selectedColor={selectedColor}
+                brushSize={brushSize}
+                drawingMode={drawingMode}
+                onSave={handleSaveImage}
+                onUndoRedoChange={handleUndoRedoChange}
+                shouldUndo={shouldUndo}
+                shouldRedo={shouldRedo}
+                shouldClear={shouldClear}
+                onActionComplete={handleActionComplete}
+              />
+            </div>
+            </div>
         )}
 
         {appState === 'minting-form' && (
