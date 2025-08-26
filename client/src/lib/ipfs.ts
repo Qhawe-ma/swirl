@@ -1,59 +1,48 @@
 import { NFTStorage } from 'nft.storage';
 
-const client = new NFTStorage({ 
-  token: import.meta.env.VITE_NFT_STORAGE_KEY || process.env.REACT_APP_NFT_STORAGE_KEY || ''
-});
-
 export async function uploadToIPFS(blob: Blob, type: 'image' | 'metadata'): Promise<string> {
   console.log(`📤 Starting ${type} upload to IPFS (size: ${blob.size} bytes)...`);
   
   // Check if we have a valid API key
   const apiKey = import.meta.env.VITE_NFT_STORAGE_KEY || process.env.REACT_APP_NFT_STORAGE_KEY;
-  console.log(`🔑 Using API key: ${apiKey ? apiKey.substring(0, 8) + '...' : 'NOT FOUND'}`);
+  console.log(`🔑 API key found: ${apiKey ? 'YES' : 'NO'}`);
+  console.log(`🔑 API key format: ${apiKey ? apiKey.substring(0, 10) + '...' : 'NONE'}`);
   
   if (!apiKey) {
     throw new Error('NFT Storage API key not found. Please set VITE_NFT_STORAGE_KEY.');
   }
   
+  console.log(`⏳ Creating NFTStorage client with your paid account...`);
+  
   try {
-    console.log(`⏳ Uploading ${type} to NFT.storage with paid storage...`);
-    console.log(`🔑 Testing API key format: ${apiKey.substring(0, 10)}...`);
+    // Create a fresh client with the API key
+    const client = new NFTStorage({ token: apiKey });
     
-    // Create client and try upload with longer timeout for paid storage
-    const uploadClient = new NFTStorage({ token: apiKey });
+    console.log(`📤 Starting ${type} upload to NFT.storage...`);
+    console.log(`📊 Blob size: ${blob.size} bytes, type: ${blob.type}`);
     
-    console.log(`📤 Starting blob upload for ${type}...`);
-    const uploadPromise = uploadClient.storeBlob(blob);
-    const timeoutPromise = new Promise<never>((_, reject) => 
-      setTimeout(() => {
-        console.log(`⏰ ${type} upload timed out after 30 seconds`);
-        reject(new Error(`${type} upload timeout after 30 seconds`));
-      }, 30000) // 30 second timeout
-    );
+    // Use the client's storeBlob method with proper error handling
+    const cid = await client.storeBlob(blob);
     
-    const cid = await Promise.race([uploadPromise, timeoutPromise]);
+    if (!cid) {
+      throw new Error('Upload returned no CID');
+    }
+    
     const uri = `https://ipfs.io/ipfs/${cid}`;
+    console.log(`✅ Successfully uploaded ${type} to IPFS!`);
+    console.log(`🔗 IPFS URI: ${uri}`);
     
-    console.log(`✅ Successfully uploaded ${type} to IPFS: ${uri}`);
     return uri;
     
   } catch (error: any) {
     console.error(`❌ IPFS upload failed for ${type}:`, error);
-    console.log(`📊 Error details:`, error.message, error.code);
+    console.log(`📊 Full error object:`, error);
+    console.log(`📊 Error name: ${error.name}`);
+    console.log(`📊 Error message: ${error.message}`);
+    console.log(`📊 Error stack:`, error.stack);
     
-    // Since you have paid storage but API issues, let's continue with placeholders
-    // This allows testing the Solana minting while IPFS issues are resolved
-    console.log(`⚠️ Using placeholder for ${type} to continue with real Solana minting`);
-    
-    if (type === 'image') {
-      return 'https://via.placeholder.com/400x300.png?text=Your+Artwork';
-    } else {
-      return 'data:application/json;base64,' + btoa(JSON.stringify({
-        name: "Your NFT",
-        description: "Created with Solana Paint App", 
-        image: "https://via.placeholder.com/400x300.png?text=Your+Artwork"
-      }));
-    }
+    // Re-throw the error to be handled by the calling function
+    throw new Error(`Failed to upload ${type} to IPFS: ${error.message}`);
   }
 }
 
