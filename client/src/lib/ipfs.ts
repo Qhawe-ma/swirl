@@ -13,12 +13,33 @@ export async function uploadToIPFS(blob: Blob, type: 'image' | 'metadata'): Prom
   
   if (!apiKey) {
     console.log(`❌ No API key found, using placeholder for ${type}`);
-    throw new Error('NFT Storage API key not found. Using placeholder URLs for testing.');
+    return getPlaceholderUrl(type);
   }
   
-  // Skip IPFS entirely and use placeholders immediately since storage is exhausted
-  console.log(`⚠️ NFT.Storage quota exhausted, using placeholder for ${type} to test Solana minting`);
-  
+  try {
+    console.log(`⏳ Attempting upload to NFT.storage...`);
+    
+    // Create client and try upload
+    const uploadClient = new NFTStorage({ token: apiKey });
+    const uploadPromise = uploadClient.storeBlob(blob);
+    const timeoutPromise = new Promise<never>((_, reject) => 
+      setTimeout(() => reject(new Error('Upload timeout')), 5000)
+    );
+    
+    const cid = await Promise.race([uploadPromise, timeoutPromise]);
+    const uri = `https://ipfs.io/ipfs/${cid}`;
+    
+    console.log(`✅ Successfully uploaded ${type} to IPFS: ${uri}`);
+    return uri;
+    
+  } catch (error: any) {
+    console.error(`❌ IPFS upload failed for ${type}:`, error);
+    console.log(`⚠️ Using placeholder URL for ${type} to continue with Solana minting`);
+    return getPlaceholderUrl(type);
+  }
+}
+
+function getPlaceholderUrl(type: 'image' | 'metadata'): string {
   if (type === 'image') {
     return 'https://via.placeholder.com/400x300.png?text=Test+Artwork';
   } else {

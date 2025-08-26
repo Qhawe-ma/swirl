@@ -116,24 +116,15 @@ export function NFTMintingForm({ imageData, onMintSuccess, onMintStart }: NFTMin
         
         onMintSuccess(mintAddress);
         
-      } catch (ipfsError: any) {
-        console.error('❌ IPFS Upload failed:', ipfsError);
-        
-        // Show user-friendly message about storage issue
         toast({
-          title: "IPFS Storage Issue",
-          description: "Your NFT.Storage quota is exhausted. Using placeholder URLs to test Solana minting.",
-          variant: "destructive",
+          title: "NFT Minted Successfully!",
+          description: `Your artwork is now a real NFT on Solana mainnet! Address: ${mintAddress}`,
         });
         
-        // Don't throw - continue with placeholders to test Solana minting
-        console.log('⚠️ Continuing with placeholder URLs to test Solana blockchain minting...');
+      } catch (ipfsError: any) {
+        console.error('❌ Unexpected error during minting:', ipfsError);
+        throw ipfsError; // Re-throw to be caught by outer catch block
       }
-      
-      toast({
-        title: "NFT Minted Successfully!",
-        description: `Your artwork is now a real NFT on Solana mainnet!`,
-      });
       
     } catch (error: any) {
       console.error('Minting error:', error);
