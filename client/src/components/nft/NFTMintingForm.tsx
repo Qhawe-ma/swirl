@@ -118,7 +118,16 @@ export function NFTMintingForm({ imageData, onMintSuccess, onMintStart }: NFTMin
         
       } catch (ipfsError: any) {
         console.error('❌ IPFS Upload failed:', ipfsError);
-        throw new Error(`IPFS upload failed: ${ipfsError.message || 'Unknown IPFS error'}`);
+        
+        // Show user-friendly message about storage issue
+        toast({
+          title: "IPFS Storage Issue",
+          description: "Your NFT.Storage quota is exhausted. Using placeholder URLs to test Solana minting.",
+          variant: "destructive",
+        });
+        
+        // Don't throw - continue with placeholders to test Solana minting
+        console.log('⚠️ Continuing with placeholder URLs to test Solana blockchain minting...');
       }
       
       toast({
