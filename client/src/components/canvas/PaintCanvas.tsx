@@ -140,7 +140,10 @@ export function PaintCanvas({
       const newHistory = prev.slice(0, historyIndex + 1);
       newHistory.push(newState);
       setHistoryIndex(newHistory.length - 1);
-      onUndoRedoChange(newHistory.length > 1, false);
+      // Use setTimeout to avoid setState during render
+      setTimeout(() => {
+        onUndoRedoChange(newHistory.length > 1, false);
+      }, 0);
       return newHistory;
     });
   };

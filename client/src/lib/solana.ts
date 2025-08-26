@@ -23,7 +23,7 @@ export async function mintNFT(
   walletAdapter: any,
   metadataUri: string,
   name: string
-): Promise<string> {
+): Promise<{ mintAddress: string; transactionSignature: string }> {
   try {
     console.log('🔍 Checking wallet connection...');
     console.log('Wallet publicKey:', walletAdapter.publicKey?.toBase58());
@@ -180,11 +180,15 @@ export async function mintNFT(
 
     console.log('✅ SUCCESS! Real NFT minted with metadata!');
     console.log('🏆 NFT Mint Address:', mint.publicKey.toBase58());
+    console.log('🔗 Transaction Signature:', signature);
     console.log('🎯 This NFT will show as a collectible in your wallet!');
     console.log('🖼️ It will display properly on NFT platforms like Magic Eden!');
     console.log('📱 Check your wallet\'s "Collectibles" section!');
     
-    return mint.publicKey.toBase58();
+    return {
+      mintAddress: mint.publicKey.toBase58(),
+      transactionSignature: signature
+    };
     
   } catch (error: any) {
     console.error('💥 Failed to mint NFT:', error);

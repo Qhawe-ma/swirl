@@ -8,6 +8,7 @@ import { Alert, AlertDescription } from "@/components/ui/alert";
 import { useToast } from "@/hooks/use-toast";
 import { uploadToIPFS } from "@/lib/ipfs";
 import { mintNFT } from "@/lib/solana";
+import { saveMintRecord } from "@/lib/firebase";
 
 interface NFTMintingFormProps {
   imageData: string;
@@ -106,19 +107,35 @@ export function NFTMintingForm({ imageData, onMintSuccess, onMintStart }: NFTMin
         // Mint NFT on mainnet - this will require wallet signature and SOL fees
         console.log('🚀 Requesting wallet signature for Solana mainnet minting...');
         const walletAdapter = { publicKey, signTransaction };
-        const mintAddress = await mintNFT(
+        const mintResult = await mintNFT(
           connection,
           walletAdapter,
           metadataUri,
           nftName.trim()
         );
-        console.log('🎉 NFT minted with address:', mintAddress);
+        console.log('🎉 NFT minted with address:', mintResult.mintAddress);
         
-        onMintSuccess(mintAddress);
+        // Save mint record to Firebase
+        console.log('💾 Saving mint record to Firebase...');
+        try {
+          await saveMintRecord({
+            walletAddress: publicKey.toBase58(),
+            mintAddress: mintResult.mintAddress,
+            name: nftName.trim(),
+            imageData: imageData,
+            metadataUri: metadataUri,
+            transactionSignature: mintResult.transactionSignature
+          });
+          console.log('✅ Mint record saved to Firebase');
+        } catch (firebaseError) {
+          console.error('⚠️ Failed to save to Firebase (NFT still minted):', firebaseError);
+        }
+        
+        onMintSuccess(mintResult.mintAddress);
         
         toast({
           title: "NFT Minted Successfully!",
-          description: `Your artwork is now a real NFT on Solana mainnet! Address: ${mintAddress}`,
+          description: `Your artwork is now a real NFT on Solana mainnet! Address: ${mintResult.mintAddress}`,
         });
         
       } catch (ipfsError: any) {
