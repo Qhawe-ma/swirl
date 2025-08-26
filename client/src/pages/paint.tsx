@@ -80,9 +80,9 @@ export default function PaintPage() {
 
       <main className="flex-1 overflow-hidden bg-gray-200" style={{ background: 'linear-gradient(145deg, #e0e0e0, #c0c0c0)' }}>
         {appState === 'drawing' && (
-          <div className="flex h-full">
+          <div className="flex h-full gap-1 p-1">
             {/* Drawing Toolbar - MS Paint Style */}
-            <div className="w-64 bg-gray-300 border-r-2 border-gray-400 flex-shrink-0" style={{ borderStyle: 'outset' }}>
+            <div className="w-64 flex-shrink-0">
               <DrawingToolbar
                 selectedColor={selectedColor}
                 onColorChange={setSelectedColor}
@@ -99,7 +99,7 @@ export default function PaintPage() {
             </div>
             
             {/* Paint Canvas - MS Paint Style */}
-            <div className="flex-1 bg-gray-100 p-2">
+            <div className="flex-1">
               <PaintCanvas
                 selectedColor={selectedColor}
                 brushSize={brushSize}

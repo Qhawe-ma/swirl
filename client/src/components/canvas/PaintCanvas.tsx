@@ -228,13 +228,13 @@ export function PaintCanvas({
   };
 
   return (
-    <div className="h-full flex flex-col bg-gray-100 border border-gray-300" data-testid="card-paint-canvas">
-      {/* Classic Paint-style toolbar */}
-      <div className="flex items-center justify-between bg-gray-200 border-b border-gray-300 px-3 py-2">
+    <div className="h-full flex flex-col bg-gray-100 border-2 border-gray-400" style={{ borderStyle: 'inset' }} data-testid="card-paint-canvas">
+      {/* Classic Paint-style header */}
+      <div className="flex items-center justify-between bg-gray-200 border-b-2 border-gray-400 px-3 py-2" style={{ borderStyle: 'outset' }}>
         <div className="flex items-center space-x-2">
-          <span className="text-sm font-medium text-gray-800">Canvas</span>
+          <span className="text-sm font-bold text-gray-800">Canvas</span>
           <span className="text-xs text-gray-600" data-testid="text-canvas-size">
-            {canvas ? `${canvas.width}x${canvas.height}` : 'Canvas'}
+            {canvas ? `${canvas.width}×${canvas.height}` : 'Loading...'}
           </span>
         </div>
         <Button
