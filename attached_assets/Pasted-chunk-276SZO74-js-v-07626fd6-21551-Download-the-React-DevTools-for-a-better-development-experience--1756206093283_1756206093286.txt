@@ -1,0 +1,109 @@
+chunk-276SZO74.js?v=07626fd6:21551 Download the React DevTools for a better development experience: https://reactjs.org/link/react-devtools
+chunk-276SZO74.js?v=07626fd6:521 Warning: Cannot update a component (`PaintPage`) while rendering a different component (`PaintCanvas`). To locate the bad setState() call inside `PaintCanvas`, follow the stack trace as described in https://reactjs.org/link/setstate-in-render
+    at PaintCanvas (https://945ed464-22ac-453f-991f-7beb946d5591-00-1hk0ef5kug38u.spock.replit.dev/src/components/canvas/PaintCanvas.tsx:22:3)
+    at div
+    at div
+    at main
+    at div
+    at PaintPage (https://945ed464-22ac-453f-991f-7beb946d5591-00-1hk0ef5kug38u.spock.replit.dev/src/pages/paint.tsx?t=1756205837151:27:45)
+    at Route (https://945ed464-22ac-453f-991f-7beb946d5591-00-1hk0ef5kug38u.spock.replit.dev/@fs/home/runner/workspace/node_modules/.vite/deps/wouter.js?v=ee64b248:323:16)
+    at Switch (https://945ed464-22ac-453f-991f-7beb946d5591-00-1hk0ef5kug38u.spock.replit.dev/@fs/home/runner/workspace/node_modules/.vite/deps/wouter.js?v=ee64b248:379:17)
+    at Router
+    at Provider (https://945ed464-22ac-453f-991f-7beb946d5591-00-1hk0ef5kug38u.spock.replit.dev/@fs/home/runner/workspace/node_modules/.vite/deps/chunk-WRZTIZRA.js?v=07626fd6:54:15)
+    at TooltipProvider (https://945ed464-22ac-453f-991f-7beb946d5591-00-1hk0ef5kug38u.spock.replit.dev/@fs/home/runner/workspace/node_modules/.vite/deps/@radix-ui_react-tooltip.js?v=668f8170:2210:5)
+    at WalletModalProvider (https://945ed464-22ac-453f-991f-7beb946d5591-00-1hk0ef5kug38u.spock.replit.dev/@fs/home/runner/workspace/node_modules/.vite/deps/@solana_wallet-adapter-react-ui.js?v=f87a47ea:592:30)
+    at WalletProviderBase (https://945ed464-22ac-453f-991f-7beb946d5591-00-1hk0ef5kug38u.spock.replit.dev/@fs/home/runner/workspace/node_modules/.vite/deps/chunk-SPUNAMP4.js?v=07626fd6:7390:31)
+    at WalletProvider (https://945ed464-22ac-453f-991f-7beb946d5591-00-1hk0ef5kug38u.spock.replit.dev/@fs/home/runner/workspace/node_modules/.vite/deps/chunk-SPUNAMP4.js?v=07626fd6:7602:27)
+    at ConnectionProvider (https://945ed464-22ac-453f-991f-7beb946d5591-00-1hk0ef5kug38u.spock.replit.dev/@fs/home/runner/workspace/node_modules/.vite/deps/chunk-SPUNAMP4.js?v=07626fd6:6203:29)
+    at WalletProvider (https://945ed464-22ac-453f-991f-7beb946d5591-00-1hk0ef5kug38u.spock.replit.dev/src/components/wallet/WalletProvider.tsx:22:34)
+    at QueryClientProvider (https://945ed464-22ac-453f-991f-7beb946d5591-00-1hk0ef5kug38u.spock.replit.dev/@fs/home/runner/workspace/node_modules/.vite/deps/@tanstack_react-query.js?v=dbc504c6:2805:3)
+    at App
+printWarning @ chunk-276SZO74.js?v=07626fd6:521
+NFTMintingForm.tsx:61 🎨 Starting NFT minting process...
+NFTMintingForm.tsx:65 ✅ Image blob created, size: 21238
+NFTMintingForm.tsx:68 📤 Uploading image to IPFS...
+ipfs.ts:3 🚀 UPLOADING IMAGE TO PINATA FOR REAL NFT
+ipfs.ts:4 📊 Blob size: 21238 bytes
+ipfs.ts:5 📊 Blob type: image/png
+ipfs.ts:16 📤 Uploading nft-image-1756205916077.png to Pinata...
+ipfs.ts:45 ✅ SUCCESS! image uploaded to IPFS: https://gateway.pinata.cloud/ipfs/QmWWDPmgMtyu1KHKCFZoYAmMxHcPuZce2mdsYs7CJXvmpX
+NFTMintingForm.tsx:71 ✅ Image uploaded to: https://gateway.pinata.cloud/ipfs/QmWWDPmgMtyu1KHKCFZoYAmMxHcPuZce2mdsYs7CJXvmpX
+NFTMintingForm.tsx:95 📤 Uploading metadata to IPFS...
+ipfs.ts:3 🚀 UPLOADING METADATA TO PINATA FOR REAL NFT
+ipfs.ts:4 📊 Blob size: 329 bytes
+ipfs.ts:5 📊 Blob type: application/json
+ipfs.ts:16 📤 Uploading nft-metadata-1756205918171.json to Pinata...
+ipfs.ts:45 ✅ SUCCESS! metadata uploaded to IPFS: https://gateway.pinata.cloud/ipfs/QmP2UeHFRjXAWHVPS61h1MXFtp1B29CKNCpRCWnobkQUQe
+NFTMintingForm.tsx:98 ✅ Metadata uploaded to: https://gateway.pinata.cloud/ipfs/QmP2UeHFRjXAWHVPS61h1MXFtp1B29CKNCpRCWnobkQUQe
+NFTMintingForm.tsx:107 🚀 Requesting wallet signature for Solana mainnet minting...
+solana.ts:25 🔍 Checking wallet connection...
+solana.ts:26 Wallet publicKey: ALJk32Pud7NbzR6zFyWc28EtNW4waRT2oVhE8r3xJaKv
+solana.ts:27 Wallet signTransaction available: true
+solana.ts:35 Wallet SOL balance: 0.027429231 SOL
+solana.ts:41 🚀 Starting REAL NFT minting with Token Metadata on Solana mainnet...
+solana.ts:42 📋 NFT Name: GG
+solana.ts:43 🔗 Metadata URI: https://gateway.pinata.cloud/ipfs/QmP2UeHFRjXAWHVPS61h1MXFtp1B29CKNCpRCWnobkQUQe
+solana.ts:47 Generated mint address: 22e5GBhURPPos9YY2UBXvnmBUp2iXpwPF1Hd3Fv1FnXg
+solana.ts:149 🖊️ Requesting wallet signature for REAL NFT...
+solana.ts:150 💰 Transaction will cost approximately 0.01 SOL in fees
+solana.ts:153 ✅ Transaction signed by wallet
+solana.ts:156 📡 Sending NFT transaction to Solana mainnet...
+solana.ts:180 💥 Failed to mint NFT: SendTransactionError: Simulation failed. 
+Message: Transaction simulation failed: Error processing Instruction 4: invalid instruction data. 
+Logs: 
+[
+  "Program ATokenGPvbdGVxr1b2hvZbsiqW5xWH25efTNsLJA8knL consumed 20407 of 799883 compute units",
+  "Program ATokenGPvbdGVxr1b2hvZbsiqW5xWH25efTNsLJA8knL success",
+  "Program TokenkegQfeZyiNwAJbNbGKPFXCWuBvf9Ss623VQ5DA invoke [1]",
+  "Program log: Instruction: MintTo",
+  "Program TokenkegQfeZyiNwAJbNbGKPFXCWuBvf9Ss623VQ5DA consumed 4536 of 779476 compute units",
+  "Program TokenkegQfeZyiNwAJbNbGKPFXCWuBvf9Ss623VQ5DA success",
+  "Program metaqbxxUerdq28cj1RbAWkYQm3ybzjb6a8bt518x1s invoke [1]",
+  "Program log: Error: InvalidInstructionData",
+  "Program metaqbxxUerdq28cj1RbAWkYQm3ybzjb6a8bt518x1s consumed 3079 of 774940 compute units",
+  "Program metaqbxxUerdq28cj1RbAWkYQm3ybzjb6a8bt518x1s failed: invalid instruction data"
+]. 
+Catch the `SendTransactionError` and call `getLogs()` on it for full details.
+    at Connection.sendEncodedTransaction (chunk-LWABBFZD.js?v=07626fd6:18190:17)
+    at async Connection.sendRawTransaction (chunk-LWABBFZD.js?v=07626fd6:18157:24)
+    at async mintNFT (solana.ts:157:23)
+    at async handleMintNFT (NFTMintingForm.tsx:109:29)
+mintNFT @ solana.ts:180
+NFTMintingForm.tsx:125 ❌ Unexpected error during minting: Error: Failed to mint NFT on mainnet: Simulation failed. 
+Message: Transaction simulation failed: Error processing Instruction 4: invalid instruction data. 
+Logs: 
+[
+  "Program ATokenGPvbdGVxr1b2hvZbsiqW5xWH25efTNsLJA8knL consumed 20407 of 799883 compute units",
+  "Program ATokenGPvbdGVxr1b2hvZbsiqW5xWH25efTNsLJA8knL success",
+  "Program TokenkegQfeZyiNwAJbNbGKPFXCWuBvf9Ss623VQ5DA invoke [1]",
+  "Program log: Instruction: MintTo",
+  "Program TokenkegQfeZyiNwAJbNbGKPFXCWuBvf9Ss623VQ5DA consumed 4536 of 779476 compute units",
+  "Program TokenkegQfeZyiNwAJbNbGKPFXCWuBvf9Ss623VQ5DA success",
+  "Program metaqbxxUerdq28cj1RbAWkYQm3ybzjb6a8bt518x1s invoke [1]",
+  "Program log: Error: InvalidInstructionData",
+  "Program metaqbxxUerdq28cj1RbAWkYQm3ybzjb6a8bt518x1s consumed 3079 of 774940 compute units",
+  "Program metaqbxxUerdq28cj1RbAWkYQm3ybzjb6a8bt518x1s failed: invalid instruction data"
+]. 
+Catch the `SendTransactionError` and call `getLogs()` on it for full details.. Please ensure you have sufficient SOL (~0.01 SOL) for fees and try again.
+    at mintNFT (solana.ts:181:11)
+    at async handleMintNFT (NFTMintingForm.tsx:109:29)
+handleMintNFT @ NFTMintingForm.tsx:125
+NFTMintingForm.tsx:130 Minting error: Error: Failed to mint NFT on mainnet: Simulation failed. 
+Message: Transaction simulation failed: Error processing Instruction 4: invalid instruction data. 
+Logs: 
+[
+  "Program ATokenGPvbdGVxr1b2hvZbsiqW5xWH25efTNsLJA8knL consumed 20407 of 799883 compute units",
+  "Program ATokenGPvbdGVxr1b2hvZbsiqW5xWH25efTNsLJA8knL success",
+  "Program TokenkegQfeZyiNwAJbNbGKPFXCWuBvf9Ss623VQ5DA invoke [1]",
+  "Program log: Instruction: MintTo",
+  "Program TokenkegQfeZyiNwAJbNbGKPFXCWuBvf9Ss623VQ5DA consumed 4536 of 779476 compute units",
+  "Program TokenkegQfeZyiNwAJbNbGKPFXCWuBvf9Ss623VQ5DA success",
+  "Program metaqbxxUerdq28cj1RbAWkYQm3ybzjb6a8bt518x1s invoke [1]",
+  "Program log: Error: InvalidInstructionData",
+  "Program metaqbxxUerdq28cj1RbAWkYQm3ybzjb6a8bt518x1s consumed 3079 of 774940 compute units",
+  "Program metaqbxxUerdq28cj1RbAWkYQm3ybzjb6a8bt518x1s failed: invalid instruction data"
+]. 
+Catch the `SendTransactionError` and call `getLogs()` on it for full details.. Please ensure you have sufficient SOL (~0.01 SOL) for fees and try again.
+    at mintNFT (solana.ts:181:11)
+    at async handleMintNFT (NFTMintingForm.tsx:109:29)
+handleMintNFT @ NFTMintingForm.tsx:130

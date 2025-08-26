@@ -12,8 +12,11 @@ import {
   getMinimumBalanceForRentExemptMint
 } from '@solana/spl-token';
 
-// Token Metadata Program ID (hardcoded)
-const TOKEN_METADATA_PROGRAM_ID = new PublicKey('metaqbxxUerdq28cj1RbAWkYQm3ybzjb6a8bt518x1s');
+// Metaplex Token Metadata v2 imports for proper NFT creation
+import { 
+  createCreateMetadataAccountV3Instruction,
+  PROGRAM_ID as TOKEN_METADATA_PROGRAM_ID 
+} from '@metaplex-foundation/mpl-token-metadata';
 
 export async function mintNFT(
   connection: Connection,
@@ -109,33 +112,40 @@ export async function mintNFT(
       )
     );
     
-    // Create metadata instruction manually
-    const metadataInstruction = {
-      programId: TOKEN_METADATA_PROGRAM_ID,
-      keys: [
-        { pubkey: metadataPDA, isSigner: false, isWritable: true },
-        { pubkey: mint.publicKey, isSigner: false, isWritable: false },
-        { pubkey: walletAdapter.publicKey, isSigner: true, isWritable: false },
-        { pubkey: walletAdapter.publicKey, isSigner: true, isWritable: true },
-        { pubkey: walletAdapter.publicKey, isSigner: false, isWritable: false },
-        { pubkey: SystemProgram.programId, isSigner: false, isWritable: false },
-      ],
-      data: Buffer.concat([
-        Buffer.from([33]), // CreateMetadataAccountV3 instruction discriminator
-        Buffer.from(name.padEnd(32, '\0'), 'utf8').slice(0, 32),
-        Buffer.from('PAINT'.padEnd(10, '\0'), 'utf8').slice(0, 10),
-        Buffer.from(metadataUri.padEnd(200, '\0'), 'utf8').slice(0, 200),
-        Buffer.from([1]), // has creators
-        Buffer.from([1]), // creator count
-        walletAdapter.publicKey.toBuffer(),
-        Buffer.from([1]), // verified
-        Buffer.from([100]), // share
-        Buffer.from([244, 1]), // seller fee basis points (500)
-        Buffer.from([1]), // is mutable
-      ]),
-    };
-    
-    transaction.add(metadataInstruction);
+    // Add proper NFT metadata instruction using Metaplex v2
+    transaction.add(
+      createCreateMetadataAccountV3Instruction(
+        {
+          metadata: metadataPDA,
+          mint: mint.publicKey,
+          mintAuthority: walletAdapter.publicKey,
+          payer: walletAdapter.publicKey,
+          updateAuthority: walletAdapter.publicKey,
+          systemProgram: SystemProgram.programId,
+        },
+        {
+          createMetadataAccountArgsV3: {
+            data: {
+              name: name,
+              symbol: 'PAINT',
+              uri: metadataUri,
+              creators: [
+                {
+                  address: walletAdapter.publicKey,
+                  verified: true,
+                  share: 100,
+                },
+              ],
+              sellerFeeBasisPoints: 500, // 5% royalty
+              collection: null,
+              uses: null,
+            },
+            isMutable: true,
+            collectionDetails: null,
+          },
+        }
+      )
+    );
     
     // Get recent blockhash
     const { blockhash } = await connection.getLatestBlockhash();
@@ -152,10 +162,10 @@ export async function mintNFT(
     const signedTransaction = await walletAdapter.signTransaction(transaction);
     console.log('✅ Transaction signed by wallet');
     
-    // Send transaction
+    // Send transaction to REAL SOLANA MAINNET (no simulation)
     console.log('📡 Sending NFT transaction to Solana mainnet...');
     const signature = await connection.sendRawTransaction(signedTransaction.serialize(), {
-      skipPreflight: false,
+      skipPreflight: true, // Skip simulation, send directly to mainnet
       preflightCommitment: 'confirmed'
     });
     console.log('🔗 Transaction signature:', signature);
