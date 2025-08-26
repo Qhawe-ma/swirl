@@ -124,19 +124,31 @@ export default function PaintPage() {
         )}
 
         {appState === 'minting' && (
-          <Card className="p-8 text-center" data-testid="card-minting-progress">
-            <div className="flex flex-col items-center space-y-4">
-              <div className="w-16 h-16 border-4 border-primary border-t-transparent rounded-full animate-spin"></div>
-              <h3 className="text-lg font-medium text-gray-900">Minting Your NFT</h3>
-              <div className="space-y-2 text-sm text-gray-600">
-                <div className="flex items-center justify-center space-x-2">
-                  <span className="material-icons text-sm text-primary">cloud_upload</span>
-                  <span>Uploading artwork to IPFS...</span>
+          <div className="flex justify-center items-center min-h-0 bg-gray-200 p-4" style={{ background: 'linear-gradient(145deg, #e0e0e0, #c0c0c0)' }}>
+            <div className="bg-gray-300 border-2 border-gray-400 p-6 max-w-md w-full" style={{ borderStyle: 'outset' }} data-testid="card-minting-progress">
+              {/* Header */}
+              <div className="bg-gray-200 border-b-2 border-gray-400 px-3 py-2 -m-6 mb-4" style={{ borderStyle: 'outset' }}>
+                <h3 className="text-sm font-bold text-gray-800 flex items-center">
+                  <span className="mr-2">📝</span>
+                  Minting Your NFT
+                </h3>
+              </div>
+              
+              <div className="flex flex-col items-center space-y-4">
+                <div className="w-12 h-12 border-4 border-blue-500 border-t-transparent animate-spin" style={{ borderRadius: '0' }}></div>
+                <div className="space-y-2 text-sm text-gray-800 text-center">
+                  <div className="flex items-center justify-center space-x-2">
+                    <span>🌐</span>
+                    <span>Uploading artwork to IPFS...</span>
+                  </div>
+                  <div className="text-xs text-gray-600">This may take a few moments</div>
+                  <div className="text-xs text-gray-600 bg-yellow-100 border border-yellow-400 p-2 mt-2">
+                    ⚠️ If it takes too long, try again with higher SOL balance
+                  </div>
                 </div>
-                <div className="text-xs text-gray-500">This may take a few moments</div>
               </div>
             </div>
-          </Card>
+          </div>
         )}
 
         {appState === 'success' && (

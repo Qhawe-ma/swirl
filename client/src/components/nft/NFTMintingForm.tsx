@@ -145,9 +145,30 @@ export function NFTMintingForm({ imageData, onMintSuccess, onMintStart }: NFTMin
       
     } catch (error: any) {
       console.error('Minting error:', error);
+      
+      // Provide more helpful error messages based on the error type
+      let errorTitle = "Minting Failed";
+      let errorDescription = "Failed to mint NFT. Please try again.";
+      
+      if (error.message?.includes('timeout') || error.message?.includes('timed out')) {
+        errorTitle = "Transaction Timeout";
+        errorDescription = "Transaction took too long to confirm. Check Solana Explorer with the transaction signature to see if it succeeded. If not, try again with more SOL for fees.";
+      } else if (error.message?.includes('insufficient funds') || error.message?.includes('SOL')) {
+        errorTitle = "Insufficient SOL";
+        errorDescription = "You need more SOL in your wallet for transaction fees. Add at least 0.01 SOL and try again.";
+      } else if (error.message?.includes('signature')) {
+        errorTitle = "Transaction Issue";
+        errorDescription = `${error.message}`;
+      } else if (error.message?.includes('rejected') || error.message?.includes('cancelled')) {
+        errorTitle = "Transaction Cancelled";
+        errorDescription = "Transaction was cancelled in your wallet. Please try again and approve the transaction.";
+      } else {
+        errorDescription = error.message || "Unknown error occurred. Please try again.";
+      }
+      
       toast({
-        title: "Minting Failed",
-        description: error.message || "Failed to mint NFT. Please try again.",
+        title: errorTitle,
+        description: errorDescription,
         variant: "destructive",
       });
     } finally {

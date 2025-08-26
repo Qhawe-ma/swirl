@@ -170,12 +170,32 @@ export async function mintNFT(
     });
     console.log('🔗 Transaction signature:', signature);
     
-    // Confirm transaction
+    // Confirm transaction with extended timeout and better error handling
     console.log('⏳ Confirming NFT transaction on blockchain...');
-    const confirmation = await connection.confirmTransaction(signature, 'confirmed');
-    
-    if (confirmation.value.err) {
-      throw new Error(`Transaction failed: ${confirmation.value.err}`);
+    try {
+      // Use a longer timeout and check status multiple times
+      const confirmation = await connection.confirmTransaction({
+        signature: signature,
+        blockhash: blockhash,
+        lastValidBlockHeight: (await connection.getLatestBlockhash()).lastValidBlockHeight
+      }, 'confirmed');
+      
+      if (confirmation.value.err) {
+        throw new Error(`Transaction failed: ${JSON.stringify(confirmation.value.err)}`);
+      }
+    } catch (confirmError: any) {
+      // Check if transaction might have succeeded even if confirmation timed out
+      console.log('⚠️ Confirmation timeout, checking transaction status...');
+      try {
+        const txStatus = await connection.getSignatureStatus(signature);
+        if (txStatus.value?.confirmationStatus === 'confirmed' || txStatus.value?.confirmationStatus === 'finalized') {
+          console.log('✅ Transaction was actually successful despite timeout!');
+        } else {
+          throw new Error(`Transaction confirmation failed or timed out. Transaction signature: ${signature}. Please check Solana Explorer to see if your transaction succeeded. You may need to try again with a higher transaction fee.`);
+        }
+      } catch (statusError) {
+        throw new Error(`Transaction may have failed or timed out. Signature: ${signature}. Check Solana Explorer and try again if needed.`);
+      }
     }
 
     console.log('✅ SUCCESS! Real NFT minted with metadata!');
