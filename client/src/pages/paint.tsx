@@ -61,11 +61,11 @@ export default function PaintPage() {
   };
 
   return (
-    <div className="min-h-screen bg-background font-sans">
+    <div className="h-screen bg-background font-sans flex flex-col">
       {/* Header */}
-      <header className="bg-surface shadow-sm border-b border-gray-200">
+      <header className="bg-surface shadow-sm border-b border-gray-200 flex-shrink-0">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-          <div className="flex justify-between items-center h-16">
+          <div className="flex justify-between items-center h-14">
             <div className="flex items-center space-x-3">
               <div className="w-8 h-8 bg-primary rounded-lg flex items-center justify-center">
                 <span className="material-icons text-white text-lg">palette</span>
@@ -78,9 +78,9 @@ export default function PaintPage() {
         </div>
       </header>
 
-      <main className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
+      <main className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-4 flex-1 overflow-hidden">
         {appState === 'drawing' && (
-          <div className="grid lg:grid-cols-12 gap-8">
+          <div className="grid lg:grid-cols-12 gap-6 h-full">
             {/* Drawing Toolbar */}
             <div className="lg:col-span-3 order-2 lg:order-1">
               <DrawingToolbar

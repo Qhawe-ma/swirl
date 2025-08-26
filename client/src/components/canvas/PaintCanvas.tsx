@@ -40,12 +40,28 @@ export function PaintCanvas({
     
     if (!ctx) return;
 
-    canvasElement.width = 800;
-    canvasElement.height = 600;
-    
-    // Set white background
-    ctx.fillStyle = '#ffffff';
-    ctx.fillRect(0, 0, 800, 600);
+    // Make canvas responsive to container size
+    const container = canvasElement.parentElement;
+    if (container) {
+      const containerWidth = container.clientWidth - 32; // Account for padding
+      const maxHeight = Math.min(500, window.innerHeight - 200); // Responsive height
+      const aspectRatio = 4/3; // 4:3 aspect ratio
+      
+      let canvasWidth = Math.min(containerWidth, 700);
+      let canvasHeight = canvasWidth / aspectRatio;
+      
+      if (canvasHeight > maxHeight) {
+        canvasHeight = maxHeight;
+        canvasWidth = canvasHeight * aspectRatio;
+      }
+      
+      canvasElement.width = canvasWidth;
+      canvasElement.height = canvasHeight;
+      
+      // Set white background
+      ctx.fillStyle = '#ffffff';
+      ctx.fillRect(0, 0, canvasWidth, canvasHeight);
+    }
     
     setCanvas(canvasElement);
     setContext(ctx);
@@ -84,7 +100,7 @@ export function PaintCanvas({
     
     const img = new Image();
     img.onload = () => {
-      context.clearRect(0, 0, 800, 600);
+      context.clearRect(0, 0, canvas.width, canvas.height);
       context.drawImage(img, 0, 0);
       setHistoryIndex(newIndex);
       onUndoRedoChange(newIndex > 0, newIndex < history.length - 1);
@@ -102,7 +118,7 @@ export function PaintCanvas({
     
     const img = new Image();
     img.onload = () => {
-      context.clearRect(0, 0, 800, 600);
+      context.clearRect(0, 0, canvas.width, canvas.height);
       context.drawImage(img, 0, 0);
       setHistoryIndex(newIndex);
       onUndoRedoChange(newIndex > 0, newIndex < history.length - 1);
@@ -116,7 +132,7 @@ export function PaintCanvas({
     if (!shouldClear || !canvas || !context) return;
 
     context.fillStyle = '#ffffff';
-    context.fillRect(0, 0, 800, 600);
+    context.fillRect(0, 0, canvas.width, canvas.height);
     
     // Reset history
     const newState = canvas.toDataURL();
@@ -178,14 +194,14 @@ export function PaintCanvas({
   };
 
   return (
-    <Card className="p-6 mb-8" data-testid="card-paint-canvas">
-      <div className="flex items-center justify-between mb-6">
+    <Card className="p-4 h-full flex flex-col" data-testid="card-paint-canvas">
+      <div className="flex items-center justify-between mb-4">
         <h2 className="text-lg font-medium text-gray-900 flex items-center">
           <span className="material-icons mr-2">create</span>
           Canvas
         </h2>
         <div className="flex items-center space-x-3">
-          <span className="text-sm text-gray-500" data-testid="text-canvas-size">800x600</span>
+          <span className="text-sm text-gray-500" data-testid="text-canvas-size">{canvas ? `${canvas.width}x${canvas.height}` : 'Canvas'}</span>
           <Button
             className="bg-secondary hover:bg-orange-600 text-white flex items-center space-x-2"
             onClick={handleSave}
@@ -198,11 +214,11 @@ export function PaintCanvas({
       </div>
       
       {/* Canvas Area */}
-      <div className="flex justify-center">
-        <div className="canvas-container w-full max-w-4xl bg-white">
+      <div className="flex-1 flex items-center justify-center overflow-hidden">
+        <div className="canvas-container bg-white border rounded-lg">
           <canvas 
             ref={canvasRef}
-            className="drawing-canvas w-full h-full cursor-crosshair"
+            className="drawing-canvas cursor-crosshair block"
             data-testid="canvas-drawing"
             onMouseDown={startDrawing}
             onMouseMove={draw}
@@ -214,7 +230,7 @@ export function PaintCanvas({
       </div>
       
       {/* Canvas Instructions */}
-      <div className="mt-4 text-center text-sm text-gray-500">
+      <div className="mt-2 text-center text-sm text-gray-500">
         <span className="material-icons text-sm align-middle mr-1">touch_app</span>
         Click and drag to draw • Touch supported on mobile
       </div>
