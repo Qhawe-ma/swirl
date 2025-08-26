@@ -2,13 +2,13 @@ import { initializeApp } from "firebase/app";
 import { getDatabase, ref, set, push, onValue, off } from "firebase/database";
 
 const firebaseConfig = {
-  apiKey: "AIzaSyBvNqUgrM-a_JuMDHwDEteeJCp02lLwFZ8",
-  authDomain: "minter-nft.firebaseapp.com",
-  projectId: "minter-nft",
-  storageBucket: "minter-nft.firebasestorage.app",
-  messagingSenderId: "768239036621",
-  appId: "1:768239036621:web:a8073263f7883dc2c72184",
-  measurementId: "G-7Y00KM374C"
+  apiKey: import.meta.env.VITE_FIREBASE_API_KEY,
+  authDomain: `${import.meta.env.VITE_FIREBASE_PROJECT_ID}.firebaseapp.com`,
+  projectId: import.meta.env.VITE_FIREBASE_PROJECT_ID,
+  storageBucket: `${import.meta.env.VITE_FIREBASE_PROJECT_ID}.firebasestorage.app`,
+  messagingSenderId: import.meta.env.VITE_FIREBASE_MESSAGING_SENDER_ID,
+  appId: import.meta.env.VITE_FIREBASE_APP_ID,
+  measurementId: import.meta.env.VITE_FIREBASE_MEASUREMENT_ID
 };
 
 // Initialize Firebase
