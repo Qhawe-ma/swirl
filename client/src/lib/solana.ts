@@ -12,8 +12,8 @@ import {
   getMinimumBalanceForRentExemptMint
 } from '@solana/spl-token';
 
-// Metaplex imports for proper NFT creation
-import { Metaplex, walletAdapterIdentity } from '@metaplex-foundation/js';
+// Token Metadata Program ID (hardcoded)
+const TOKEN_METADATA_PROGRAM_ID = new PublicKey('metaqbxxUerdq28cj1RbAWkYQm3ybzjb6a8bt518x1s');
 
 export async function mintNFT(
   connection: Connection,
@@ -38,38 +38,143 @@ export async function mintNFT(
       throw new Error('Insufficient SOL balance. You need at least 0.01 SOL for NFT transaction fees.');
     }
 
-    console.log('🚀 Starting REAL NFT minting with Metaplex on Solana mainnet...');
+    console.log('🚀 Starting REAL NFT minting with Token Metadata on Solana mainnet...');
     console.log('📋 NFT Name:', name);
     console.log('🔗 Metadata URI:', metadataUri);
     
-    // Initialize Metaplex with wallet
-    const metaplex = Metaplex.make(connection)
-      .use(walletAdapterIdentity(walletAdapter));
+    // Generate new mint keypair
+    const mint = Keypair.generate();
+    console.log('Generated mint address:', mint.publicKey.toBase58());
     
-    console.log('🎨 Creating NFT with Metaplex Token Metadata Program...');
+    // Get associated token account
+    const associatedTokenAccount = await getAssociatedTokenAddress(
+      mint.publicKey,
+      walletAdapter.publicKey
+    );
     
-    // Create the NFT using Metaplex
-    const { nft } = await metaplex.nfts().create({
-      uri: metadataUri,
-      name: name,
-      symbol: 'PAINT',
-      sellerFeeBasisPoints: 500, // 5% royalty
-      creators: [
-        {
-          address: walletAdapter.publicKey,
-          share: 100,
-        },
+    // Calculate metadata PDA
+    const [metadataPDA] = PublicKey.findProgramAddressSync(
+      [
+        Buffer.from('metadata'),
+        TOKEN_METADATA_PROGRAM_ID.toBuffer(),
+        mint.publicKey.toBuffer(),
       ],
-      collection: null,
-      uses: null,
+      TOKEN_METADATA_PROGRAM_ID
+    );
+    
+    // Get minimum lamports for mint account
+    const mintRent = await getMinimumBalanceForRentExemptMint(connection);
+    
+    // Create transaction
+    const transaction = new Transaction();
+    
+    // Add instruction to create mint account
+    transaction.add(
+      SystemProgram.createAccount({
+        fromPubkey: walletAdapter.publicKey,
+        newAccountPubkey: mint.publicKey,
+        space: MINT_SIZE,
+        lamports: mintRent,
+        programId: TOKEN_PROGRAM_ID,
+      })
+    );
+    
+    // Add instruction to initialize mint (0 decimals for NFT)
+    transaction.add(
+      createInitializeMintInstruction(
+        mint.publicKey,
+        0, // decimals
+        walletAdapter.publicKey, // mint authority
+        walletAdapter.publicKey  // freeze authority
+      )
+    );
+    
+    // Add instruction to create associated token account
+    transaction.add(
+      createAssociatedTokenAccountInstruction(
+        walletAdapter.publicKey, // payer
+        associatedTokenAccount,   // associated token account
+        walletAdapter.publicKey, // owner
+        mint.publicKey           // mint
+      )
+    );
+    
+    // Add instruction to mint 1 token
+    transaction.add(
+      createMintToInstruction(
+        mint.publicKey,           // mint
+        associatedTokenAccount,   // destination
+        walletAdapter.publicKey, // authority
+        1                        // amount (1 for NFT)
+      )
+    );
+    
+    // Create metadata instruction manually
+    const metadataInstruction = {
+      programId: TOKEN_METADATA_PROGRAM_ID,
+      keys: [
+        { pubkey: metadataPDA, isSigner: false, isWritable: true },
+        { pubkey: mint.publicKey, isSigner: false, isWritable: false },
+        { pubkey: walletAdapter.publicKey, isSigner: true, isWritable: false },
+        { pubkey: walletAdapter.publicKey, isSigner: true, isWritable: true },
+        { pubkey: walletAdapter.publicKey, isSigner: false, isWritable: false },
+        { pubkey: SystemProgram.programId, isSigner: false, isWritable: false },
+      ],
+      data: Buffer.concat([
+        Buffer.from([33]), // CreateMetadataAccountV3 instruction discriminator
+        Buffer.from(name.padEnd(32, '\0'), 'utf8').slice(0, 32),
+        Buffer.from('PAINT'.padEnd(10, '\0'), 'utf8').slice(0, 10),
+        Buffer.from(metadataUri.padEnd(200, '\0'), 'utf8').slice(0, 200),
+        Buffer.from([1]), // has creators
+        Buffer.from([1]), // creator count
+        walletAdapter.publicKey.toBuffer(),
+        Buffer.from([1]), // verified
+        Buffer.from([100]), // share
+        Buffer.from([244, 1]), // seller fee basis points (500)
+        Buffer.from([1]), // is mutable
+      ]),
+    };
+    
+    transaction.add(metadataInstruction);
+    
+    // Get recent blockhash
+    const { blockhash } = await connection.getLatestBlockhash();
+    transaction.recentBlockhash = blockhash;
+    transaction.feePayer = walletAdapter.publicKey;
+    
+    // Sign with mint keypair
+    transaction.partialSign(mint);
+    
+    // Request wallet signature
+    console.log('🖊️ Requesting wallet signature for REAL NFT...');
+    console.log('💰 Transaction will cost approximately 0.01 SOL in fees');
+    
+    const signedTransaction = await walletAdapter.signTransaction(transaction);
+    console.log('✅ Transaction signed by wallet');
+    
+    // Send transaction
+    console.log('📡 Sending NFT transaction to Solana mainnet...');
+    const signature = await connection.sendRawTransaction(signedTransaction.serialize(), {
+      skipPreflight: false,
+      preflightCommitment: 'confirmed'
     });
+    console.log('🔗 Transaction signature:', signature);
+    
+    // Confirm transaction
+    console.log('⏳ Confirming NFT transaction on blockchain...');
+    const confirmation = await connection.confirmTransaction(signature, 'confirmed');
+    
+    if (confirmation.value.err) {
+      throw new Error(`Transaction failed: ${confirmation.value.err}`);
+    }
 
     console.log('✅ SUCCESS! Real NFT minted with metadata!');
-    console.log('🏆 NFT Address:', nft.address.toString());
+    console.log('🏆 NFT Mint Address:', mint.publicKey.toBase58());
     console.log('🎯 This NFT will show as a collectible in your wallet!');
     console.log('🖼️ It will display properly on NFT platforms like Magic Eden!');
+    console.log('📱 Check your wallet\'s "Collectibles" section!');
     
-    return nft.address.toString();
+    return mint.publicKey.toBase58();
     
   } catch (error: any) {
     console.error('💥 Failed to mint NFT:', error);
