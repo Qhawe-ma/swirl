@@ -27,6 +27,14 @@ export async function mintNFT(
       throw new Error('Wallet not properly connected. Please connect your wallet first.');
     }
 
+    // Check wallet balance first
+    const balance = await connection.getBalance(walletAdapter.publicKey);
+    console.log('Wallet SOL balance:', balance / 1e9, 'SOL');
+    
+    if (balance < 5000000) { // 0.005 SOL minimum
+      throw new Error('Insufficient SOL balance. You need at least 0.005 SOL for transaction fees.');
+    }
+
     console.log('🚀 Starting real NFT minting on Solana mainnet...');
     
     // Generate new mint keypair
@@ -95,16 +103,27 @@ export async function mintNFT(
     transaction.partialSign(mint);
     
     // Request wallet signature
-    console.log('Requesting wallet signature...');
+    console.log('🖊️ Requesting wallet signature...');
+    console.log('💰 Transaction will cost approximately 0.005 SOL in fees');
+    
     const signedTransaction = await walletAdapter.signTransaction(transaction);
+    console.log('✅ Transaction signed by wallet');
     
     // Send transaction
-    console.log('Sending transaction to Solana mainnet...');
-    const signature = await connection.sendRawTransaction(signedTransaction.serialize());
+    console.log('📡 Sending transaction to Solana mainnet...');
+    const signature = await connection.sendRawTransaction(signedTransaction.serialize(), {
+      skipPreflight: false,
+      preflightCommitment: 'confirmed'
+    });
+    console.log('🔗 Transaction signature:', signature);
     
     // Confirm transaction
-    console.log('Confirming transaction:', signature);
-    await connection.confirmTransaction(signature, 'confirmed');
+    console.log('⏳ Confirming transaction on blockchain...');
+    const confirmation = await connection.confirmTransaction(signature, 'confirmed');
+    
+    if (confirmation.value.err) {
+      throw new Error(`Transaction failed: ${confirmation.value.err}`);
+    }
     
     console.log('NFT successfully minted! Mint address:', mint.publicKey.toBase58());
     

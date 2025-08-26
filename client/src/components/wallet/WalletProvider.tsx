@@ -10,8 +10,8 @@ interface WalletProviderProps {
 }
 
 export function WalletProvider({ children }: WalletProviderProps) {
-  // Use Solana mainnet
-  const endpoint = useMemo(() => 'https://api.mainnet-beta.solana.com', []);
+  // Use Helius RPC for better reliability and higher rate limits
+  const endpoint = useMemo(() => 'https://mainnet.helius-rpc.com/?api-key=ee57b5b0-b40d-4044-8e24-9e1c8e0b7b7b', []);
   
   // Use empty array for now - modern browsers will auto-detect wallets
   const wallets = useMemo(() => [], []);
