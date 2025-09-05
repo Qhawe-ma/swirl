@@ -141,7 +141,7 @@ export default function PaintPage() {
                 ? 'w-20' 
                 : 'w-full lg:w-80'
             }`}>
-              <div className="h-full max-h-[calc(100vh-6rem)] overflow-y-auto relative">
+              <div className="h-[calc(100vh-6rem)] relative">
                 {/* Sidebar Toggle Button */}
                 <Button
                   onClick={() => setSidebarCollapsed(!sidebarCollapsed)}
@@ -178,67 +178,64 @@ export default function PaintPage() {
                   />
                 </div>
                 
-                {/* Collapsed Mini Toolbar - No scrolling, fits in viewport */}
+                {/* Collapsed Mini Toolbar - Fixed height, all tools visible */}
                 {sidebarCollapsed && (
-                  <div className="w-full h-full bg-white/98 dark:bg-slate-900/98 backdrop-blur-2xl border border-slate-200/60 dark:border-slate-700/60 rounded-2xl shadow-2xl ring-1 ring-slate-900/5 dark:ring-white/10 flex flex-col items-center justify-between p-2">
-                    {/* Top Tools */}
-                    <div className="flex flex-col items-center space-y-1">
-                      {/* Mini Mode Indicator */}
-                      <div className="w-10 h-10 bg-gradient-to-br from-primary/15 via-primary/10 to-primary/5 rounded-lg flex items-center justify-center ring-1 ring-primary/20">
-                        <Palette className="h-4 w-4 text-primary" />
-                      </div>
-                      
-                      {/* Current Color */}
-                      <div 
-                        className="w-10 h-10 border-2 border-slate-200 dark:border-slate-700 rounded-lg cursor-pointer shadow-md hover:shadow-lg transition-all duration-300 ring-1 ring-slate-900/10 dark:ring-white/10"
-                        style={{ backgroundColor: selectedColor }}
-                        title="Current color"
-                      />
-                      
-                      {/* Quick Mode Toggle */}
-                      <button
-                        onClick={() => setDrawingMode(drawingMode === 'brush' ? 'eraser' : 'brush')}
-                        className="w-10 h-10 bg-slate-100 dark:bg-slate-800 hover:bg-slate-200 dark:hover:bg-slate-700 rounded-lg flex items-center justify-center transition-all duration-200 shadow-sm hover:shadow-md border border-slate-200 dark:border-slate-600"
-                        title={`Switch to ${drawingMode === 'brush' ? 'eraser' : 'brush'}`}
-                      >
-                        {drawingMode === 'brush' ? (
-                          <Brush className="h-4 w-4 text-slate-600 dark:text-slate-400" />
-                        ) : (
-                          <Eraser className="h-4 w-4 text-slate-600 dark:text-slate-400" />
-                        )}
-                      </button>
+                  <div className="w-full h-[calc(100vh-8rem)] bg-white/98 dark:bg-slate-900/98 backdrop-blur-2xl border border-slate-200/60 dark:border-slate-700/60 rounded-2xl shadow-2xl ring-1 ring-slate-900/5 dark:ring-white/10 flex flex-col items-center justify-center p-1 space-y-2">
+                    {/* Mini Mode Indicator */}
+                    <div className="w-9 h-9 bg-gradient-to-br from-primary/15 via-primary/10 to-primary/5 rounded-lg flex items-center justify-center ring-1 ring-primary/20 flex-shrink-0">
+                      <Palette className="h-4 w-4 text-primary" />
                     </div>
+                    
+                    {/* Current Color */}
+                    <div 
+                      className="w-9 h-9 border-2 border-slate-200 dark:border-slate-700 rounded-lg cursor-pointer shadow-md hover:shadow-lg transition-all duration-300 ring-1 ring-slate-900/10 dark:ring-white/10 flex-shrink-0"
+                      style={{ backgroundColor: selectedColor }}
+                      title="Current color"
+                    />
+                    
+                    {/* Quick Mode Toggle */}
+                    <button
+                      onClick={() => setDrawingMode(drawingMode === 'brush' ? 'eraser' : 'brush')}
+                      className="w-9 h-9 bg-slate-100 dark:bg-slate-800 hover:bg-slate-200 dark:hover:bg-slate-700 rounded-lg flex items-center justify-center transition-all duration-200 shadow-sm hover:shadow-md border border-slate-200 dark:border-slate-600 flex-shrink-0"
+                      title={`Switch to ${drawingMode === 'brush' ? 'eraser' : 'brush'}`}
+                    >
+                      {drawingMode === 'brush' ? (
+                        <Brush className="h-4 w-4 text-slate-600 dark:text-slate-400" />
+                      ) : (
+                        <Eraser className="h-4 w-4 text-slate-600 dark:text-slate-400" />
+                      )}
+                    </button>
 
-                    {/* Bottom Actions */}
-                    <div className="flex flex-col items-center space-y-1">
-                      <button
-                        onClick={handleUndo}
-                        disabled={!canUndo}
-                        className="w-10 h-8 bg-slate-50 dark:bg-slate-800 hover:bg-slate-100 dark:hover:bg-slate-700 disabled:opacity-40 disabled:cursor-not-allowed rounded-lg flex items-center justify-center transition-all duration-200 shadow-sm hover:shadow-md border border-slate-200 dark:border-slate-600"
-                        title="Undo"
-                      >
-                        <Undo2 className="h-3 w-3 text-slate-600 dark:text-slate-400" />
-                      </button>
-                      
-                      <button
-                        onClick={handleRedo}
-                        disabled={!canRedo}
-                        className="w-10 h-8 bg-slate-50 dark:bg-slate-800 hover:bg-slate-100 dark:hover:bg-slate-700 disabled:opacity-40 disabled:cursor-not-allowed rounded-lg flex items-center justify-center transition-all duration-200 shadow-sm hover:shadow-md border border-slate-200 dark:border-slate-600"
-                        title="Redo"
-                      >
-                        <Redo2 className="h-3 w-3 text-slate-600 dark:text-slate-400" />
-                      </button>
+                    <div className="w-full border-t border-slate-200 dark:border-slate-700 my-1 flex-shrink-0"></div>
 
-                      <button
-                        onClick={handleClear}
-                        className="w-10 h-8 bg-red-50 dark:bg-red-900/20 hover:bg-red-100 dark:hover:bg-red-900/30 rounded-lg flex items-center justify-center transition-all duration-200 shadow-sm hover:shadow-md border border-red-200 dark:border-red-800"
-                        title="Clear Canvas"
-                      >
-                        <svg className="h-3 w-3 text-red-600 dark:text-red-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                          <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16" />
-                        </svg>
-                      </button>
-                    </div>
+                    {/* Actions */}
+                    <button
+                      onClick={handleUndo}
+                      disabled={!canUndo}
+                      className="w-9 h-7 bg-slate-50 dark:bg-slate-800 hover:bg-slate-100 dark:hover:bg-slate-700 disabled:opacity-40 disabled:cursor-not-allowed rounded-lg flex items-center justify-center transition-all duration-200 shadow-sm hover:shadow-md border border-slate-200 dark:border-slate-600 flex-shrink-0"
+                      title="Undo"
+                    >
+                      <Undo2 className="h-3 w-3 text-slate-600 dark:text-slate-400" />
+                    </button>
+                    
+                    <button
+                      onClick={handleRedo}
+                      disabled={!canRedo}
+                      className="w-9 h-7 bg-slate-50 dark:bg-slate-800 hover:bg-slate-100 dark:hover:bg-slate-700 disabled:opacity-40 disabled:cursor-not-allowed rounded-lg flex items-center justify-center transition-all duration-200 shadow-sm hover:shadow-md border border-slate-200 dark:border-slate-600 flex-shrink-0"
+                      title="Redo"
+                    >
+                      <Redo2 className="h-3 w-3 text-slate-600 dark:text-slate-400" />
+                    </button>
+
+                    <button
+                      onClick={handleClear}
+                      className="w-9 h-7 bg-red-50 dark:bg-red-900/20 hover:bg-red-100 dark:hover:bg-red-900/30 rounded-lg flex items-center justify-center transition-all duration-200 shadow-sm hover:shadow-md border border-red-200 dark:border-red-800 flex-shrink-0"
+                      title="Clear Canvas"
+                    >
+                      <svg className="h-3 w-3 text-red-600 dark:text-red-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16" />
+                      </svg>
+                    </button>
                   </div>
                 )}
               </div>
