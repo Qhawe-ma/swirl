@@ -225,48 +225,32 @@ export function PaintCanvas({
 
   return (
     <div className="h-full flex flex-col bg-white/98 dark:bg-slate-900/98 backdrop-blur-2xl border border-slate-200/60 dark:border-slate-700/60 rounded-2xl shadow-2xl overflow-hidden" data-testid="card-paint-canvas">
-      {/* Professional Canvas Header */}
-      <div className="flex items-center justify-between bg-gradient-to-r from-slate-50/90 via-white/95 to-slate-50/90 dark:from-slate-800/90 dark:via-slate-900/95 dark:to-slate-800/90 border-b border-slate-200/50 dark:border-slate-700/50 px-6 py-4 backdrop-blur-xl">
-        <div className="flex items-center space-x-4">
-          <div className="flex items-center space-x-3">
-            <div className="relative">
-              <div className="w-10 h-10 bg-gradient-to-br from-primary/15 via-primary/10 to-primary/5 rounded-xl flex items-center justify-center ring-1 ring-primary/20">
-                <span className="text-lg">🎨</span>
-              </div>
-              <div className="absolute -top-0.5 -right-0.5 w-3 h-3 bg-emerald-500 rounded-full border-2 border-white dark:border-slate-900"></div>
+      {/* Compact Canvas Header */}
+      <div className="flex items-center justify-between bg-gradient-to-r from-slate-50/90 via-white/95 to-slate-50/90 dark:from-slate-800/90 dark:via-slate-900/95 dark:to-slate-800/90 border-b border-slate-200/50 dark:border-slate-700/50 px-4 py-2.5 backdrop-blur-xl">
+        <div className="flex items-center space-x-3">
+          <div className="relative">
+            <div className="w-7 h-7 bg-gradient-to-br from-primary/15 via-primary/10 to-primary/5 rounded-lg flex items-center justify-center ring-1 ring-primary/20">
+              <span className="text-sm">🎨</span>
             </div>
-            <div>
-              <h3 className="text-base font-bold text-slate-900 dark:text-slate-100 tracking-tight">Professional Canvas</h3>
-              <div className="flex items-center space-x-2 mt-0.5">
-                <span className="text-xs font-semibold text-slate-600 dark:text-slate-400" data-testid="text-canvas-size">
-                  {canvas ? `${canvas.width} × ${canvas.height}px` : 'Initializing...'}
-                </span>
-                <div className="w-1 h-1 bg-slate-300 dark:bg-slate-600 rounded-full"></div>
-                <span className="text-xs font-medium text-emerald-600 dark:text-emerald-400">High-DPI</span>
-              </div>
-            </div>
+            <div className="absolute -top-0.5 -right-0.5 w-2.5 h-2.5 bg-emerald-500 rounded-full border border-white dark:border-slate-900"></div>
+          </div>
+          <div className="flex items-center space-x-2">
+            <span className="text-xs font-bold text-emerald-700 dark:text-emerald-300 tracking-wider uppercase">Live</span>
           </div>
         </div>
         
-        <div className="flex items-center space-x-3">
-          <div className="flex items-center space-x-2 px-3 py-2 bg-emerald-50/80 dark:bg-emerald-900/20 border border-emerald-200/60 dark:border-emerald-800/60 rounded-xl backdrop-blur-sm">
-            <div className="w-2 h-2 bg-emerald-500 rounded-full animate-pulse"></div>
-            <span className="text-xs font-bold text-emerald-700 dark:text-emerald-300 tracking-wider uppercase">Live</span>
-          </div>
-          
-          <Button
-            onClick={handleSave}
-            className="bg-gradient-to-r from-primary via-primary/98 to-primary/95 hover:from-primary/95 hover:via-primary/90 hover:to-primary/85 text-primary-foreground shadow-lg hover:shadow-xl transition-all duration-300 motion-safe:hover:scale-[1.02] focus-visible:ring-2 focus-visible:ring-primary/50 focus-visible:ring-offset-2 px-6 py-2.5 rounded-xl font-bold text-sm tracking-wide ring-1 ring-white/20"
-            data-testid="button-save-artwork"
-          >
-            <div className="flex items-center space-x-2.5">
-              <div className="w-4 h-4 bg-primary-foreground/20 rounded-md flex items-center justify-center">
-                <span className="material-icons text-xs">save</span>
-              </div>
-              <span>Save Artwork</span>
+        <Button
+          onClick={handleSave}
+          className="bg-gradient-to-r from-primary via-primary/98 to-primary/95 hover:from-primary/95 hover:via-primary/90 hover:to-primary/85 text-primary-foreground shadow-lg hover:shadow-xl transition-all duration-300 motion-safe:hover:scale-[1.02] focus-visible:ring-2 focus-visible:ring-primary/50 focus-visible:ring-offset-2 px-4 py-2 rounded-lg font-bold text-sm tracking-wide ring-1 ring-white/20"
+          data-testid="button-save-artwork"
+        >
+          <div className="flex items-center space-x-2">
+            <div className="w-3 h-3 bg-primary-foreground/20 rounded-sm flex items-center justify-center">
+              <span className="material-icons text-xs">save</span>
             </div>
-          </Button>
-        </div>
+            <span>Save Artwork</span>
+          </div>
+        </Button>
       </div>
       
       {/* Professional Canvas Drawing Area */}
