@@ -51,31 +51,28 @@ export function PaintCanvas({
     const container = canvasElement.parentElement;
     if (container) {
       const containerRect = container.getBoundingClientRect();
-      const availableWidth = containerRect.width - 16;
-      const availableHeight = containerRect.height - 16;
+      const availableWidth = containerRect.width - 4;
+      const availableHeight = containerRect.height - 4;
       
       let canvasWidth, canvasHeight;
       
       if (canvasFormat === 'square') {
-        // Perfect square canvas - big and consistent
+        // Perfect square canvas - use much more space
         const minSize = Math.min(availableWidth, availableHeight);
-        const squareSize = Math.min(minSize * 0.99, 1100); // Use 99% or max 1100px
+        const squareSize = minSize * 0.98; // Use 98% of available space, no max limit
         canvasWidth = squareSize;
         canvasHeight = squareSize;
       } else {
-        // Rectangle canvas (16:9 aspect ratio) - big and consistent
+        // Rectangle canvas (16:9 aspect ratio) - use much more space
         const aspectRatio = 16 / 9;
         
-        // Always aim for similar size as square - don't shrink when switching
-        const targetSize = Math.min(Math.min(availableWidth, availableHeight) * 0.99, 1100);
-        
         if (availableWidth / availableHeight > aspectRatio) {
-          // Height is the limiting factor - use height similar to square
-          canvasHeight = Math.min(targetSize, availableHeight * 0.99);
+          // Height is the limiting factor
+          canvasHeight = availableHeight * 0.98;
           canvasWidth = canvasHeight * aspectRatio;
         } else {
-          // Width is the limiting factor - use width similar to square  
-          canvasWidth = Math.min(targetSize * aspectRatio, availableWidth * 0.99);
+          // Width is the limiting factor
+          canvasWidth = availableWidth * 0.98;
           canvasHeight = canvasWidth / aspectRatio;
         }
       }
@@ -424,7 +421,7 @@ export function PaintCanvas({
       </div>
       
       {/* Professional Canvas Drawing Area */}
-      <div className="flex-1 p-6 bg-gradient-to-br from-slate-50/40 via-white/20 to-slate-100/30 dark:from-slate-900/40 dark:via-slate-800/20 dark:to-slate-900/30">
+      <div className="flex-1 p-2 bg-gradient-to-br from-slate-50/40 via-white/20 to-slate-100/30 dark:from-slate-900/40 dark:via-slate-800/20 dark:to-slate-900/30">
         <div className="relative h-full w-full group flex items-center justify-center">
           {/* Dynamic Canvas Container */}
           <div className={`${canvasFormat === 'square' ? 'aspect-square' : 'aspect-video'} max-w-full max-h-full bg-white dark:bg-slate-50 border-2 border-slate-200/80 dark:border-slate-700/80 rounded-2xl overflow-hidden shadow-2xl ring-1 ring-slate-900/5 dark:ring-white/10 transition-all duration-300 group-hover:shadow-3xl group-hover:ring-slate-900/10`}>
