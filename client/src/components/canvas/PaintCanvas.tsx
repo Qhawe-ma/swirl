@@ -32,40 +32,6 @@ export function PaintCanvas({
   const [historyIndex, setHistoryIndex] = useState(-1);
   const [lastPoint, setLastPoint] = useState<{x: number, y: number} | null>(null);
 
-  // Resize canvas function
-  const resizeCanvas = (canvasElement: HTMLCanvasElement, ctx: CanvasRenderingContext2D) => {
-    const container = canvasElement.parentElement;
-    if (container) {
-      // Save current canvas content
-      const currentImageData = canvasElement.toDataURL();
-      
-      // Use full available space with padding
-      const containerRect = container.getBoundingClientRect();
-      let canvasWidth = Math.max(containerRect.width - 8, 400); // Account for padding
-      let canvasHeight = Math.max(containerRect.height - 8, 300);
-      
-      canvasElement.width = canvasWidth;
-      canvasElement.height = canvasHeight;
-      
-      // Set white background
-      ctx.fillStyle = '#ffffff';
-      ctx.fillRect(0, 0, canvasWidth, canvasHeight);
-      
-      // Restore canvas content if it existed
-      if (currentImageData !== 'data:,') {
-        const img = new Image();
-        img.onload = () => {
-          ctx.drawImage(img, 0, 0);
-        };
-        img.src = currentImageData;
-      }
-      
-      // Enable smooth drawing
-      ctx.imageSmoothingEnabled = true;
-      ctx.imageSmoothingQuality = 'high';
-    }
-  };
-
   useEffect(() => {
     if (!canvasRef.current) return;
 
@@ -74,8 +40,26 @@ export function PaintCanvas({
     
     if (!ctx) return;
 
-    // Initial canvas setup
-    resizeCanvas(canvasElement, ctx);
+    // Make perfect square canvas for NFTs
+    const container = canvasElement.parentElement;
+    if (container) {
+      const containerRect = container.getBoundingClientRect();
+      // Use smaller dimension to create perfect square
+      const availableWidth = containerRect.width - 16;
+      const availableHeight = containerRect.height - 16;
+      const squareSize = Math.min(Math.max(availableWidth, 400), Math.max(availableHeight, 400));
+      
+      canvasElement.width = squareSize;
+      canvasElement.height = squareSize;
+      
+      // Set white background
+      ctx.fillStyle = '#ffffff';
+      ctx.fillRect(0, 0, squareSize, squareSize);
+      
+      // Enable smooth drawing
+      ctx.imageSmoothingEnabled = true;
+      ctx.imageSmoothingQuality = 'high';
+    }
     
     setCanvas(canvasElement);
     setContext(ctx);
@@ -83,25 +67,10 @@ export function PaintCanvas({
     setHistory([initialData]);
     setHistoryIndex(0);
     
-    // Add resize observer to handle dynamic resizing
-    const resizeObserver = new ResizeObserver(() => {
-      resizeCanvas(canvasElement, ctx);
-    });
-    
-    const container = canvasElement.parentElement;
-    if (container) {
-      resizeObserver.observe(container);
-    }
-    
     // Use setTimeout to avoid calling setState during render
     setTimeout(() => {
       onUndoRedoChange(false, false);
     }, 0);
-
-    // Cleanup
-    return () => {
-      resizeObserver.disconnect();
-    };
   }, []);
 
   // Update brush properties for smooth drawing
@@ -276,9 +245,9 @@ export function PaintCanvas({
       
       {/* Professional Canvas Drawing Area */}
       <div className="flex-1 p-6 bg-gradient-to-br from-slate-50/40 via-white/20 to-slate-100/30 dark:from-slate-900/40 dark:via-slate-800/20 dark:to-slate-900/30">
-        <div className="relative h-full w-full group">
-          {/* Premium Canvas Container */}
-          <div className="h-full w-full bg-white dark:bg-slate-50 border-2 border-slate-200/80 dark:border-slate-700/80 rounded-2xl overflow-hidden shadow-2xl ring-1 ring-slate-900/5 dark:ring-white/10 transition-all duration-300 group-hover:shadow-3xl group-hover:ring-slate-900/10">
+        <div className="relative h-full w-full group flex items-center justify-center">
+          {/* Premium Square Canvas Container for NFTs */}
+          <div className="aspect-square max-w-full max-h-full bg-white dark:bg-slate-50 border-2 border-slate-200/80 dark:border-slate-700/80 rounded-2xl overflow-hidden shadow-2xl ring-1 ring-slate-900/5 dark:ring-white/10 transition-all duration-300 group-hover:shadow-3xl group-hover:ring-slate-900/10">
             {/* Subtle Grid Pattern */}
             <div 
               className="absolute inset-0 opacity-[0.03] dark:opacity-[0.08] pointer-events-none" 
