@@ -5,13 +5,12 @@ import { DrawingToolbar } from '@/components/canvas/DrawingToolbar';
 import { NFTMintingForm } from '@/components/nft/NFTMintingForm';
 import { MintSuccess } from '@/components/nft/MintSuccess';
 import { MintsHistory } from '@/components/wallet/MintsHistory';
-import { CaveArtGallery } from '@/components/gallery/CaveArtGallery';
 import { Card } from '@/components/ui/card';
 import { Button } from '@/components/ui/button';
 import { useWallet } from '@solana/wallet-adapter-react';
-import { FileText, Globe, Palette, AlertTriangle, ChevronLeft, ChevronRight, Menu, Brush, Eraser, Undo2, Redo2, Square, RectangleHorizontal, ImageIcon } from 'lucide-react';
+import { FileText, Globe, Palette, AlertTriangle, ChevronLeft, ChevronRight, Menu, Brush, Eraser, Undo2, Redo2, Square, RectangleHorizontal } from 'lucide-react';
 
-type AppState = 'drawing' | 'minting-form' | 'minting' | 'success' | 'gallery';
+type AppState = 'drawing' | 'minting-form' | 'minting' | 'success';
 
 export default function PaintPage() {
   const { connected } = useWallet();
@@ -110,29 +109,12 @@ export default function PaintPage() {
               
               {/* Navigation Items - Desktop */}
               <nav className="hidden lg:flex items-center space-x-1">
-                <button
-                  onClick={() => setAppState('drawing')}
-                  className={`px-3 py-2 text-sm font-medium rounded-lg transition-colors ${
-                    appState === 'drawing'
-                      ? 'text-primary bg-primary/5 border border-primary/20'
-                      : 'text-muted-foreground hover:text-foreground hover:bg-accent'
-                  }`}
-                  data-testid="nav-create"
-                >
+                <div className="px-3 py-2 text-sm font-medium text-primary bg-primary/5 rounded-lg border border-primary/20">
                   Create
-                </button>
-                <button
-                  onClick={() => setAppState('gallery')}
-                  className={`px-3 py-2 text-sm font-medium rounded-lg transition-colors flex items-center space-x-2 ${
-                    appState === 'gallery'
-                      ? 'text-primary bg-primary/5 border border-primary/20'
-                      : 'text-muted-foreground hover:text-foreground hover:bg-accent'
-                  }`}
-                  data-testid="nav-gallery"
-                >
-                  <ImageIcon className="w-4 h-4" />
-                  <span>Gallery</span>
-                </button>
+                </div>
+                <div className="px-3 py-2 text-sm font-medium text-muted-foreground hover:text-foreground hover:bg-accent rounded-lg transition-colors cursor-not-allowed opacity-60">
+                  Gallery
+                </div>
                 <div className="px-3 py-2 text-sm font-medium text-muted-foreground hover:text-foreground hover:bg-accent rounded-lg transition-colors cursor-not-allowed opacity-60">
                   Analytics
                 </div>
@@ -309,7 +291,6 @@ export default function PaintPage() {
                     shouldClear={shouldClear}
                     onActionComplete={handleActionComplete}
                     onModeChange={setDrawingMode}
-                    restoredImageData={savedImageData}
                   />
                 </div>
               </div>
@@ -317,14 +298,14 @@ export default function PaintPage() {
           </div>
         )}
 
-        <NFTMintingForm
-          imageData={savedImageData}
-          onMintSuccess={handleMintSuccess}
-          onMintStart={handleMintStart}
-          onBack={handleBackToDrawing}
-          isOpen={appState === 'minting-form'}
-          onClose={() => setAppState('drawing')}
-        />
+        {appState === 'minting-form' && (
+          <NFTMintingForm
+            imageData={savedImageData}
+            onMintSuccess={handleMintSuccess}
+            onMintStart={handleMintStart}
+            onBack={handleBackToDrawing}
+          />
+        )}
 
         {appState === 'minting' && (
           <div className="max-w-7xl mx-auto p-6 min-h-0 flex items-center justify-center">
@@ -420,10 +401,6 @@ export default function PaintPage() {
             mintAddress={mintAddress}
             onCreateAnother={handleCreateAnother}
           />
-        )}
-
-        {appState === 'gallery' && (
-          <CaveArtGallery />
         )}
       </main>
     </div>

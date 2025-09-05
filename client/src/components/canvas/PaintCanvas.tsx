@@ -14,7 +14,6 @@ interface PaintCanvasProps {
   shouldClear: boolean;
   onActionComplete: () => void;
   onModeChange: (mode: 'brush' | 'eraser' | 'rectangle' | 'circle' | 'triangle') => void;
-  restoredImageData?: string;
 }
 
 export function PaintCanvas({
@@ -28,8 +27,7 @@ export function PaintCanvas({
   shouldRedo,
   shouldClear,
   onActionComplete,
-  onModeChange,
-  restoredImageData
+  onModeChange
 }: PaintCanvasProps) {
   const canvasRef = useRef<HTMLCanvasElement>(null);
   const [canvas, setCanvas] = useState<HTMLCanvasElement | null>(null);
@@ -115,28 +113,6 @@ export function PaintCanvas({
       onUndoRedoChange(false, false);
     }, 0);
   }, [canvasFormat]);
-
-  // Restore artwork when restoredImageData changes
-  useEffect(() => {
-    if (!canvas || !context || !restoredImageData) return;
-
-    const img = new Image();
-    img.onload = () => {
-      // Clear canvas first
-      context.fillStyle = '#ffffff';
-      context.fillRect(0, 0, canvas.width, canvas.height);
-      
-      // Draw the restored image
-      context.drawImage(img, 0, 0, canvas.width, canvas.height);
-      
-      // Update history with restored state
-      const newState = canvas.toDataURL();
-      setHistory([newState]);
-      setHistoryIndex(0);
-      onUndoRedoChange(false, false);
-    };
-    img.src = restoredImageData;
-  }, [restoredImageData, canvas, context, onUndoRedoChange]);
 
   // Update brush properties for smooth drawing
   useEffect(() => {
