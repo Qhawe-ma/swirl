@@ -52,7 +52,7 @@ export function ColorPicker({ color, onChange, open, onOpenChange }: ColorPicker
 
   return (
     <Dialog open={open} onOpenChange={onOpenChange}>
-      <DialogContent className="max-w-sm p-6" data-testid="dialog-color-picker">
+      <DialogContent className="max-w-sm p-6 bg-white dark:bg-white" data-testid="dialog-color-picker">
         <DialogHeader>
           <DialogTitle className="flex items-center space-x-2 text-base">
             <Palette className="w-4 h-4" />
