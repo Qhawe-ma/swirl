@@ -233,16 +233,22 @@ export function PaintCanvas({
     const canvasX = (clientX - rect.left) * (canvas.width / rect.width);
     const canvasY = (clientY - rect.top) * (canvas.height / rect.height);
     
+    // Clamp coordinates to canvas bounds while allowing full canvas drawing
+    const clampedX = Math.max(0, Math.min(canvas.width - 1, canvasX));
+    const clampedY = Math.max(0, Math.min(canvas.height - 1, canvasY));
+    
     // For 1px brush, use exact coordinates. For larger brushes, center them.
     if (brushSize <= 1) {
       return {
-        x: Math.floor(canvasX),
-        y: Math.floor(canvasY)
+        x: Math.floor(clampedX),
+        y: Math.floor(clampedY)
       };
     } else {
+      // For larger brushes, ensure they don't go outside canvas bounds
+      const halfBrush = brushSize / 2;
       return {
-        x: canvasX - (brushSize / 2),
-        y: canvasY - (brushSize / 2)
+        x: Math.max(halfBrush, Math.min(canvas.width - halfBrush, clampedX)),
+        y: Math.max(halfBrush, Math.min(canvas.height - halfBrush, clampedY))
       };
     }
   };
@@ -306,9 +312,11 @@ export function PaintCanvas({
       
       // For 1px brush, draw exact pixel
       if (brushSize <= 1) {
-        context.fillRect(x, y, 1, 1);
+        if (x >= 0 && x < canvas.width && y >= 0 && y < canvas.height) {
+          context.fillRect(x, y, 1, 1);
+        }
       } else if (brushSize <= 3) {
-        context.arc(x + (brushSize / 2), y + (brushSize / 2), brushSize / 2, 0, 2 * Math.PI);
+        context.arc(x, y, brushSize / 2, 0, 2 * Math.PI);
         context.fill();
       } else {
         context.moveTo(x, y);
@@ -373,7 +381,10 @@ export function PaintCanvas({
       const targetY = Math.floor(y);
       
       while (true) {
-        context.fillRect(currentX, currentY, 1, 1);
+        // Only draw if within canvas bounds
+        if (currentX >= 0 && currentX < canvas.width && currentY >= 0 && currentY < canvas.height) {
+          context.fillRect(currentX, currentY, 1, 1);
+        }
         
         if (currentX === targetX && currentY === targetY) break;
         
