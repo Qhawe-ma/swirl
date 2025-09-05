@@ -66,6 +66,10 @@ export default function PaintPage() {
     setMintAddress('');
   };
 
+  const handleBackToDrawing = () => {
+    setAppState('drawing');
+  };
+
   return (
     <div className="h-screen bg-background font-sans flex flex-col">
       {/* Professional Header - NFT Marketplace Style */}
@@ -299,6 +303,7 @@ export default function PaintPage() {
             imageData={savedImageData}
             onMintSuccess={handleMintSuccess}
             onMintStart={handleMintStart}
+            onBack={handleBackToDrawing}
           />
         )}
 
