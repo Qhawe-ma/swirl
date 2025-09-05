@@ -138,7 +138,7 @@ export default function PaintPage() {
             {/* Collapsible Professional Sidebar - Tools Panel */}
             <div className={`relative transition-all duration-500 ease-in-out flex-shrink-0 order-2 lg:order-1 ${
               sidebarCollapsed 
-                ? 'w-16 lg:w-20' 
+                ? 'w-18 lg:w-20' 
                 : 'w-full lg:w-80'
             }`}>
               <div className="h-full max-h-[calc(100vh-8rem)] lg:sticky lg:top-6 relative">
@@ -180,15 +180,15 @@ export default function PaintPage() {
                 
                 {/* Collapsed Mini Toolbar */}
                 {sidebarCollapsed && (
-                  <div className="w-16 h-full bg-white/98 dark:bg-slate-900/98 backdrop-blur-2xl border border-slate-200/60 dark:border-slate-700/60 rounded-2xl shadow-2xl ring-1 ring-slate-900/5 dark:ring-white/10 flex flex-col items-center py-4 space-y-3">
+                  <div className="w-18 h-auto max-h-[calc(100vh-12rem)] bg-white/98 dark:bg-slate-900/98 backdrop-blur-2xl border border-slate-200/60 dark:border-slate-700/60 rounded-2xl shadow-2xl ring-1 ring-slate-900/5 dark:ring-white/10 flex flex-col items-center py-3 space-y-2">
                     {/* Mini Mode Indicator */}
-                    <div className="w-10 h-10 bg-gradient-to-br from-primary/15 via-primary/10 to-primary/5 rounded-xl flex items-center justify-center ring-1 ring-primary/20">
-                      <Palette className="h-5 w-5 text-primary" />
+                    <div className="w-9 h-9 bg-gradient-to-br from-primary/15 via-primary/10 to-primary/5 rounded-xl flex items-center justify-center ring-1 ring-primary/20">
+                      <Palette className="h-4 w-4 text-primary" />
                     </div>
                     
                     {/* Current Color */}
                     <div 
-                      className="w-10 h-10 border-2 border-slate-200 dark:border-slate-700 rounded-xl cursor-pointer shadow-md hover:shadow-lg transition-all duration-300 ring-1 ring-slate-900/10 dark:ring-white/10"
+                      className="w-9 h-9 border-2 border-slate-200 dark:border-slate-700 rounded-xl cursor-pointer shadow-md hover:shadow-lg transition-all duration-300 ring-1 ring-slate-900/10 dark:ring-white/10"
                       style={{ backgroundColor: selectedColor }}
                       title="Current color"
                     />
@@ -196,7 +196,7 @@ export default function PaintPage() {
                     {/* Quick Mode Toggle */}
                     <button
                       onClick={() => setDrawingMode(drawingMode === 'brush' ? 'eraser' : 'brush')}
-                      className="w-10 h-10 bg-slate-100 dark:bg-slate-800 hover:bg-slate-200 dark:hover:bg-slate-700 rounded-xl flex items-center justify-center transition-all duration-200 shadow-sm hover:shadow-md border border-slate-200 dark:border-slate-600"
+                      className="w-9 h-9 bg-slate-100 dark:bg-slate-800 hover:bg-slate-200 dark:hover:bg-slate-700 rounded-xl flex items-center justify-center transition-all duration-200 shadow-sm hover:shadow-md border border-slate-200 dark:border-slate-600"
                       title={`Switch to ${drawingMode === 'brush' ? 'eraser' : 'brush'}`}
                     >
                       {drawingMode === 'brush' ? (
@@ -207,11 +207,11 @@ export default function PaintPage() {
                     </button>
 
                     {/* Quick Actions */}
-                    <div className="flex flex-col space-y-2 pt-2 border-t border-slate-200 dark:border-slate-700">
+                    <div className="flex flex-col space-y-1.5 pt-1.5 border-t border-slate-200 dark:border-slate-700">
                       <button
                         onClick={handleUndo}
                         disabled={!canUndo}
-                        className="w-10 h-8 bg-slate-50 dark:bg-slate-800 hover:bg-slate-100 dark:hover:bg-slate-700 disabled:opacity-40 disabled:cursor-not-allowed rounded-lg flex items-center justify-center transition-all duration-200 shadow-sm hover:shadow-md border border-slate-200 dark:border-slate-600"
+                        className="w-9 h-7 bg-slate-50 dark:bg-slate-800 hover:bg-slate-100 dark:hover:bg-slate-700 disabled:opacity-40 disabled:cursor-not-allowed rounded-lg flex items-center justify-center transition-all duration-200 shadow-sm hover:shadow-md border border-slate-200 dark:border-slate-600"
                         title="Undo"
                       >
                         <Undo2 className="h-3 w-3 text-slate-600 dark:text-slate-400" />
@@ -220,7 +220,7 @@ export default function PaintPage() {
                       <button
                         onClick={handleRedo}
                         disabled={!canRedo}
-                        className="w-10 h-8 bg-slate-50 dark:bg-slate-800 hover:bg-slate-100 dark:hover:bg-slate-700 disabled:opacity-40 disabled:cursor-not-allowed rounded-lg flex items-center justify-center transition-all duration-200 shadow-sm hover:shadow-md border border-slate-200 dark:border-slate-600"
+                        className="w-9 h-7 bg-slate-50 dark:bg-slate-800 hover:bg-slate-100 dark:hover:bg-slate-700 disabled:opacity-40 disabled:cursor-not-allowed rounded-lg flex items-center justify-center transition-all duration-200 shadow-sm hover:shadow-md border border-slate-200 dark:border-slate-600"
                         title="Redo"
                       >
                         <Redo2 className="h-3 w-3 text-slate-600 dark:text-slate-400" />

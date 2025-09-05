@@ -225,29 +225,17 @@ export function PaintCanvas({
 
   return (
     <div className="h-full flex flex-col bg-white/98 dark:bg-slate-900/98 backdrop-blur-2xl border border-slate-200/60 dark:border-slate-700/60 rounded-2xl shadow-2xl overflow-hidden" data-testid="card-paint-canvas">
-      {/* Compact Canvas Header */}
-      <div className="flex items-center justify-between bg-gradient-to-r from-slate-50/90 via-white/95 to-slate-50/90 dark:from-slate-800/90 dark:via-slate-900/95 dark:to-slate-800/90 border-b border-slate-200/50 dark:border-slate-700/50 px-4 py-2.5 backdrop-blur-xl">
-        <div className="flex items-center space-x-3">
-          <div className="relative">
-            <div className="w-7 h-7 bg-gradient-to-br from-primary/15 via-primary/10 to-primary/5 rounded-lg flex items-center justify-center ring-1 ring-primary/20">
-              <span className="text-sm">🎨</span>
-            </div>
-            <div className="absolute -top-0.5 -right-0.5 w-2.5 h-2.5 bg-emerald-500 rounded-full border border-white dark:border-slate-900"></div>
-          </div>
-          <div className="flex items-center space-x-2">
-            <span className="text-xs font-bold text-emerald-700 dark:text-emerald-300 tracking-wider uppercase">Live</span>
-          </div>
-        </div>
-        
+      {/* Clean Canvas Header */}
+      <div className="flex items-center justify-end bg-gradient-to-r from-slate-50/90 via-white/95 to-slate-50/90 dark:from-slate-800/90 dark:via-slate-900/95 dark:to-slate-800/90 border-b border-slate-200/50 dark:border-slate-700/50 px-4 py-2 backdrop-blur-xl">
         <Button
           onClick={handleSave}
-          className="bg-gradient-to-r from-primary via-primary/98 to-primary/95 hover:from-primary/95 hover:via-primary/90 hover:to-primary/85 text-primary-foreground shadow-lg hover:shadow-xl transition-all duration-300 motion-safe:hover:scale-[1.02] focus-visible:ring-2 focus-visible:ring-primary/50 focus-visible:ring-offset-2 px-4 py-2 rounded-lg font-bold text-sm tracking-wide ring-1 ring-white/20"
+          className="bg-white/90 dark:bg-slate-800/90 hover:bg-slate-50 dark:hover:bg-slate-700 text-slate-900 dark:text-slate-100 shadow-md hover:shadow-lg transition-all duration-200 px-4 py-2 rounded-lg font-semibold text-sm border border-slate-200/80 dark:border-slate-600/80 hover:border-slate-300 dark:hover:border-slate-500"
           data-testid="button-save-artwork"
         >
           <div className="flex items-center space-x-2">
-            <div className="w-3 h-3 bg-primary-foreground/20 rounded-sm flex items-center justify-center">
-              <span className="material-icons text-xs">save</span>
-            </div>
+            <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+              <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M8 7H5a2 2 0 00-2 2v9a2 2 0 002 2h14a2 2 0 002-2V9a2 2 0 00-2-2h-3m-1 4l-3-3m0 0l-3 3m3-3v12" />
+            </svg>
             <span>Save Artwork</span>
           </div>
         </Button>
