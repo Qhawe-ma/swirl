@@ -132,16 +132,16 @@ export default function PaintPage() {
         </div>
       </header>
 
-      <main className="flex-1 overflow-hidden bg-gradient-to-br from-background via-muted/10 to-muted/20">
+      <main className="flex-1 bg-gradient-to-br from-background via-muted/10 to-muted/20 min-h-0">
         {appState === 'drawing' && (
-          <div className="h-full flex flex-col lg:flex-row gap-4 p-4 relative">
+          <div className="h-full flex gap-2 p-2 min-h-0">
             {/* Collapsible Professional Sidebar - Tools Panel */}
-            <div className={`relative transition-all duration-500 ease-in-out flex-shrink-0 order-2 lg:order-1 ${
+            <div className={`relative transition-all duration-500 ease-in-out flex-shrink-0 ${
               sidebarCollapsed 
-                ? 'w-20' 
-                : 'w-full lg:w-80'
+                ? 'w-16' 
+                : 'w-80'
             }`}>
-              <div className="h-[calc(100vh-6rem)] relative">
+              <div className="h-full relative">
                 {/* Sidebar Toggle Button */}
                 <Button
                   onClick={() => setSidebarCollapsed(!sidebarCollapsed)}
@@ -178,17 +178,17 @@ export default function PaintPage() {
                   />
                 </div>
                 
-                {/* Collapsed Mini Toolbar - Fixed height, all tools visible */}
+                {/* Collapsed Mini Toolbar - Robust compact design */}
                 {sidebarCollapsed && (
-                  <div className="w-full h-[calc(100vh-8rem)] bg-white/98 dark:bg-slate-900/98 backdrop-blur-2xl border border-slate-200/60 dark:border-slate-700/60 rounded-2xl shadow-2xl ring-1 ring-slate-900/5 dark:ring-white/10 flex flex-col items-center justify-center p-1 space-y-2">
+                  <div className="w-full h-full bg-white/98 dark:bg-slate-900/98 backdrop-blur-2xl border border-slate-200/60 dark:border-slate-700/60 rounded-xl shadow-2xl ring-1 ring-slate-900/5 dark:ring-white/10 flex flex-col items-center justify-evenly py-2">
                     {/* Mini Mode Indicator */}
-                    <div className="w-9 h-9 bg-gradient-to-br from-primary/15 via-primary/10 to-primary/5 rounded-lg flex items-center justify-center ring-1 ring-primary/20 flex-shrink-0">
-                      <Palette className="h-4 w-4 text-primary" />
+                    <div className="w-8 h-8 bg-gradient-to-br from-primary/15 via-primary/10 to-primary/5 rounded-lg flex items-center justify-center ring-1 ring-primary/20">
+                      <Palette className="h-3 w-3 text-primary" />
                     </div>
                     
                     {/* Current Color */}
                     <div 
-                      className="w-9 h-9 border-2 border-slate-200 dark:border-slate-700 rounded-lg cursor-pointer shadow-md hover:shadow-lg transition-all duration-300 ring-1 ring-slate-900/10 dark:ring-white/10 flex-shrink-0"
+                      className="w-8 h-8 border-2 border-slate-200 dark:border-slate-700 rounded-lg cursor-pointer shadow-md hover:shadow-lg transition-all duration-300 ring-1 ring-slate-900/10 dark:ring-white/10"
                       style={{ backgroundColor: selectedColor }}
                       title="Current color"
                     />
@@ -196,43 +196,41 @@ export default function PaintPage() {
                     {/* Quick Mode Toggle */}
                     <button
                       onClick={() => setDrawingMode(drawingMode === 'brush' ? 'eraser' : 'brush')}
-                      className="w-9 h-9 bg-slate-100 dark:bg-slate-800 hover:bg-slate-200 dark:hover:bg-slate-700 rounded-lg flex items-center justify-center transition-all duration-200 shadow-sm hover:shadow-md border border-slate-200 dark:border-slate-600 flex-shrink-0"
+                      className="w-8 h-8 bg-slate-100 dark:bg-slate-800 hover:bg-slate-200 dark:hover:bg-slate-700 rounded-lg flex items-center justify-center transition-all duration-200 shadow-sm hover:shadow-md border border-slate-200 dark:border-slate-600"
                       title={`Switch to ${drawingMode === 'brush' ? 'eraser' : 'brush'}`}
                     >
                       {drawingMode === 'brush' ? (
-                        <Brush className="h-4 w-4 text-slate-600 dark:text-slate-400" />
+                        <Brush className="h-3 w-3 text-slate-600 dark:text-slate-400" />
                       ) : (
-                        <Eraser className="h-4 w-4 text-slate-600 dark:text-slate-400" />
+                        <Eraser className="h-3 w-3 text-slate-600 dark:text-slate-400" />
                       )}
                     </button>
 
-                    <div className="w-full border-t border-slate-200 dark:border-slate-700 my-1 flex-shrink-0"></div>
-
-                    {/* Actions */}
+                    {/* Action Buttons */}
                     <button
                       onClick={handleUndo}
                       disabled={!canUndo}
-                      className="w-9 h-7 bg-slate-50 dark:bg-slate-800 hover:bg-slate-100 dark:hover:bg-slate-700 disabled:opacity-40 disabled:cursor-not-allowed rounded-lg flex items-center justify-center transition-all duration-200 shadow-sm hover:shadow-md border border-slate-200 dark:border-slate-600 flex-shrink-0"
+                      className="w-8 h-6 bg-slate-50 dark:bg-slate-800 hover:bg-slate-100 dark:hover:bg-slate-700 disabled:opacity-40 disabled:cursor-not-allowed rounded-md flex items-center justify-center transition-all duration-200 shadow-sm hover:shadow-md border border-slate-200 dark:border-slate-600"
                       title="Undo"
                     >
-                      <Undo2 className="h-3 w-3 text-slate-600 dark:text-slate-400" />
+                      <Undo2 className="h-2.5 w-2.5 text-slate-600 dark:text-slate-400" />
                     </button>
                     
                     <button
                       onClick={handleRedo}
                       disabled={!canRedo}
-                      className="w-9 h-7 bg-slate-50 dark:bg-slate-800 hover:bg-slate-100 dark:hover:bg-slate-700 disabled:opacity-40 disabled:cursor-not-allowed rounded-lg flex items-center justify-center transition-all duration-200 shadow-sm hover:shadow-md border border-slate-200 dark:border-slate-600 flex-shrink-0"
+                      className="w-8 h-6 bg-slate-50 dark:bg-slate-800 hover:bg-slate-100 dark:hover:bg-slate-700 disabled:opacity-40 disabled:cursor-not-allowed rounded-md flex items-center justify-center transition-all duration-200 shadow-sm hover:shadow-md border border-slate-200 dark:border-slate-600"
                       title="Redo"
                     >
-                      <Redo2 className="h-3 w-3 text-slate-600 dark:text-slate-400" />
+                      <Redo2 className="h-2.5 w-2.5 text-slate-600 dark:text-slate-400" />
                     </button>
 
                     <button
                       onClick={handleClear}
-                      className="w-9 h-7 bg-red-50 dark:bg-red-900/20 hover:bg-red-100 dark:hover:bg-red-900/30 rounded-lg flex items-center justify-center transition-all duration-200 shadow-sm hover:shadow-md border border-red-200 dark:border-red-800 flex-shrink-0"
+                      className="w-8 h-6 bg-red-50 dark:bg-red-900/20 hover:bg-red-100 dark:hover:bg-red-900/30 rounded-md flex items-center justify-center transition-all duration-200 shadow-sm hover:shadow-md border border-red-200 dark:border-red-800"
                       title="Clear Canvas"
                     >
-                      <svg className="h-3 w-3 text-red-600 dark:text-red-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                      <svg className="h-2.5 w-2.5 text-red-600 dark:text-red-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                         <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16" />
                       </svg>
                     </button>
@@ -241,10 +239,10 @@ export default function PaintPage() {
               </div>
             </div>
             
-            {/* Main Canvas Area - Professional Layout with Dynamic Width */}
-            <div className="flex-1 order-1 lg:order-2 min-h-0 flex flex-col min-w-0">
-              <div className="bg-card/60 backdrop-blur-xl border border-border/40 rounded-2xl shadow-xl p-1 h-full min-h-0">
-                <div className="h-full rounded-xl overflow-hidden min-h-0">
+            {/* Main Canvas Area - Full canvas display */}
+            <div className="flex-1 min-h-0 min-w-0">
+              <div className="bg-card/60 backdrop-blur-xl border border-border/40 rounded-xl shadow-xl p-1 h-full">
+                <div className="h-full rounded-lg overflow-hidden">
                   <PaintCanvas
                     selectedColor={selectedColor}
                     brushSize={brushSize}
