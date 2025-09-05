@@ -448,7 +448,7 @@ export function PaintCanvas({
       <div className="flex-1 p-1 bg-gradient-to-br from-slate-50/40 via-white/20 to-slate-100/30 dark:from-slate-900/40 dark:via-slate-800/20 dark:to-slate-900/30">
         <div className="relative h-full w-full group flex items-center justify-center">
           {/* Dynamic Canvas Container */}
-          <div className={`${canvasFormat === 'square' ? 'aspect-square w-[min(85vw,80vh)] max-w-[85%] max-h-[80%]' : 'aspect-video w-[min(90vw,70vh)] max-w-[90%] max-h-[70%]'} bg-white dark:bg-slate-50 border-2 border-slate-200/80 dark:border-slate-700/80 rounded-2xl overflow-hidden shadow-2xl ring-1 ring-slate-900/5 dark:ring-white/10 transition-all duration-300 group-hover:shadow-3xl group-hover:ring-slate-900/10`}>
+          <div className={`${canvasFormat === 'square' ? 'aspect-square w-[min(85vw,85vh)] max-w-[85%] max-h-[85%]' : 'aspect-video w-[min(95vw,85vh)] max-w-[95%] max-h-[85%]'} bg-white dark:bg-slate-50 border-2 border-slate-200/80 dark:border-slate-700/80 rounded-2xl overflow-hidden shadow-2xl ring-1 ring-slate-900/5 dark:ring-white/10 transition-all duration-300 group-hover:shadow-3xl group-hover:ring-slate-900/10`}>
             {/* Subtle Grid Pattern */}
             <div 
               className="absolute inset-0 opacity-[0.03] dark:opacity-[0.08] pointer-events-none" 
@@ -499,47 +499,6 @@ export function PaintCanvas({
         </div>
       </div>
       
-      {/* Professional Status & Info Bar */}
-      <div className="bg-gradient-to-r from-slate-50/95 via-white/98 to-slate-50/95 dark:from-slate-800/95 dark:via-slate-900/98 dark:to-slate-800/95 border-t border-slate-200/50 dark:border-slate-700/50 px-6 py-4 backdrop-blur-xl" role="status">
-        <div className="flex items-center justify-between">
-          <div className="flex items-center space-x-6 text-xs font-medium">
-            <div className="flex items-center space-x-2 text-slate-600 dark:text-slate-400">
-              <div className="w-5 h-5 bg-blue-100 dark:bg-blue-900/30 rounded-lg flex items-center justify-center">
-                <span className="material-icons text-xs text-blue-600 dark:text-blue-400">touch_app</span>
-              </div>
-              <span className="font-semibold">Click & drag to paint</span>
-            </div>
-            
-            <div className="w-px h-5 bg-slate-300 dark:bg-slate-600"></div>
-            
-            <div className="flex items-center space-x-2 text-slate-600 dark:text-slate-400">
-              <div className="w-5 h-5 bg-purple-100 dark:bg-purple-900/30 rounded-lg flex items-center justify-center">
-                <span className="material-icons text-xs text-purple-600 dark:text-purple-400">smartphone</span>
-              </div>
-              <span className="font-semibold">Touch optimized</span>
-            </div>
-            
-            <div className="w-px h-5 bg-slate-300 dark:bg-slate-600"></div>
-            
-            <div className="flex items-center space-x-2 text-slate-600 dark:text-slate-400">
-              <div className="w-5 h-5 bg-emerald-100 dark:bg-emerald-900/30 rounded-lg flex items-center justify-center">
-                <span className="material-icons text-xs text-emerald-600 dark:text-emerald-400">hd</span>
-              </div>
-              <span className="font-semibold">High-DPI rendering</span>
-            </div>
-          </div>
-          
-          <div className="flex items-center space-x-4">
-            <div className="flex items-center space-x-2 px-3 py-1.5 bg-gradient-to-r from-emerald-50 to-emerald-100/80 dark:from-emerald-900/30 dark:to-emerald-800/30 border border-emerald-200/60 dark:border-emerald-700/60 rounded-xl">
-              <div className="relative">
-                <div className="w-2.5 h-2.5 bg-gradient-to-r from-emerald-400 to-emerald-500 rounded-full animate-pulse"></div>
-                <div className="absolute inset-0 w-2.5 h-2.5 bg-gradient-to-r from-emerald-400 to-emerald-500 rounded-full animate-ping opacity-75"></div>
-              </div>
-              <span className="text-xs font-black text-emerald-700 dark:text-emerald-300 tracking-wider uppercase">Active</span>
-            </div>
-          </div>
-        </div>
-      </div>
     </div>
   );
 }
