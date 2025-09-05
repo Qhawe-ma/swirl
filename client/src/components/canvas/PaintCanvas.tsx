@@ -229,22 +229,15 @@ export function PaintCanvas({
       clientY = e.clientY;
     }
     
-    // Calculate exact pixel coordinates with high precision
+    // Calculate exact pixel coordinates with high precision and no restrictions
     const canvasX = (clientX - rect.left) * (canvas.width / rect.width);
     const canvasY = (clientY - rect.top) * (canvas.height / rect.height);
     
-    // For 1px brush, use exact coordinates. For larger brushes, center them.
-    if (brushSize <= 1) {
-      return {
-        x: Math.floor(canvasX),
-        y: Math.floor(canvasY)
-      };
-    } else {
-      return {
-        x: canvasX,
-        y: canvasY
-      };
-    }
+    // Return coordinates without any boundary limitations
+    return {
+      x: canvasX,
+      y: canvasY
+    };
   };
 
   const drawShape = (startX: number, startY: number, endX: number, endY: number) => {
@@ -535,7 +528,11 @@ export function PaintCanvas({
                 touchAction: 'none', 
                 width: '100%', 
                 height: '100%',
-                objectFit: 'contain'
+                display: 'block',
+                margin: 0,
+                padding: 0,
+                border: 'none',
+                outline: 'none'
               }}
             />
           </div>
