@@ -37,6 +37,7 @@ export function PaintCanvas({
   const [historyIndex, setHistoryIndex] = useState(-1);
   const [lastPoint, setLastPoint] = useState<{x: number, y: number} | null>(null);
   const [startPoint, setStartPoint] = useState<{x: number, y: number} | null>(null);
+  const [currentImageData, setCurrentImageData] = useState<string>('');
 
   useEffect(() => {
     if (!canvasRef.current) return;
@@ -267,8 +268,9 @@ export function PaintCanvas({
     const { x, y } = getCoordinates(e);
     
     if (['rectangle', 'circle', 'triangle'].includes(drawingMode)) {
-      // For shapes, save the starting point
+      // For shapes, save the starting point and current canvas state
       setStartPoint({ x, y });
+      setCurrentImageData(canvas.toDataURL());
     } else {
       // For brush/eraser, start drawing immediately
       setLastPoint({ x, y });
@@ -285,8 +287,29 @@ export function PaintCanvas({
     e.preventDefault();
     const { x, y } = getCoordinates(e);
     
-    if (['rectangle', 'circle', 'triangle'].includes(drawingMode)) {
-      // For shapes, do nothing during drag (shapes are drawn on release)
+    if (['rectangle', 'circle', 'triangle'].includes(drawingMode) && startPoint) {
+      // Clear canvas and redraw the saved state
+      if (currentImageData) {
+        const img = new Image();
+        img.onload = () => {
+          context.clearRect(0, 0, canvas.width, canvas.height);
+          context.drawImage(img, 0, 0);
+          
+          // Draw preview shape with semi-transparent style
+          context.save();
+          context.globalAlpha = 0.7;
+          context.strokeStyle = selectedColor;
+          context.lineWidth = Math.max(brushSize / 3, 2);
+          context.lineCap = 'round';
+          context.lineJoin = 'round';
+          context.setLineDash([5, 5]); // Dashed line for preview
+          
+          drawShape(startPoint.x, startPoint.y, x, y);
+          
+          context.restore();
+        };
+        img.src = currentImageData;
+      }
       return;
     }
     
@@ -304,16 +327,36 @@ export function PaintCanvas({
   const stopDrawing = (e?: React.MouseEvent<HTMLCanvasElement> | React.TouchEvent<HTMLCanvasElement>) => {
     if (!isDrawing) return;
     
-    if (['rectangle', 'circle', 'triangle'].includes(drawingMode) && startPoint && e) {
-      // Draw the final shape
-      const { x, y } = getCoordinates(e);
-      drawShape(startPoint.x, startPoint.y, x, y);
+    if (['rectangle', 'circle', 'triangle'].includes(drawingMode) && startPoint && e && context && canvas) {
+      // Clear canvas and redraw the saved state
+      if (currentImageData) {
+        const img = new Image();
+        img.onload = () => {
+          context.clearRect(0, 0, canvas.width, canvas.height);
+          context.drawImage(img, 0, 0);
+          
+          // Draw the final shape with solid style
+          context.strokeStyle = selectedColor;
+          context.lineWidth = Math.max(brushSize / 3, 2);
+          context.lineCap = 'round';
+          context.lineJoin = 'round';
+          context.setLineDash([]); // Solid line for final shape
+          
+          const { x, y } = getCoordinates(e);
+          drawShape(startPoint.x, startPoint.y, x, y);
+          
+          saveState();
+        };
+        img.src = currentImageData;
+      }
       setStartPoint(null);
+      setCurrentImageData('');
+    } else if (!['rectangle', 'circle', 'triangle'].includes(drawingMode)) {
+      saveState();
     }
     
     setIsDrawing(false);
     setLastPoint(null);
-    saveState();
   };
 
   return (
