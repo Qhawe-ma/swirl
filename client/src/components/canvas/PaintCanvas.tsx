@@ -117,9 +117,11 @@ export function PaintCanvas({
       context.fillStyle = selectedColor;
     }
     
-    // Set line width for shapes
+    // Enhanced settings for shapes
     if (['rectangle', 'circle', 'triangle'].includes(drawingMode)) {
       context.lineWidth = Math.max(brushSize / 3, 2);
+      context.lineCap = 'round';
+      context.lineJoin = 'round';
     }
   }, [context, selectedColor, brushSize, drawingMode]);
 
@@ -220,6 +222,43 @@ export function PaintCanvas({
     };
   };
 
+  const drawShape = (startX: number, startY: number, endX: number, endY: number) => {
+    if (!context) return;
+    
+    const width = endX - startX;
+    const height = endY - startY;
+    
+    context.beginPath();
+    
+    switch (drawingMode) {
+      case 'rectangle':
+        context.rect(startX, startY, width, height);
+        break;
+      case 'circle':
+        const radiusX = Math.abs(width) / 2;
+        const radiusY = Math.abs(height) / 2;
+        const centerX = startX + width / 2;
+        const centerY = startY + height / 2;
+        context.ellipse(centerX, centerY, radiusX, radiusY, 0, 0, 2 * Math.PI);
+        break;
+      case 'triangle':
+        const topX = startX + width / 2;
+        const topY = startY;
+        const leftX = startX;
+        const leftY = endY;
+        const rightX = endX;
+        const rightY = endY;
+        
+        context.moveTo(topX, topY);
+        context.lineTo(leftX, leftY);
+        context.lineTo(rightX, rightY);
+        context.closePath();
+        break;
+    }
+    
+    context.stroke();
+  };
+
   const startDrawing = (e: React.MouseEvent<HTMLCanvasElement> | React.TouchEvent<HTMLCanvasElement>) => {
     if (!context || !canvas) return;
     
@@ -262,47 +301,11 @@ export function PaintCanvas({
     setLastPoint({ x, y });
   };
 
-  const drawShape = (startX: number, startY: number, endX: number, endY: number) => {
-    if (!context) return;
-    
-    const width = endX - startX;
-    const height = endY - startY;
-    
-    context.beginPath();
-    
-    switch (drawingMode) {
-      case 'rectangle':
-        context.rect(startX, startY, width, height);
-        break;
-      case 'circle':
-        const radius = Math.sqrt(width * width + height * height) / 2;
-        const centerX = startX + width / 2;
-        const centerY = startY + height / 2;
-        context.arc(centerX, centerY, radius, 0, 2 * Math.PI);
-        break;
-      case 'triangle':
-        const topX = startX + width / 2;
-        const topY = startY;
-        const leftX = startX;
-        const leftY = endY;
-        const rightX = endX;
-        const rightY = endY;
-        
-        context.moveTo(topX, topY);
-        context.lineTo(leftX, leftY);
-        context.lineTo(rightX, rightY);
-        context.closePath();
-        break;
-    }
-    
-    context.stroke();
-  };
-  
   const stopDrawing = (e?: React.MouseEvent<HTMLCanvasElement> | React.TouchEvent<HTMLCanvasElement>) => {
     if (!isDrawing) return;
     
     if (['rectangle', 'circle', 'triangle'].includes(drawingMode) && startPoint && e) {
-      // Draw the shape
+      // Draw the final shape
       const { x, y } = getCoordinates(e);
       drawShape(startPoint.x, startPoint.y, x, y);
       setStartPoint(null);
