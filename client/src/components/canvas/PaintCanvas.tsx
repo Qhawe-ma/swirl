@@ -213,13 +213,11 @@ export function PaintCanvas({
     });
   };
 
-  // Get coordinates from mouse or touch event with improved accuracy
+  // Get coordinates from mouse or touch event with pixel-perfect accuracy
   const getCoordinates = (e: React.MouseEvent<HTMLCanvasElement> | React.TouchEvent<HTMLCanvasElement>) => {
     if (!canvas) return { x: 0, y: 0 };
     
     const rect = canvas.getBoundingClientRect();
-    const scaleX = canvas.width / rect.width;
-    const scaleY = canvas.height / rect.height;
     
     let clientX, clientY;
     if ('touches' in e) {
@@ -231,13 +229,17 @@ export function PaintCanvas({
       clientY = e.clientY;
     }
     
-    // For small brush sizes, use precise coordinates. For larger brushes, round them.
-    const x = (clientX - rect.left) * scaleX;
-    const y = (clientY - rect.top) * scaleY;
+    // Calculate exact pixel coordinates with high precision
+    const canvasX = (clientX - rect.left) * (canvas.width / rect.width);
+    const canvasY = (clientY - rect.top) * (canvas.height / rect.height);
+    
+    // Adjust for brush offset to center the drawing exactly at cursor position
+    const offsetX = canvasX - (brushSize / 2);
+    const offsetY = canvasY - (brushSize / 2);
     
     return {
-      x: brushSize <= 3 ? x : Math.round(x),
-      y: brushSize <= 3 ? y : Math.round(y)
+      x: offsetX,
+      y: offsetY
     };
   };
 
