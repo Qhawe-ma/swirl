@@ -233,14 +233,18 @@ export function PaintCanvas({
     const canvasX = (clientX - rect.left) * (canvas.width / rect.width);
     const canvasY = (clientY - rect.top) * (canvas.height / rect.height);
     
-    // Adjust for brush offset to center the drawing exactly at cursor position
-    const offsetX = canvasX - (brushSize / 2);
-    const offsetY = canvasY - (brushSize / 2);
-    
-    return {
-      x: offsetX,
-      y: offsetY
-    };
+    // For 1px brush, use exact coordinates. For larger brushes, center them.
+    if (brushSize <= 1) {
+      return {
+        x: Math.floor(canvasX),
+        y: Math.floor(canvasY)
+      };
+    } else {
+      return {
+        x: canvasX - (brushSize / 2),
+        y: canvasY - (brushSize / 2)
+      };
+    }
   };
 
   const drawShape = (startX: number, startY: number, endX: number, endY: number) => {
@@ -300,9 +304,11 @@ export function PaintCanvas({
       setLastPoint({ x, y });
       context.beginPath();
       
-      // For small brush sizes, draw a more precise dot
-      if (brushSize <= 3) {
-        context.arc(x, y, brushSize / 2, 0, 2 * Math.PI);
+      // For 1px brush, draw exact pixel
+      if (brushSize <= 1) {
+        context.fillRect(x, y, 1, 1);
+      } else if (brushSize <= 3) {
+        context.arc(x + (brushSize / 2), y + (brushSize / 2), brushSize / 2, 0, 2 * Math.PI);
         context.fill();
       } else {
         context.moveTo(x, y);
@@ -353,8 +359,35 @@ export function PaintCanvas({
       context.globalCompositeOperation = 'source-over';
     }
     
-    // For small brush sizes, use quadratic curves for smoother lines
-    if (brushSize <= 3) {
+    // For 1px brush, draw individual pixels along the path
+    if (brushSize <= 1) {
+      const dx = Math.abs(x - lastPoint.x);
+      const dy = Math.abs(y - lastPoint.y);
+      const sx = lastPoint.x < x ? 1 : -1;
+      const sy = lastPoint.y < y ? 1 : -1;
+      let err = dx - dy;
+      
+      let currentX = Math.floor(lastPoint.x);
+      let currentY = Math.floor(lastPoint.y);
+      const targetX = Math.floor(x);
+      const targetY = Math.floor(y);
+      
+      while (true) {
+        context.fillRect(currentX, currentY, 1, 1);
+        
+        if (currentX === targetX && currentY === targetY) break;
+        
+        const e2 = 2 * err;
+        if (e2 > -dy) {
+          err -= dy;
+          currentX += sx;
+        }
+        if (e2 < dx) {
+          err += dx;
+          currentY += sy;
+        }
+      }
+    } else if (brushSize <= 3) {
       const midX = (lastPoint.x + x) / 2;
       const midY = (lastPoint.y + y) / 2;
       context.quadraticCurveTo(lastPoint.x, lastPoint.y, midX, midY);
