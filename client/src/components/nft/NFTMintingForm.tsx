@@ -184,7 +184,9 @@ export function NFTMintingForm({ imageData, onMintSuccess, onMintStart }: NFTMin
           <div className="flex items-center justify-between">
             <div className="flex items-center space-x-4">
               <div className="w-12 h-12 bg-gradient-to-br from-primary to-primary/80 rounded-xl flex items-center justify-center shadow-lg">
-                <span className="text-2xl">💎</span>
+                <svg className="w-6 h-6 text-white" fill="currentColor" viewBox="0 0 24 24">
+                  <path d="M12 2L2 7V17L12 22L22 17V7L12 2ZM12 4.14L19.25 8L12 11.86L4.75 8L12 4.14ZM4 9.89L11 13.75V20.11L4 16.25V9.89ZM13 20.11V13.75L20 9.89V16.25L13 20.11Z"/>
+                </svg>
               </div>
               <div>
                 <h2 className="text-xl font-bold text-foreground tracking-tight">
@@ -277,11 +279,15 @@ export function NFTMintingForm({ imageData, onMintSuccess, onMintStart }: NFTMin
                   </Alert>
                   
                   <Alert className="border-blue-200 bg-blue-50 dark:border-blue-800 dark:bg-blue-950">
-                    <span className="text-lg">💰</span>
+                    <div className="w-5 h-5 bg-blue-500 rounded-full flex items-center justify-center">
+                      <svg className="w-3 h-3 text-white" fill="currentColor" viewBox="0 0 24 24">
+                        <path d="M12 2C13.1 2 14 2.9 14 4C14 5.1 13.1 6 12 6C10.9 6 10 5.1 10 4C10 2.9 10.9 2 12 2ZM21 9V7L12 2L3 7V9C3 10.55 4.45 12 6 12S9 10.55 9 12C9 13.45 10.45 15 12 15S15 13.45 15 12C15 10.55 16.45 12 18 12S21 10.55 21 9Z"/>
+                      </svg>
+                    </div>
                     <AlertDescription className="text-blue-800 dark:text-blue-200">
                       <div className="font-semibold mb-1">Minting Cost</div>
                       <div className="text-xs">
-                        ~0.002-0.01 SOL transaction fee
+                        ~0.02 SOL transaction fee
                       </div>
                     </AlertDescription>
                   </Alert>
@@ -295,7 +301,9 @@ export function NFTMintingForm({ imageData, onMintSuccess, onMintStart }: NFTMin
             <div className="flex flex-col sm:flex-row items-center justify-between gap-4">
               <div className="flex items-center space-x-3">
                 <div className="w-8 h-8 bg-primary/10 rounded-lg flex items-center justify-center">
-                  <span className="material-icons text-primary text-sm">security</span>
+                  <svg className="w-4 h-4 text-primary" fill="currentColor" viewBox="0 0 24 24">
+                    <path d="M12 1L21 5V11C21 16.55 17.16 21.74 12 23C6.84 21.74 3 16.55 3 11V5L12 1ZM12 7C10.9 7 10 7.9 10 9V15C10 16.1 10.9 17 12 17S14 16.1 14 15V9C14 7.9 13.1 7 12 7Z"/>
+                  </svg>
                 </div>
                 <div className="text-sm">
                   <div className="font-semibold text-foreground">Secure & Permanent</div>
@@ -313,7 +321,9 @@ export function NFTMintingForm({ imageData, onMintSuccess, onMintStart }: NFTMin
                 data-testid="button-mint-nft"
               >
                 <div className="flex items-center space-x-2">
-                  <span className="text-lg">💎</span>
+                  <svg className="w-5 h-5" fill="currentColor" viewBox="0 0 24 24">
+                    <path d="M12 2L2 7V17L12 22L22 17V7L12 2ZM12 4.14L19.25 8L12 11.86L4.75 8L12 4.14ZM4 9.89L11 13.75V20.11L4 16.25V9.89ZM13 20.11V13.75L20 9.89V16.25L13 20.11Z"/>
+                  </svg>
                   <span>{isLoading ? 'Minting NFT...' : 'Mint NFT on Solana'}</span>
                 </div>
               </Button>
