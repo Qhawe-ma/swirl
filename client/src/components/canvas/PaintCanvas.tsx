@@ -59,7 +59,7 @@ export function PaintCanvas({
       if (canvasFormat === 'square') {
         // Perfect square canvas - use much more space
         const minSize = Math.min(availableWidth, availableHeight);
-        const squareSize = minSize * 0.99; // Use 99% of available space, no max limit
+        const squareSize = minSize * 0.95; // Use 95% of available space for better sizing
         canvasWidth = squareSize;
         canvasHeight = squareSize;
       } else {
@@ -421,10 +421,10 @@ export function PaintCanvas({
       </div>
       
       {/* Professional Canvas Drawing Area */}
-      <div className="flex-1 p-2 bg-gradient-to-br from-slate-50/40 via-white/20 to-slate-100/30 dark:from-slate-900/40 dark:via-slate-800/20 dark:to-slate-900/30">
+      <div className="flex-1 p-1 bg-gradient-to-br from-slate-50/40 via-white/20 to-slate-100/30 dark:from-slate-900/40 dark:via-slate-800/20 dark:to-slate-900/30">
         <div className="relative h-full w-full group flex items-center justify-center">
           {/* Dynamic Canvas Container */}
-          <div className={`${canvasFormat === 'square' ? 'aspect-square' : 'aspect-video'} max-w-full max-h-full bg-white dark:bg-slate-50 border-2 border-slate-200/80 dark:border-slate-700/80 rounded-2xl overflow-hidden shadow-2xl ring-1 ring-slate-900/5 dark:ring-white/10 transition-all duration-300 group-hover:shadow-3xl group-hover:ring-slate-900/10`}>
+          <div className={`${canvasFormat === 'square' ? 'aspect-square' : 'aspect-video'} w-[90%] h-[90%] bg-white dark:bg-slate-50 border-2 border-slate-200/80 dark:border-slate-700/80 rounded-2xl overflow-hidden shadow-2xl ring-1 ring-slate-900/5 dark:ring-white/10 transition-all duration-300 group-hover:shadow-3xl group-hover:ring-slate-900/10`}>
             {/* Subtle Grid Pattern */}
             <div 
               className="absolute inset-0 opacity-[0.03] dark:opacity-[0.08] pointer-events-none" 
