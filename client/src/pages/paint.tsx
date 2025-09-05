@@ -6,8 +6,9 @@ import { NFTMintingForm } from '@/components/nft/NFTMintingForm';
 import { MintSuccess } from '@/components/nft/MintSuccess';
 import { MintsHistory } from '@/components/wallet/MintsHistory';
 import { Card } from '@/components/ui/card';
+import { Button } from '@/components/ui/button';
 import { useWallet } from '@solana/wallet-adapter-react';
-import { FileText, Globe, Palette, AlertTriangle } from 'lucide-react';
+import { FileText, Globe, Palette, AlertTriangle, ChevronLeft, ChevronRight, Menu } from 'lucide-react';
 
 type AppState = 'drawing' | 'minting-form' | 'minting' | 'success';
 
@@ -21,6 +22,9 @@ export default function PaintPage() {
   const [shouldUndo, setShouldUndo] = useState(false);
   const [shouldRedo, setShouldRedo] = useState(false);
   const [shouldClear, setShouldClear] = useState(false);
+  
+  // Collapsible sidebar state
+  const [sidebarCollapsed, setSidebarCollapsed] = useState(false);
   
   const [appState, setAppState] = useState<AppState>('drawing');
   const [savedImageData, setSavedImageData] = useState<string>('');
@@ -130,27 +134,83 @@ export default function PaintPage() {
 
       <main className="flex-1 overflow-hidden bg-gradient-to-br from-background via-muted/10 to-muted/20">
         {appState === 'drawing' && (
-          <div className="max-w-7xl mx-auto h-full flex flex-col lg:flex-row gap-6 p-6">
-            {/* Professional Sidebar - Tools Panel */}
-            <div className="w-full lg:w-80 flex-shrink-0 order-2 lg:order-1">
-              <div className="h-full max-h-[calc(100vh-8rem)] lg:sticky lg:top-6">
-                <DrawingToolbar
-                  selectedColor={selectedColor}
-                  onColorChange={setSelectedColor}
-                  brushSize={brushSize}
-                  onBrushSizeChange={setBrushSize}
-                  drawingMode={drawingMode}
-                  onModeChange={setDrawingMode}
-                  onUndo={handleUndo}
-                  onRedo={handleRedo}
-                  onClear={handleClear}
-                  canUndo={canUndo}
-                  canRedo={canRedo}
-                />
+          <div className="max-w-7xl mx-auto h-full flex flex-col lg:flex-row gap-6 p-6 relative">
+            {/* Collapsible Professional Sidebar - Tools Panel */}
+            <div className={`relative transition-all duration-500 ease-in-out flex-shrink-0 order-2 lg:order-1 ${
+              sidebarCollapsed 
+                ? 'w-16 lg:w-16' 
+                : 'w-full lg:w-80'
+            }`}>
+              <div className="h-full max-h-[calc(100vh-8rem)] lg:sticky lg:top-6 relative">
+                {/* Sidebar Toggle Button */}
+                <Button
+                  onClick={() => setSidebarCollapsed(!sidebarCollapsed)}
+                  className={`absolute top-4 z-20 w-10 h-10 p-0 bg-primary hover:bg-primary/90 text-primary-foreground shadow-lg hover:shadow-xl transition-all duration-300 motion-safe:hover:scale-105 rounded-xl border-2 border-white/20 ${
+                    sidebarCollapsed ? 'right-2' : '-right-5'
+                  }`}
+                  aria-label={sidebarCollapsed ? 'Expand sidebar' : 'Collapse sidebar'}
+                  data-testid="button-toggle-sidebar"
+                >
+                  {sidebarCollapsed ? (
+                    <ChevronRight className="h-4 w-4" />
+                  ) : (
+                    <ChevronLeft className="h-4 w-4" />
+                  )}
+                </Button>
+                
+                {/* Sidebar Content */}
+                <div className={`transition-all duration-500 ease-in-out overflow-hidden ${
+                  sidebarCollapsed ? 'opacity-0 pointer-events-none' : 'opacity-100'
+                }`}>
+                  <DrawingToolbar
+                    selectedColor={selectedColor}
+                    onColorChange={setSelectedColor}
+                    brushSize={brushSize}
+                    onBrushSizeChange={setBrushSize}
+                    drawingMode={drawingMode}
+                    onModeChange={setDrawingMode}
+                    onUndo={handleUndo}
+                    onRedo={handleRedo}
+                    onClear={handleClear}
+                    canUndo={canUndo}
+                    canRedo={canRedo}
+                    isCollapsed={sidebarCollapsed}
+                  />
+                </div>
+                
+                {/* Collapsed Mini Toolbar */}
+                {sidebarCollapsed && (
+                  <div className="w-12 h-full bg-white/98 dark:bg-slate-900/98 backdrop-blur-2xl border border-slate-200/60 dark:border-slate-700/60 rounded-2xl shadow-2xl ring-1 ring-slate-900/5 dark:ring-white/10 flex flex-col items-center py-6 space-y-4">
+                    {/* Mini Mode Indicator */}
+                    <div className="w-8 h-8 bg-gradient-to-br from-primary/15 via-primary/10 to-primary/5 rounded-xl flex items-center justify-center ring-1 ring-primary/20">
+                      <Palette className="h-4 w-4 text-primary" />
+                    </div>
+                    
+                    {/* Current Color */}
+                    <div 
+                      className="w-8 h-8 border-2 border-slate-200 dark:border-slate-700 rounded-lg cursor-pointer shadow-md hover:shadow-lg transition-all duration-300 ring-1 ring-slate-900/10 dark:ring-white/10"
+                      style={{ backgroundColor: selectedColor }}
+                      title="Current color"
+                    />
+                    
+                    {/* Quick Mode Toggle */}
+                    <button
+                      onClick={() => setDrawingMode(drawingMode === 'brush' ? 'eraser' : 'brush')}
+                      className="w-8 h-8 bg-slate-100 dark:bg-slate-800 hover:bg-slate-200 dark:hover:bg-slate-700 rounded-lg flex items-center justify-center transition-all duration-200 shadow-sm hover:shadow-md"
+                      title={`Switch to ${drawingMode === 'brush' ? 'eraser' : 'brush'}`}
+                    >
+                      {drawingMode === 'brush' ? (
+                        <span className="text-sm">🖌️</span>
+                      ) : (
+                        <span className="text-sm">🧹</span>
+                      )}
+                    </button>
+                  </div>
+                )}
               </div>
             </div>
             
-            {/* Main Canvas Area - Professional Layout */}
+            {/* Main Canvas Area - Professional Layout with Dynamic Width */}
             <div className="flex-1 order-1 lg:order-2 min-h-0 flex flex-col">
               <div className="bg-card/60 backdrop-blur-xl border border-border/40 rounded-2xl shadow-xl p-1 h-full">
                 <div className="h-full rounded-xl overflow-hidden">
