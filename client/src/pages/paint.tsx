@@ -16,7 +16,7 @@ export default function PaintPage() {
   const { connected } = useWallet();
   const [selectedColor, setSelectedColor] = useState('#000000');
   const [brushSize, setBrushSize] = useState(15);
-  const [drawingMode, setDrawingMode] = useState<'brush' | 'eraser'>('brush');
+  const [drawingMode, setDrawingMode] = useState<'brush' | 'eraser' | 'rectangle' | 'circle' | 'triangle'>('brush');
   const [canUndo, setCanUndo] = useState(false);
   const [canRedo, setCanRedo] = useState(false);
   const [shouldUndo, setShouldUndo] = useState(false);
@@ -286,6 +286,7 @@ export default function PaintPage() {
                     shouldRedo={shouldRedo}
                     shouldClear={shouldClear}
                     onActionComplete={handleActionComplete}
+                    onModeChange={setDrawingMode}
                   />
                 </div>
               </div>

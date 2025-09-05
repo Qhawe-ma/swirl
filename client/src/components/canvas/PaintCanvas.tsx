@@ -1,10 +1,11 @@
 import { useEffect, useRef, useState } from 'react';
 import { Button } from "@/components/ui/button";
+import { Square, Circle, Triangle, RectangleHorizontal } from 'lucide-react';
 
 interface PaintCanvasProps {
   selectedColor: string;
   brushSize: number;
-  drawingMode: 'brush' | 'eraser';
+  drawingMode: 'brush' | 'eraser' | 'rectangle' | 'circle' | 'triangle';
   canvasFormat: 'square' | 'rectangle';
   onSave: (imageData: string) => void;
   onUndoRedoChange: (canUndo: boolean, canRedo: boolean) => void;
@@ -12,6 +13,7 @@ interface PaintCanvasProps {
   shouldRedo: boolean;
   shouldClear: boolean;
   onActionComplete: () => void;
+  onModeChange: (mode: 'brush' | 'eraser' | 'rectangle' | 'circle' | 'triangle') => void;
 }
 
 export function PaintCanvas({
@@ -24,7 +26,8 @@ export function PaintCanvas({
   shouldUndo,
   shouldRedo,
   shouldClear,
-  onActionComplete
+  onActionComplete,
+  onModeChange
 }: PaintCanvasProps) {
   const canvasRef = useRef<HTMLCanvasElement>(null);
   const [canvas, setCanvas] = useState<HTMLCanvasElement | null>(null);
@@ -33,6 +36,7 @@ export function PaintCanvas({
   const [history, setHistory] = useState<string[]>([]);
   const [historyIndex, setHistoryIndex] = useState(-1);
   const [lastPoint, setLastPoint] = useState<{x: number, y: number} | null>(null);
+  const [startPoint, setStartPoint] = useState<{x: number, y: number} | null>(null);
 
   useEffect(() => {
     if (!canvasRef.current) return;
@@ -111,6 +115,11 @@ export function PaintCanvas({
       context.globalCompositeOperation = 'source-over';
       context.strokeStyle = selectedColor;
       context.fillStyle = selectedColor;
+    }
+    
+    // Set line width for shapes
+    if (['rectangle', 'circle', 'triangle'].includes(drawingMode)) {
+      context.lineWidth = Math.max(brushSize / 3, 2);
     }
   }, [context, selectedColor, brushSize, drawingMode]);
 
@@ -217,21 +226,34 @@ export function PaintCanvas({
     e.preventDefault();
     setIsDrawing(true);
     const { x, y } = getCoordinates(e);
-    setLastPoint({ x, y });
     
-    context.beginPath();
-    context.moveTo(x, y);
-    context.lineTo(x, y);
-    context.stroke();
+    if (['rectangle', 'circle', 'triangle'].includes(drawingMode)) {
+      // For shapes, save the starting point
+      setStartPoint({ x, y });
+    } else {
+      // For brush/eraser, start drawing immediately
+      setLastPoint({ x, y });
+      context.beginPath();
+      context.moveTo(x, y);
+      context.lineTo(x, y);
+      context.stroke();
+    }
   };
 
   const draw = (e: React.MouseEvent<HTMLCanvasElement> | React.TouchEvent<HTMLCanvasElement>) => {
-    if (!isDrawing || !context || !canvas || !lastPoint) return;
+    if (!isDrawing || !context || !canvas) return;
     
     e.preventDefault();
     const { x, y } = getCoordinates(e);
     
-    // Draw smooth continuous line
+    if (['rectangle', 'circle', 'triangle'].includes(drawingMode)) {
+      // For shapes, do nothing during drag (shapes are drawn on release)
+      return;
+    }
+    
+    if (!lastPoint) return;
+    
+    // Draw smooth continuous line for brush/eraser
     context.lineTo(x, y);
     context.stroke();
     context.beginPath();
@@ -240,8 +262,52 @@ export function PaintCanvas({
     setLastPoint({ x, y });
   };
 
-  const stopDrawing = () => {
+  const drawShape = (startX: number, startY: number, endX: number, endY: number) => {
+    if (!context) return;
+    
+    const width = endX - startX;
+    const height = endY - startY;
+    
+    context.beginPath();
+    
+    switch (drawingMode) {
+      case 'rectangle':
+        context.rect(startX, startY, width, height);
+        break;
+      case 'circle':
+        const radius = Math.sqrt(width * width + height * height) / 2;
+        const centerX = startX + width / 2;
+        const centerY = startY + height / 2;
+        context.arc(centerX, centerY, radius, 0, 2 * Math.PI);
+        break;
+      case 'triangle':
+        const topX = startX + width / 2;
+        const topY = startY;
+        const leftX = startX;
+        const leftY = endY;
+        const rightX = endX;
+        const rightY = endY;
+        
+        context.moveTo(topX, topY);
+        context.lineTo(leftX, leftY);
+        context.lineTo(rightX, rightY);
+        context.closePath();
+        break;
+    }
+    
+    context.stroke();
+  };
+  
+  const stopDrawing = (e?: React.MouseEvent<HTMLCanvasElement> | React.TouchEvent<HTMLCanvasElement>) => {
     if (!isDrawing) return;
+    
+    if (['rectangle', 'circle', 'triangle'].includes(drawingMode) && startPoint && e) {
+      // Draw the shape
+      const { x, y } = getCoordinates(e);
+      drawShape(startPoint.x, startPoint.y, x, y);
+      setStartPoint(null);
+    }
+    
     setIsDrawing(false);
     setLastPoint(null);
     saveState();
@@ -249,8 +315,50 @@ export function PaintCanvas({
 
   return (
     <div className="h-full flex flex-col bg-white/98 dark:bg-slate-900/98 backdrop-blur-2xl border border-slate-200/60 dark:border-slate-700/60 rounded-2xl shadow-2xl overflow-hidden" data-testid="card-paint-canvas">
-      {/* Clean Canvas Header */}
-      <div className="flex items-center justify-end bg-gradient-to-r from-slate-50/90 via-white/95 to-slate-50/90 dark:from-slate-800/90 dark:via-slate-900/95 dark:to-slate-800/90 border-b border-slate-200/50 dark:border-slate-700/50 px-4 py-2 backdrop-blur-xl">
+      {/* Canvas Header with Shape Tools */}
+      <div className="flex items-center justify-between bg-gradient-to-r from-slate-50/90 via-white/95 to-slate-50/90 dark:from-slate-800/90 dark:via-slate-900/95 dark:to-slate-800/90 border-b border-slate-200/50 dark:border-slate-700/50 px-4 py-2 backdrop-blur-xl">
+        {/* Shape Tools */}
+        <div className="flex items-center space-x-2">
+          <span className="text-xs font-medium text-muted-foreground mr-2">Shapes:</span>
+          <button
+            onClick={() => onModeChange('rectangle')}
+            className={`p-2 rounded-lg transition-all duration-200 flex items-center justify-center ${
+              drawingMode === 'rectangle'
+                ? 'bg-primary text-primary-foreground shadow-sm'
+                : 'text-muted-foreground hover:text-foreground hover:bg-accent'
+            }`}
+            data-testid="button-shape-rectangle"
+            title="Rectangle"
+          >
+            <RectangleHorizontal className="w-4 h-4" />
+          </button>
+          <button
+            onClick={() => onModeChange('circle')}
+            className={`p-2 rounded-lg transition-all duration-200 flex items-center justify-center ${
+              drawingMode === 'circle'
+                ? 'bg-primary text-primary-foreground shadow-sm'
+                : 'text-muted-foreground hover:text-foreground hover:bg-accent'
+            }`}
+            data-testid="button-shape-circle"
+            title="Circle"
+          >
+            <Circle className="w-4 h-4" />
+          </button>
+          <button
+            onClick={() => onModeChange('triangle')}
+            className={`p-2 rounded-lg transition-all duration-200 flex items-center justify-center ${
+              drawingMode === 'triangle'
+                ? 'bg-primary text-primary-foreground shadow-sm'
+                : 'text-muted-foreground hover:text-foreground hover:bg-accent'
+            }`}
+            data-testid="button-shape-triangle"
+            title="Triangle"
+          >
+            <Triangle className="w-4 h-4" />
+          </button>
+        </div>
+        
+        {/* Save Button */}
         <Button
           onClick={handleSave}
           className="bg-white/90 dark:bg-slate-800/90 hover:bg-slate-50 dark:hover:bg-slate-700 text-slate-900 dark:text-slate-100 shadow-md hover:shadow-lg transition-all duration-200 px-4 py-2 rounded-lg font-semibold text-sm border border-slate-200/80 dark:border-slate-600/80 hover:border-slate-300 dark:hover:border-slate-500"
@@ -290,12 +398,12 @@ export function PaintCanvas({
               aria-label="Professional drawing canvas with high-DPI support"
               onMouseDown={startDrawing}
               onMouseMove={draw}
-              onMouseUp={stopDrawing}
-              onMouseLeave={stopDrawing}
+              onMouseUp={(e) => stopDrawing(e)}
+              onMouseLeave={() => stopDrawing()}
               onTouchStart={startDrawing}
               onTouchMove={draw}
-              onTouchEnd={stopDrawing}
-              onTouchCancel={stopDrawing}
+              onTouchEnd={(e) => stopDrawing(e)}
+              onTouchCancel={() => stopDrawing()}
               style={{ 
                 touchAction: 'none', 
                 width: '100%', 

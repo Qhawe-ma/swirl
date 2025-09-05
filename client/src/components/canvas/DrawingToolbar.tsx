@@ -11,8 +11,8 @@ interface DrawingToolbarProps {
   onColorChange: (color: string) => void;
   brushSize: number;
   onBrushSizeChange: (size: number) => void;
-  drawingMode: 'brush' | 'eraser';
-  onModeChange: (mode: 'brush' | 'eraser') => void;
+  drawingMode: 'brush' | 'eraser' | 'rectangle' | 'circle' | 'triangle';
+  onModeChange: (mode: 'brush' | 'eraser' | 'rectangle' | 'circle' | 'triangle') => void;
   onUndo: () => void;
   onRedo: () => void;
   onClear: () => void;
@@ -76,7 +76,7 @@ export function DrawingToolbar({
           <ToggleGroup
             type="single"
             value={drawingMode}
-            onValueChange={(value) => value && onModeChange(value as 'brush' | 'eraser')}
+            onValueChange={(value) => value && onModeChange(value as 'brush' | 'eraser' | 'rectangle' | 'circle' | 'triangle')}
             className="grid grid-cols-2 gap-3"
             aria-label="Drawing mode selection"
             data-testid="toggle-group-drawing-mode"
