@@ -167,19 +167,21 @@ export function DrawingToolbar({
           </div>
           <div className="bg-slate-50/80 dark:bg-slate-800/50 rounded-xl p-4 border border-slate-200/60 dark:border-slate-700/60">
             <div className="flex items-center space-x-4">
-              <Slider
-                id="brush-size"
-                value={[brushSize]}
-                onValueChange={(value) => onBrushSizeChange(value[0])}
-                max={50}
-                min={1}
-                step={1}
-                className="flex-1"
-                aria-label="Brush size control"
-                data-testid="slider-brush-size"
-              />
+              <div className="flex-1 py-2">
+                <Slider
+                  id="brush-size"
+                  value={[brushSize]}
+                  onValueChange={(value) => onBrushSizeChange(value[0])}
+                  max={50}
+                  min={1}
+                  step={1}
+                  className="w-full [&>span[data-orientation=horizontal]]:h-3 [&>span[data-orientation=horizontal]]:bg-slate-200 [&>span[data-orientation=horizontal]]:dark:bg-slate-600 [&>span[data-orientation=horizontal]]:rounded-full [&_[role=slider]]:w-5 [&_[role=slider]]:h-5 [&_[role=slider]]:border-3 [&_[role=slider]]:border-white [&_[role=slider]]:bg-primary [&_[role=slider]]:shadow-lg [&_[role=slider]]:ring-2 [&_[role=slider]]:ring-primary/30"
+                  aria-label="Brush size control"
+                  data-testid="slider-brush-size"
+                />
+              </div>
               <div 
-                className="w-8 h-8 border-2 border-slate-200 dark:border-slate-700 rounded-full shadow-md flex-shrink-0 transition-all duration-200"
+                className="w-10 h-10 border-2 border-slate-200 dark:border-slate-700 rounded-full shadow-md flex-shrink-0 transition-all duration-200"
                 style={{ 
                   backgroundColor: drawingMode === 'brush' ? selectedColor : '#f1f5f9',
                   transform: `scale(${Math.min(Math.max(brushSize / 25, 0.4), 1)})`
