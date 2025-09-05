@@ -212,7 +212,7 @@ export default function PaintPage() {
                 
                 {/* Collapsed Mini Toolbar - Robust compact design */}
                 {sidebarCollapsed && (
-                  <div className="w-full h-full bg-white/98 dark:bg-slate-900/98 backdrop-blur-2xl border border-slate-200/60 dark:border-slate-700/60 rounded-xl shadow-2xl ring-1 ring-slate-900/5 dark:ring-white/10 flex flex-col items-center justify-center py-2 gap-2">
+                  <div className="w-full h-full bg-white/98 dark:bg-slate-900/98 backdrop-blur-2xl border border-slate-200/60 dark:border-slate-700/60 rounded-xl shadow-2xl ring-1 ring-slate-900/5 dark:ring-white/10 flex flex-col items-center justify-start pt-16 pb-4 gap-2">
                     {/* Mini Mode Indicator */}
                     <div className="w-8 h-8 bg-gradient-to-br from-primary/15 via-primary/10 to-primary/5 rounded-lg flex items-center justify-center ring-1 ring-primary/20">
                       <Palette className="h-3 w-3 text-primary" />
