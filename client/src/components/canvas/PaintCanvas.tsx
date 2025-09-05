@@ -306,9 +306,7 @@ export function PaintCanvas({
       
       // For 1px brush, draw exact pixel
       if (brushSize <= 1) {
-        if (x >= 0 && x < canvas.width && y >= 0 && y < canvas.height) {
-          context.fillRect(x, y, 1, 1);
-        }
+        context.fillRect(x, y, 1, 1);
       } else if (brushSize <= 3) {
         context.arc(x, y, brushSize / 2, 0, 2 * Math.PI);
         context.fill();
@@ -375,10 +373,8 @@ export function PaintCanvas({
       const targetY = Math.floor(y);
       
       while (true) {
-        // Only draw if within canvas bounds
-        if (currentX >= 0 && currentX < canvas.width && currentY >= 0 && currentY < canvas.height) {
-          context.fillRect(currentX, currentY, 1, 1);
-        }
+        // Draw pixel without boundary restrictions
+        context.fillRect(currentX, currentY, 1, 1);
         
         if (currentX === targetX && currentY === targetY) break;
         
