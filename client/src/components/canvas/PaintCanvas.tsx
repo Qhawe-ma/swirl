@@ -231,10 +231,13 @@ export function PaintCanvas({
       clientY = e.clientY;
     }
     
-    // Round coordinates for pixel-perfect drawing
+    // For small brush sizes, use precise coordinates. For larger brushes, round them.
+    const x = (clientX - rect.left) * scaleX;
+    const y = (clientY - rect.top) * scaleY;
+    
     return {
-      x: Math.round((clientX - rect.left) * scaleX),
-      y: Math.round((clientY - rect.top) * scaleY)
+      x: brushSize <= 3 ? x : Math.round(x),
+      y: brushSize <= 3 ? y : Math.round(y)
     };
   };
 
@@ -291,12 +294,19 @@ export function PaintCanvas({
       setStartPoint({ x, y });
       setCurrentImageData(canvas.toDataURL());
     } else {
-      // For brush/eraser, start drawing immediately
+      // For brush/eraser, start drawing immediately with precise positioning
       setLastPoint({ x, y });
       context.beginPath();
-      context.moveTo(x, y);
-      context.lineTo(x, y);
-      context.stroke();
+      
+      // For small brush sizes, draw a more precise dot
+      if (brushSize <= 3) {
+        context.arc(x, y, brushSize / 2, 0, 2 * Math.PI);
+        context.fill();
+      } else {
+        context.moveTo(x, y);
+        context.lineTo(x, y);
+        context.stroke();
+      }
     }
   };
 
@@ -341,10 +351,20 @@ export function PaintCanvas({
       context.globalCompositeOperation = 'source-over';
     }
     
-    context.lineTo(x, y);
-    context.stroke();
-    context.beginPath();
-    context.moveTo(x, y);
+    // For small brush sizes, use quadratic curves for smoother lines
+    if (brushSize <= 3) {
+      const midX = (lastPoint.x + x) / 2;
+      const midY = (lastPoint.y + y) / 2;
+      context.quadraticCurveTo(lastPoint.x, lastPoint.y, midX, midY);
+      context.stroke();
+      context.beginPath();
+      context.moveTo(midX, midY);
+    } else {
+      context.lineTo(x, y);
+      context.stroke();
+      context.beginPath();
+      context.moveTo(x, y);
+    }
     
     setLastPoint({ x, y });
   };
