@@ -200,7 +200,7 @@ export function PaintCanvas({
     });
   };
 
-  // Get coordinates from mouse or touch event
+  // Get coordinates from mouse or touch event with improved accuracy
   const getCoordinates = (e: React.MouseEvent<HTMLCanvasElement> | React.TouchEvent<HTMLCanvasElement>) => {
     if (!canvas) return { x: 0, y: 0 };
     
@@ -218,9 +218,10 @@ export function PaintCanvas({
       clientY = e.clientY;
     }
     
+    // Round coordinates for pixel-perfect drawing
     return {
-      x: (clientX - rect.left) * scaleX,
-      y: (clientY - rect.top) * scaleY
+      x: Math.round((clientX - rect.left) * scaleX),
+      y: Math.round((clientY - rect.top) * scaleY)
     };
   };
 
@@ -316,7 +317,13 @@ export function PaintCanvas({
     
     if (!lastPoint) return;
     
-    // Draw smooth continuous line for brush/eraser
+    // Draw smooth continuous line for brush/eraser with improved accuracy
+    if (drawingMode === 'eraser') {
+      context.globalCompositeOperation = 'destination-out';
+    } else {
+      context.globalCompositeOperation = 'source-over';
+    }
+    
     context.lineTo(x, y);
     context.stroke();
     context.beginPath();
@@ -424,7 +431,7 @@ export function PaintCanvas({
       <div className="flex-1 p-1 bg-gradient-to-br from-slate-50/40 via-white/20 to-slate-100/30 dark:from-slate-900/40 dark:via-slate-800/20 dark:to-slate-900/30">
         <div className="relative h-full w-full group flex items-center justify-center">
           {/* Dynamic Canvas Container */}
-          <div className={`${canvasFormat === 'square' ? 'aspect-square w-[min(85vw,80vh)] max-w-[85%] max-h-[80%]' : 'aspect-video w-full max-h-[80%]'} bg-white dark:bg-slate-50 border-2 border-slate-200/80 dark:border-slate-700/80 rounded-2xl overflow-hidden shadow-2xl ring-1 ring-slate-900/5 dark:ring-white/10 transition-all duration-300 group-hover:shadow-3xl group-hover:ring-slate-909/10`}>
+          <div className={`${canvasFormat === 'square' ? 'aspect-square w-[min(85vw,80vh)] max-w-[85%] max-h-[80%]' : 'aspect-video w-[min(90vw,70vh)] max-w-[90%] max-h-[70%]'} bg-white dark:bg-slate-50 border-2 border-slate-200/80 dark:border-slate-700/80 rounded-2xl overflow-hidden shadow-2xl ring-1 ring-slate-900/5 dark:ring-white/10 transition-all duration-300 group-hover:shadow-3xl group-hover:ring-slate-900/10`}>
             {/* Subtle Grid Pattern */}
             <div 
               className="absolute inset-0 opacity-[0.03] dark:opacity-[0.08] pointer-events-none" 
