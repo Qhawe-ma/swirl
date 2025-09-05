@@ -59,7 +59,7 @@ export function PaintCanvas({
       if (canvasFormat === 'square') {
         // Perfect square canvas - use much more space
         const minSize = Math.min(availableWidth, availableHeight);
-        const squareSize = minSize * 0.98; // Use 98% of available space, no max limit
+        const squareSize = minSize * 0.99; // Use 99% of available space, no max limit
         canvasWidth = squareSize;
         canvasHeight = squareSize;
       } else {
@@ -68,11 +68,11 @@ export function PaintCanvas({
         
         if (availableWidth / availableHeight > aspectRatio) {
           // Height is the limiting factor
-          canvasHeight = availableHeight * 0.98;
+          canvasHeight = availableHeight * 0.99;
           canvasWidth = canvasHeight * aspectRatio;
         } else {
           // Width is the limiting factor
-          canvasWidth = availableWidth * 0.98;
+          canvasWidth = availableWidth * 0.99;
           canvasHeight = canvasWidth / aspectRatio;
         }
       }
