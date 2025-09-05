@@ -57,14 +57,14 @@ export function PaintCanvas({
       let canvasWidth, canvasHeight;
       
       if (canvasFormat === 'square') {
-        // Perfect square canvas
-        const squareSize = Math.min(Math.max(availableWidth, 600), Math.max(availableHeight, 600));
+        // Perfect square canvas - bigger size
+        const squareSize = Math.min(Math.max(availableWidth, 800), Math.max(availableHeight, 800));
         canvasWidth = squareSize;
         canvasHeight = squareSize;
       } else {
-        // Rectangle canvas (16:9 aspect ratio)
-        const maxWidth = Math.max(availableWidth, 800);
-        const maxHeight = Math.max(availableHeight, 450);
+        // Rectangle canvas (16:9 aspect ratio) - bigger size
+        const maxWidth = Math.max(availableWidth, 1200);
+        const maxHeight = Math.max(availableHeight, 675);
         const aspectRatio = 16 / 9;
         
         if (availableWidth / availableHeight > aspectRatio) {
