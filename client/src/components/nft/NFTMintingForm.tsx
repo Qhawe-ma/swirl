@@ -177,92 +177,94 @@ export function NFTMintingForm({ imageData, onMintSuccess, onMintStart }: NFTMin
   };
 
   return (
-    <div className="flex justify-center items-center min-h-0 bg-gray-200 p-4" style={{ background: 'linear-gradient(145deg, #e0e0e0, #c0c0c0)' }}>
-      <div className="bg-gray-300 border-2 border-gray-400 max-w-2xl w-full" style={{ borderStyle: 'outset' }} data-testid="form-nft-minting">
-        {/* Header */}
-        <div className="bg-gray-200 border-b-2 border-gray-400 px-3 py-2" style={{ borderStyle: 'outset' }}>
-          <h2 className="text-sm font-bold text-gray-800 flex items-center">
-            <span className="mr-2">💎</span>
+    <div className="flex justify-center items-center min-h-0 bg-gradient-to-br from-muted/20 via-transparent to-muted/30 p-6">
+      <Card className="bg-card/90 backdrop-blur-xl border border-border/50 max-w-4xl w-full shadow-2xl" data-testid="form-nft-minting">
+        {/* Modern Header */}
+        <div className="bg-gradient-to-r from-primary/10 via-primary/5 to-transparent border-b border-border/30 px-6 py-4">
+          <h2 className="text-lg font-semibold text-foreground flex items-center tracking-wide">
+            <span className="mr-3 text-xl">💎</span>
             Mint as NFT
           </h2>
         </div>
 
-        <div className="p-4">
-          <div className="flex gap-4">
-            {/* Artwork Preview - Smaller */}
-            <div className="w-48 flex-shrink-0">
-              <h3 className="text-xs font-bold text-gray-800 mb-2">Your Artwork</h3>
-              <div className="bg-white border-2 border-gray-400 p-2" style={{ borderStyle: 'inset' }}>
+        <div className="p-6">
+          <div className="flex gap-8">
+            {/* Modern Artwork Preview */}
+            <div className="w-64 flex-shrink-0">
+              <h3 className="text-sm font-medium text-muted-foreground uppercase tracking-wider mb-3">Your Artwork</h3>
+              <div className="bg-card border border-border/50 rounded-xl p-4 shadow-lg">
                 <img 
                   src={imageData} 
                   alt="User artwork preview" 
-                  className="w-full border border-gray-500"
+                  className="w-full rounded-lg border border-border/30 shadow-sm"
                   data-testid="img-artwork-preview"
                 />
               </div>
             </div>
             
-            {/* NFT Details Form - Compact */}
+            {/* Modern NFT Details Form */}
             <div className="flex-1">
-              <div className="space-y-3">
-                <div>
-                  <label className="block text-xs font-bold text-gray-800 mb-1">NFT Name *</label>
-                  <input
+              <div className="space-y-6">
+                <div className="space-y-2">
+                  <label htmlFor="nft-name" className="text-sm font-medium text-foreground">NFT Name *</label>
+                  <Input
+                    id="nft-name"
                     type="text" 
                     placeholder="e.g., Abstract Dreams #1" 
                     value={nftName}
                     onChange={(e) => setNftName(e.target.value)}
                     disabled={isLoading}
-                    className="w-full px-2 py-1 text-sm border-2 border-gray-400"
-                    style={{ borderStyle: 'inset' }}
+                    className="text-base focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2"
                     data-testid="input-nft-name"
                   />
                 </div>
                 
-                <div>
-                  <label className="block text-xs font-bold text-gray-800 mb-1">Description</label>
-                  <textarea
+                <div className="space-y-2">
+                  <label htmlFor="nft-description" className="text-sm font-medium text-foreground">Description</label>
+                  <Textarea
+                    id="nft-description"
                     placeholder="Describe your artwork..." 
-                    rows={3} 
+                    rows={4} 
                     value={nftDescription}
                     onChange={(e) => setNftDescription(e.target.value)}
                     disabled={isLoading}
-                    className="w-full px-2 py-1 text-sm border-2 border-gray-400 resize-none"
-                    style={{ borderStyle: 'inset' }}
+                    className="resize-none text-base focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2"
                     data-testid="textarea-nft-description"
                   />
                 </div>
                 
-                {/* Minting Cost Info - Compact */}
-                <div className="bg-yellow-100 border-2 border-yellow-400 p-2 text-xs" style={{ borderStyle: 'inset' }}>
-                  <div className="font-bold text-yellow-800">⚠️ Mainnet Minting Cost</div>
-                  <div className="text-yellow-700">
-                    Est: ~0.002-0.01 SOL for fees<br/>
-                    Ensure sufficient SOL in wallet
-                  </div>
-                </div>
+                {/* Modern Cost Info Alert */}
+                <Alert className="border-amber-200 bg-amber-50 dark:border-amber-800 dark:bg-amber-950">
+                  <span className="text-lg">⚠️</span>
+                  <AlertDescription className="text-amber-800 dark:text-amber-200">
+                    <div className="font-semibold mb-1">Mainnet Minting Cost</div>
+                    <div className="text-sm">
+                      Estimated: ~0.002-0.01 SOL for transaction fees<br/>
+                      Please ensure sufficient SOL in your wallet
+                    </div>
+                  </AlertDescription>
+                </Alert>
               </div>
             </div>
           </div>
           
-          {/* Mint Button - Prominent and MS Paint Style */}
-          <div className="mt-4 flex justify-center">
-            <button
-              className={`px-6 py-2 text-sm font-bold border-2 ${
-                isLoading || !connected 
-                  ? 'bg-gray-100 border-gray-300 text-gray-400 cursor-not-allowed' 
-                  : 'bg-green-400 border-green-600 text-black hover:bg-green-300 active:bg-green-500'
+          {/* Modern Mint Button */}
+          <div className="mt-8 flex justify-center">
+            <Button
+              size="lg"
+              className={`px-8 py-4 text-base font-semibold bg-gradient-to-r from-primary to-primary/90 hover:from-primary/90 hover:to-primary/80 text-primary-foreground shadow-lg hover:shadow-xl transition-all duration-300 motion-safe:hover:scale-105 focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 ${
+                isLoading || !connected ? 'opacity-50 cursor-not-allowed' : ''
               }`}
-              style={{ borderStyle: isLoading || !connected ? 'inset' : 'outset', borderRadius: '0' }}
               onClick={handleMintNFT}
               disabled={isLoading || !connected}
               data-testid="button-mint-nft"
             >
-              💎 {isLoading ? 'Minting...' : 'Mint NFT on Solana'}
-            </button>
+              <span className="mr-2 text-lg">💎</span>
+              {isLoading ? 'Minting...' : 'Mint NFT on Solana'}
+            </Button>
           </div>
         </div>
-      </div>
+      </Card>
     </div>
   );
 }

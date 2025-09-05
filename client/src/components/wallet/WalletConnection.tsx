@@ -35,18 +35,18 @@ export function WalletConnection() {
       
       {!connected ? (
         <WalletMultiButton 
-          className="!bg-primary hover:!bg-blue-700 !text-white !px-4 !py-2 !rounded-lg !flex !items-center !space-x-2 !transition-colors !font-roboto"
+          className="!bg-primary hover:!bg-primary/90 !text-primary-foreground !px-6 !py-3 !rounded-xl !flex !items-center !space-x-2 motion-safe:!transition-all motion-safe:!duration-300 motion-reduce:!transition-none !font-medium !shadow-lg hover:!shadow-xl motion-safe:hover:!scale-[1.02] motion-reduce:hover:!scale-100 !border-0 focus-visible:!ring-2 focus-visible:!ring-ring focus-visible:!ring-offset-2"
           data-testid="button-connect-wallet"
         />
       ) : (
-        <div className="wallet-card text-white px-4 py-2 rounded-lg" data-testid="wallet-connected">
+        <div className="wallet-card text-primary-foreground px-6 py-3 rounded-xl shadow-lg hover:shadow-xl motion-safe:transition-all motion-safe:duration-300 motion-reduce:transition-none backdrop-blur-sm border border-white/10 dark:border-white/5 focus-visible:ring-2 focus-visible:ring-primary-foreground focus-visible:ring-offset-2" tabIndex={0} data-testid="wallet-connected">
           <div className="flex items-center space-x-3">
-            <div className="w-8 h-8 bg-white bg-opacity-20 rounded-full flex items-center justify-center">
-              <span className="material-icons text-sm">account_balance_wallet</span>
+            <div className="w-10 h-10 bg-primary-foreground/20 dark:bg-primary-foreground/10 backdrop-blur-sm rounded-xl flex items-center justify-center shadow-inner">
+              <span className="material-icons text-lg">account_balance_wallet</span>
             </div>
-            <div className="text-sm">
-              <div className="font-medium" data-testid="text-wallet-address">{shortAddress}</div>
-              <div className="opacity-90" data-testid="text-wallet-balance">
+            <div>
+              <div className="font-semibold text-sm tracking-wide" data-testid="text-wallet-address">{shortAddress}</div>
+              <div className="opacity-90 text-xs font-medium" data-testid="text-wallet-balance">
                 {balance !== null ? `${balance.toFixed(3)} SOL` : 'Connected'}
               </div>
             </div>

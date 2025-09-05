@@ -1,6 +1,5 @@
 import { useEffect, useRef, useState } from 'react';
 import { Button } from "@/components/ui/button";
-import { Card } from "@/components/ui/card";
 
 interface PaintCanvasProps {
   selectedColor: string;
@@ -44,12 +43,9 @@ export function PaintCanvas({
     // Make canvas optimized for smooth drawing
     const container = canvasElement.parentElement;
     if (container) {
-      const containerWidth = container.clientWidth - 8; // Account for border
-      const containerHeight = container.clientHeight - 8; // Account for border
-      
       // Use full available space
-      let canvasWidth = Math.max(containerWidth, 400);
-      let canvasHeight = Math.max(containerHeight, 300);
+      let canvasWidth = Math.max(container.clientWidth, 400);
+      let canvasHeight = Math.max(container.clientHeight, 300);
       
       canvasElement.width = canvasWidth;
       canvasElement.height = canvasHeight;
@@ -228,32 +224,32 @@ export function PaintCanvas({
   };
 
   return (
-    <div className="h-full flex flex-col bg-gray-100 border-2 border-gray-400" style={{ borderStyle: 'inset' }} data-testid="card-paint-canvas">
-      {/* Classic Paint-style header */}
-      <div className="flex items-center justify-between bg-gray-200 border-b-2 border-gray-400 px-3 py-2" style={{ borderStyle: 'outset' }}>
-        <div className="flex items-center space-x-2">
-          <span className="text-sm font-bold text-gray-800">Canvas</span>
-          <span className="text-xs text-gray-600" data-testid="text-canvas-size">
-            {canvas ? `${canvas.width}×${canvas.height}` : 'Loading...'}
+    <div className="h-full flex flex-col bg-card/80 backdrop-blur-xl border border-border/50 rounded-2xl shadow-xl overflow-hidden" data-testid="card-paint-canvas">
+      {/* Modern Canvas Header */}
+      <div className="flex items-center justify-between bg-gradient-to-r from-primary/10 via-primary/5 to-transparent border-b border-border/30 px-4 py-3">
+        <div className="flex items-center space-x-3">
+          <span className="text-sm font-semibold text-foreground tracking-wide">Canvas</span>
+          <span className="text-xs text-muted-foreground font-medium bg-muted/50 px-2 py-1 rounded-md" data-testid="text-canvas-size">
+            {canvas ? `${canvas.width}×${canvas.height}px` : 'Loading...'}
           </span>
         </div>
-        <button
-          className="bg-orange-500 hover:bg-orange-400 active:bg-orange-600 text-white text-sm px-3 py-1 h-7 border-2 border-orange-600 font-medium"
-          style={{ borderStyle: 'outset', borderRadius: '0' }}
+        <Button
           onClick={handleSave}
+          className="bg-primary hover:bg-primary/90 text-primary-foreground shadow-md hover:shadow-lg transition-all duration-200 motion-safe:hover:scale-105 focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2"
           data-testid="button-save-artwork"
         >
           Save Artwork
-        </button>
+        </Button>
       </div>
       
-      {/* Classic Paint canvas area - fills most space */}
-      <div className="flex-1 p-2 bg-gray-100">
-        <div className="h-full w-full bg-white border-2 border-gray-400 overflow-hidden" style={{ borderStyle: 'inset' }}>
+      {/* Modern Canvas Area */}
+      <div className="flex-1 p-4 bg-gradient-to-br from-muted/20 via-transparent to-muted/30">
+        <div className="h-full w-full bg-card border border-border/50 rounded-xl overflow-hidden shadow-inner">
           <canvas 
             ref={canvasRef}
             className="drawing-canvas cursor-crosshair block w-full h-full"
             data-testid="canvas-drawing"
+            aria-label="Drawing canvas"
             onMouseDown={startDrawing}
             onMouseMove={draw}
             onMouseUp={stopDrawing}
@@ -267,9 +263,15 @@ export function PaintCanvas({
         </div>
       </div>
       
-      {/* Status bar like classic Paint */}
-      <div className="bg-gray-200 border-t border-gray-300 px-3 py-1 text-xs text-gray-600">
-        Click and drag to draw • Touch supported on mobile
+      {/* Modern Status Bar */}
+      <div className="bg-muted/30 border-t border-border/30 px-4 py-2 text-xs text-muted-foreground font-medium" role="status">
+        <div className="flex items-center justify-between">
+          <span>Click and drag to draw • Touch supported on mobile</span>
+          <span className="flex items-center space-x-1 text-primary/80">
+            <span className="w-2 h-2 bg-success rounded-full animate-pulse"></span>
+            <span>Ready</span>
+          </span>
+        </div>
       </div>
     </div>
   );
