@@ -5,6 +5,7 @@ interface PaintCanvasProps {
   selectedColor: string;
   brushSize: number;
   drawingMode: 'brush' | 'eraser';
+  canvasFormat: 'square' | 'rectangle';
   onSave: (imageData: string) => void;
   onUndoRedoChange: (canUndo: boolean, canRedo: boolean) => void;
   shouldUndo: boolean;
@@ -17,6 +18,7 @@ export function PaintCanvas({
   selectedColor,
   brushSize,
   drawingMode,
+  canvasFormat,
   onSave,
   onUndoRedoChange,
   shouldUndo,
@@ -40,21 +42,41 @@ export function PaintCanvas({
     
     if (!ctx) return;
 
-    // Make perfect square canvas for NFTs
+    // Dynamic canvas sizing based on format
     const container = canvasElement.parentElement;
     if (container) {
       const containerRect = container.getBoundingClientRect();
-      // Use smaller dimension to create perfect square - bigger canvas
       const availableWidth = containerRect.width - 16;
       const availableHeight = containerRect.height - 16;
-      const squareSize = Math.min(Math.max(availableWidth, 600), Math.max(availableHeight, 600));
       
-      canvasElement.width = squareSize;
-      canvasElement.height = squareSize;
+      let canvasWidth, canvasHeight;
+      
+      if (canvasFormat === 'square') {
+        // Perfect square canvas
+        const squareSize = Math.min(Math.max(availableWidth, 600), Math.max(availableHeight, 600));
+        canvasWidth = squareSize;
+        canvasHeight = squareSize;
+      } else {
+        // Rectangle canvas (16:9 aspect ratio)
+        const maxWidth = Math.max(availableWidth, 800);
+        const maxHeight = Math.max(availableHeight, 450);
+        const aspectRatio = 16 / 9;
+        
+        if (availableWidth / availableHeight > aspectRatio) {
+          canvasHeight = Math.min(maxHeight, availableHeight);
+          canvasWidth = canvasHeight * aspectRatio;
+        } else {
+          canvasWidth = Math.min(maxWidth, availableWidth);
+          canvasHeight = canvasWidth / aspectRatio;
+        }
+      }
+      
+      canvasElement.width = canvasWidth;
+      canvasElement.height = canvasHeight;
       
       // Set white background
       ctx.fillStyle = '#ffffff';
-      ctx.fillRect(0, 0, squareSize, squareSize);
+      ctx.fillRect(0, 0, canvasWidth, canvasHeight);
       
       // Enable smooth drawing
       ctx.imageSmoothingEnabled = true;
@@ -71,7 +93,7 @@ export function PaintCanvas({
     setTimeout(() => {
       onUndoRedoChange(false, false);
     }, 0);
-  }, []);
+  }, [canvasFormat]);
 
   // Update brush properties for smooth drawing
   useEffect(() => {
@@ -246,8 +268,8 @@ export function PaintCanvas({
       {/* Professional Canvas Drawing Area */}
       <div className="flex-1 p-6 bg-gradient-to-br from-slate-50/40 via-white/20 to-slate-100/30 dark:from-slate-900/40 dark:via-slate-800/20 dark:to-slate-900/30">
         <div className="relative h-full w-full group flex items-center justify-center">
-          {/* Premium Square Canvas Container for NFTs */}
-          <div className="aspect-square max-w-full max-h-full bg-white dark:bg-slate-50 border-2 border-slate-200/80 dark:border-slate-700/80 rounded-2xl overflow-hidden shadow-2xl ring-1 ring-slate-900/5 dark:ring-white/10 transition-all duration-300 group-hover:shadow-3xl group-hover:ring-slate-900/10">
+          {/* Dynamic Canvas Container */}
+          <div className={`${canvasFormat === 'square' ? 'aspect-square' : 'aspect-video'} max-w-full max-h-full bg-white dark:bg-slate-50 border-2 border-slate-200/80 dark:border-slate-700/80 rounded-2xl overflow-hidden shadow-2xl ring-1 ring-slate-900/5 dark:ring-white/10 transition-all duration-300 group-hover:shadow-3xl group-hover:ring-slate-900/10`}>
             {/* Subtle Grid Pattern */}
             <div 
               className="absolute inset-0 opacity-[0.03] dark:opacity-[0.08] pointer-events-none" 

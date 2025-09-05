@@ -8,7 +8,7 @@ import { MintsHistory } from '@/components/wallet/MintsHistory';
 import { Card } from '@/components/ui/card';
 import { Button } from '@/components/ui/button';
 import { useWallet } from '@solana/wallet-adapter-react';
-import { FileText, Globe, Palette, AlertTriangle, ChevronLeft, ChevronRight, Menu, Brush, Eraser, Undo2, Redo2 } from 'lucide-react';
+import { FileText, Globe, Palette, AlertTriangle, ChevronLeft, ChevronRight, Menu, Brush, Eraser, Undo2, Redo2, Square, RectangleHorizontal } from 'lucide-react';
 
 type AppState = 'drawing' | 'minting-form' | 'minting' | 'success';
 
@@ -25,6 +25,7 @@ export default function PaintPage() {
   
   // Collapsible sidebar state
   const [sidebarCollapsed, setSidebarCollapsed] = useState(false);
+  const [canvasFormat, setCanvasFormat] = useState<'square' | 'rectangle'>('square');
   
   const [appState, setAppState] = useState<AppState>('drawing');
   const [savedImageData, setSavedImageData] = useState<string>('');
@@ -118,6 +119,37 @@ export default function PaintPage() {
             
             {/* Right: Actions */}
             <div className="flex items-center space-x-4">
+              {/* Canvas Format Selection */}
+              {appState === 'drawing' && (
+                <div className="hidden sm:flex items-center space-x-1 px-2 py-1.5 bg-muted/50 border border-border/40 rounded-lg">
+                  <span className="text-xs font-medium text-muted-foreground mr-2">Format:</span>
+                  <button
+                    onClick={() => setCanvasFormat('square')}
+                    className={`px-2 py-1 text-xs font-medium rounded-md transition-all duration-200 flex items-center space-x-1 ${
+                      canvasFormat === 'square'
+                        ? 'bg-primary text-primary-foreground shadow-sm'
+                        : 'text-muted-foreground hover:text-foreground hover:bg-accent'
+                    }`}
+                    data-testid="button-format-square"
+                  >
+                    <Square className="w-3 h-3" />
+                    <span>Square</span>
+                  </button>
+                  <button
+                    onClick={() => setCanvasFormat('rectangle')}
+                    className={`px-2 py-1 text-xs font-medium rounded-md transition-all duration-200 flex items-center space-x-1 ${
+                      canvasFormat === 'rectangle'
+                        ? 'bg-primary text-primary-foreground shadow-sm'
+                        : 'text-muted-foreground hover:text-foreground hover:bg-accent'
+                    }`}
+                    data-testid="button-format-rectangle"
+                  >
+                    <RectangleHorizontal className="w-3 h-3" />
+                    <span>Rectangle</span>
+                  </button>
+                </div>
+              )}
+              
               {/* Network Status */}
               <div className="hidden sm:flex items-center space-x-2 px-3 py-1.5 bg-emerald-50 dark:bg-emerald-900/20 border border-emerald-200 dark:border-emerald-800 rounded-lg">
                 <div className="w-2 h-2 bg-emerald-500 rounded-full animate-pulse"></div>
@@ -247,6 +279,7 @@ export default function PaintPage() {
                     selectedColor={selectedColor}
                     brushSize={brushSize}
                     drawingMode={drawingMode}
+                    canvasFormat={canvasFormat}
                     onSave={handleSaveImage}
                     onUndoRedoChange={handleUndoRedoChange}
                     shouldUndo={shouldUndo}
