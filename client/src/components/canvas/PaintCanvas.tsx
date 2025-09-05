@@ -32,20 +32,17 @@ export function PaintCanvas({
   const [historyIndex, setHistoryIndex] = useState(-1);
   const [lastPoint, setLastPoint] = useState<{x: number, y: number} | null>(null);
 
-  useEffect(() => {
-    if (!canvasRef.current) return;
-
-    const canvasElement = canvasRef.current;
-    const ctx = canvasElement.getContext('2d');
-    
-    if (!ctx) return;
-
-    // Make canvas optimized for smooth drawing
+  // Resize canvas function
+  const resizeCanvas = (canvasElement: HTMLCanvasElement, ctx: CanvasRenderingContext2D) => {
     const container = canvasElement.parentElement;
     if (container) {
-      // Use full available space
-      let canvasWidth = Math.max(container.clientWidth, 400);
-      let canvasHeight = Math.max(container.clientHeight, 300);
+      // Save current canvas content
+      const currentImageData = canvasElement.toDataURL();
+      
+      // Use full available space with padding
+      const containerRect = container.getBoundingClientRect();
+      let canvasWidth = Math.max(containerRect.width - 8, 400); // Account for padding
+      let canvasHeight = Math.max(containerRect.height - 8, 300);
       
       canvasElement.width = canvasWidth;
       canvasElement.height = canvasHeight;
@@ -54,10 +51,31 @@ export function PaintCanvas({
       ctx.fillStyle = '#ffffff';
       ctx.fillRect(0, 0, canvasWidth, canvasHeight);
       
+      // Restore canvas content if it existed
+      if (currentImageData !== 'data:,') {
+        const img = new Image();
+        img.onload = () => {
+          ctx.drawImage(img, 0, 0);
+        };
+        img.src = currentImageData;
+      }
+      
       // Enable smooth drawing
       ctx.imageSmoothingEnabled = true;
       ctx.imageSmoothingQuality = 'high';
     }
+  };
+
+  useEffect(() => {
+    if (!canvasRef.current) return;
+
+    const canvasElement = canvasRef.current;
+    const ctx = canvasElement.getContext('2d');
+    
+    if (!ctx) return;
+
+    // Initial canvas setup
+    resizeCanvas(canvasElement, ctx);
     
     setCanvas(canvasElement);
     setContext(ctx);
@@ -65,10 +83,25 @@ export function PaintCanvas({
     setHistory([initialData]);
     setHistoryIndex(0);
     
+    // Add resize observer to handle dynamic resizing
+    const resizeObserver = new ResizeObserver(() => {
+      resizeCanvas(canvasElement, ctx);
+    });
+    
+    const container = canvasElement.parentElement;
+    if (container) {
+      resizeObserver.observe(container);
+    }
+    
     // Use setTimeout to avoid calling setState during render
     setTimeout(() => {
       onUndoRedoChange(false, false);
     }, 0);
+
+    // Cleanup
+    return () => {
+      resizeObserver.disconnect();
+    };
   }, []);
 
   // Update brush properties for smooth drawing
@@ -272,7 +305,12 @@ export function PaintCanvas({
               onTouchMove={draw}
               onTouchEnd={stopDrawing}
               onTouchCancel={stopDrawing}
-              style={{ touchAction: 'none', maxWidth: '100%', maxHeight: '100%' }}
+              style={{ 
+                touchAction: 'none', 
+                width: '100%', 
+                height: '100%',
+                objectFit: 'contain'
+              }}
             />
           </div>
           
