@@ -42,55 +42,77 @@ export function DrawingToolbar({
   const [showColorPicker, setShowColorPicker] = useState(false);
 
   return (
-    <div className="bg-card/80 backdrop-blur-xl border border-border/50 h-48 lg:h-full overflow-y-auto lg:overflow-y-auto rounded-2xl shadow-xl" data-testid="toolbar-drawing-tools">
-      {/* Modern Header - Responsive */}
-      <div className="bg-gradient-to-r from-primary/10 via-primary/5 to-transparent border-b border-border/30 px-3 lg:px-4 py-2 lg:py-3">
-        <h2 className="text-xs lg:text-sm font-semibold text-foreground flex items-center tracking-wide">
-          <Palette className="mr-2 lg:mr-3 h-3 w-3 lg:h-4 lg:w-4" aria-hidden="true" />
-          <span className="hidden sm:inline">Drawing Tools</span>
-          <span className="sm:hidden">Tools</span>
-        </h2>
+    <div className="bg-card/90 backdrop-blur-2xl border border-border/30 h-64 lg:h-full overflow-y-auto rounded-2xl shadow-2xl" data-testid="toolbar-drawing-tools">
+      {/* Professional Header */}
+      <div className="bg-gradient-to-r from-primary/8 via-primary/4 to-transparent border-b border-border/20 px-4 py-4">
+        <div className="flex items-center justify-between">
+          <h2 className="text-sm font-bold text-foreground flex items-center tracking-wide">
+            <div className="w-8 h-8 bg-primary/10 rounded-lg flex items-center justify-center mr-3">
+              <Palette className="h-4 w-4 text-primary" aria-hidden="true" />
+            </div>
+            <span>Creative Tools</span>
+          </h2>
+          <div className="px-2 py-1 bg-primary/10 text-primary text-xs font-semibold rounded-full tracking-wide">
+            Pro
+          </div>
+        </div>
       </div>
 
-      <div className="p-3 lg:p-4 space-y-4 lg:space-y-6">
-        {/* Modern Drawing Mode Selection - Responsive */}
-        <div className="space-y-2 lg:space-y-3">
-          <label htmlFor="drawing-mode" className="text-xs font-medium text-muted-foreground uppercase tracking-wider">Mode</label>
-          <div className="bg-muted/30 rounded-lg lg:rounded-xl p-2 lg:p-3">
+      <div className="p-4 space-y-6">
+        {/* Professional Drawing Mode Selection */}
+        <div className="space-y-3">
+          <div className="flex items-center justify-between">
+            <label htmlFor="drawing-mode" className="text-xs font-semibold text-foreground uppercase tracking-wider">Drawing Mode</label>
+            <div className="text-xs text-muted-foreground font-medium">{drawingMode === 'brush' ? 'Paint' : 'Erase'}</div>
+          </div>
+          <div className="bg-muted/20 rounded-xl p-3 border border-border/20">
             <ToggleGroup
               type="single"
               value={drawingMode}
               onValueChange={(value) => value && onModeChange(value as 'brush' | 'eraser')}
-              className="grid grid-cols-2 lg:grid-cols-1 gap-1 lg:gap-2"
+              className="grid grid-cols-1 gap-2"
               aria-label="Drawing mode selection"
               data-testid="toggle-group-drawing-mode"
             >
               <ToggleGroupItem
                 value="brush"
-                className="w-full flex items-center space-x-1 lg:space-x-3 px-2 lg:px-4 py-2 lg:py-3 text-xs lg:text-sm font-medium transition-all duration-200 motion-reduce:transition-none motion-safe:hover:scale-[1.02] data-[state=on]:bg-primary data-[state=on]:text-primary-foreground"
+                className="w-full flex items-center justify-start space-x-3 px-4 py-3 text-sm font-semibold transition-all duration-200 motion-reduce:transition-none motion-safe:hover:scale-[1.01] data-[state=on]:bg-gradient-to-r data-[state=on]:from-primary data-[state=on]:to-primary/90 data-[state=on]:text-primary-foreground data-[state=on]:shadow-lg rounded-lg"
                 aria-label="Select brush tool"
                 data-testid="button-select-brush"
               >
-                <Brush className="h-3 w-3 lg:h-4 lg:w-4" aria-hidden="true" />
-                <span className="font-medium">Brush</span>
+                <div className="w-8 h-8 bg-primary/10 data-[state=on]:bg-primary-foreground/20 rounded-lg flex items-center justify-center">
+                  <Brush className="h-4 w-4" aria-hidden="true" />
+                </div>
+                <div className="flex flex-col items-start">
+                  <span className="font-semibold">Brush Tool</span>
+                  <span className="text-xs opacity-80">Paint & draw</span>
+                </div>
               </ToggleGroupItem>
               <ToggleGroupItem
                 value="eraser"
-                className="w-full flex items-center space-x-1 lg:space-x-3 px-2 lg:px-4 py-2 lg:py-3 text-xs lg:text-sm font-medium transition-all duration-200 motion-reduce:transition-none motion-safe:hover:scale-[1.02] data-[state=on]:bg-primary data-[state=on]:text-primary-foreground"
+                className="w-full flex items-center justify-start space-x-3 px-4 py-3 text-sm font-semibold transition-all duration-200 motion-reduce:transition-none motion-safe:hover:scale-[1.01] data-[state=on]:bg-gradient-to-r data-[state=on]:from-primary data-[state=on]:to-primary/90 data-[state=on]:text-primary-foreground data-[state=on]:shadow-lg rounded-lg"
                 aria-label="Select eraser tool"
                 data-testid="button-select-eraser"
               >
-                <Eraser className="h-3 w-3 lg:h-4 lg:w-4" aria-hidden="true" />
-                <span className="font-medium">Eraser</span>
+                <div className="w-8 h-8 bg-primary/10 data-[state=on]:bg-primary-foreground/20 rounded-lg flex items-center justify-center">
+                  <Eraser className="h-4 w-4" aria-hidden="true" />
+                </div>
+                <div className="flex flex-col items-start">
+                  <span className="font-semibold">Eraser Tool</span>
+                  <span className="text-xs opacity-80">Remove & clean</span>
+                </div>
               </ToggleGroupItem>
             </ToggleGroup>
           </div>
         </div>
 
-        {/* Modern Color Selection */}
+        {/* Professional Color Selection */}
         <div className="space-y-3">
-          <label htmlFor="color-selection" className="text-xs font-medium text-muted-foreground uppercase tracking-wider">Color</label>
-          <div className="bg-muted/30 rounded-xl p-4 space-y-4">
+          <div className="flex items-center justify-between">
+            <label htmlFor="color-selection" className="text-xs font-semibold text-foreground uppercase tracking-wider">Color Palette</label>
+            <div className="text-xs text-muted-foreground font-medium">8 presets</div>
+          </div>
+          <div className="bg-muted/20 rounded-xl p-4 space-y-4 border border-border/20">
             <div className="flex items-center space-x-3">
               <div 
                 className="w-12 h-8 border border-border rounded-lg cursor-pointer shadow-sm hover:shadow-md transition-all duration-200 motion-reduce:transition-none motion-safe:hover:scale-105 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2" 
@@ -130,13 +152,15 @@ export function DrawingToolbar({
           </div>
         </div>
 
-        {/* Modern Brush Size - Responsive */}
-        <div className="space-y-2 lg:space-y-3">
-          <label htmlFor="brush-size" className="text-xs font-medium text-muted-foreground uppercase tracking-wider flex items-center justify-between">
-            <span>Brush Size</span>
-            <span className="text-foreground font-semibold" data-testid="text-brush-size">{brushSize}px</span>
-          </label>
-          <div className="bg-muted/30 rounded-lg lg:rounded-xl p-3 lg:p-4 space-y-3 lg:space-y-4">
+        {/* Professional Brush Size Control */}
+        <div className="space-y-3">
+          <div className="flex items-center justify-between">
+            <label htmlFor="brush-size" className="text-xs font-semibold text-foreground uppercase tracking-wider">Brush Size</label>
+            <div className="flex items-center space-x-2">
+              <span className="text-sm font-bold text-primary" data-testid="text-brush-size">{brushSize}px</span>
+            </div>
+          </div>
+          <div className="bg-muted/20 rounded-xl p-4 space-y-4 border border-border/20">
             <Slider
               id="brush-size"
               value={[brushSize]}
@@ -163,45 +187,50 @@ export function DrawingToolbar({
           </div>
         </div>
 
-        {/* Modern Actions - Responsive */}
-        <div className="space-y-2 lg:space-y-3">
-          <label className="text-xs font-medium text-muted-foreground uppercase tracking-wider">Actions</label>
-          <div className="space-y-1 lg:space-y-2">
-            <Button 
-              variant="secondary"
-              size="default"
-              className="w-full flex items-center justify-center space-x-3 transition-all duration-200 motion-reduce:transition-none motion-safe:hover:scale-[1.02]"
-              onClick={onUndo}
-              disabled={!canUndo}
-              aria-label="Undo last action"
-              data-testid="button-undo"
-            >
-              <Undo2 className="h-4 w-4" aria-hidden="true" />
-              <span>Undo</span>
-            </Button>
-            <Button 
-              variant="secondary"
-              size="default"
-              className="w-full flex items-center justify-center space-x-3 transition-all duration-200 motion-reduce:transition-none motion-safe:hover:scale-[1.02]"
-              onClick={onRedo}
-              disabled={!canRedo}
-              aria-label="Redo last action"
-              data-testid="button-redo"
-            >
-              <Redo2 className="h-4 w-4" aria-hidden="true" />
-              <span>Redo</span>
-            </Button>
+        {/* Professional Action Controls */}
+        <div className="space-y-3">
+          <div className="flex items-center justify-between">
+            <label className="text-xs font-semibold text-foreground uppercase tracking-wider">Quick Actions</label>
+            <div className="text-xs text-muted-foreground font-medium">3 tools</div>
+          </div>
+          <div className="space-y-2">
+            <div className="grid grid-cols-2 gap-2">
+              <Button 
+                variant="secondary"
+                size="default"
+                className="flex items-center justify-center space-x-2 transition-all duration-200 motion-reduce:transition-none motion-safe:hover:scale-[1.01] disabled:opacity-40"
+                onClick={onUndo}
+                disabled={!canUndo}
+                aria-label="Undo last action"
+                data-testid="button-undo"
+              >
+                <Undo2 className="h-4 w-4" aria-hidden="true" />
+                <span className="text-xs font-medium">Undo</span>
+              </Button>
+              <Button 
+                variant="secondary"
+                size="default"
+                className="flex items-center justify-center space-x-2 transition-all duration-200 motion-reduce:transition-none motion-safe:hover:scale-[1.01] disabled:opacity-40"
+                onClick={onRedo}
+                disabled={!canRedo}
+                aria-label="Redo last action"
+                data-testid="button-redo"
+              >
+                <Redo2 className="h-4 w-4" aria-hidden="true" />
+                <span className="text-xs font-medium">Redo</span>
+              </Button>
+            </div>
             <AlertDialog>
               <AlertDialogTrigger asChild>
                 <Button 
                   variant="destructive"
                   size="default"
-                  className="w-full flex items-center justify-center space-x-3 transition-all duration-200 motion-reduce:transition-none motion-safe:hover:scale-[1.02]"
+                  className="w-full flex items-center justify-center space-x-2 transition-all duration-200 motion-reduce:transition-none motion-safe:hover:scale-[1.01] mt-2"
                   aria-label="Clear entire canvas"
                   data-testid="button-clear-canvas"
                 >
                   <Trash2 className="h-4 w-4" aria-hidden="true" />
-                  <span>Clear Canvas</span>
+                  <span className="text-sm font-medium">Clear Canvas</span>
                 </Button>
               </AlertDialogTrigger>
               <AlertDialogContent>

@@ -63,65 +63,110 @@ export default function PaintPage() {
 
   return (
     <div className="h-screen bg-background font-sans flex flex-col">
-      {/* Modern Header with Glassmorphism */}
-      <header className="bg-card/80 backdrop-blur-xl border-b border-border/50 flex-shrink-0 relative">
-        <div className="absolute inset-0 bg-gradient-to-r from-primary/5 via-transparent to-primary/5 pointer-events-none"></div>
-        <div className="relative w-full px-4 sm:px-6 lg:px-8">
-          <div className="flex justify-between items-center h-14 sm:h-16">
-            <div className="flex items-center space-x-3 sm:space-x-4">
-              {/* Modern Logo with Gradient */}
-              <div className="relative group" data-testid="app-logo">
-                <div className="w-8 h-8 sm:w-10 sm:h-10 bg-gradient-to-br from-primary to-primary/80 rounded-lg sm:rounded-xl flex items-center justify-center shadow-lg group-hover:shadow-xl motion-safe:transition-all motion-safe:duration-300 motion-reduce:transition-none motion-safe:group-hover:scale-105 motion-reduce:group-hover:scale-100 focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2" tabIndex={0}>
-                  <Palette className="w-4 h-4 sm:w-5 sm:h-5 text-primary-foreground" aria-hidden="true" />
+      {/* Professional Header - NFT Marketplace Style */}
+      <header className="bg-background/95 backdrop-blur-2xl border-b border-border/30 flex-shrink-0 relative shadow-sm">
+        <div className="absolute inset-0 bg-gradient-to-r from-primary/3 via-transparent to-primary/3 pointer-events-none"></div>
+        
+        <div className="relative max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+          <div className="flex justify-between items-center h-16 lg:h-18">
+            {/* Left: Brand Section */}
+            <div className="flex items-center space-x-6">
+              {/* Professional Logo */}
+              <div className="relative group cursor-pointer" data-testid="app-logo">
+                <div className="flex items-center space-x-3">
+                  <div className="relative">
+                    <div className="w-10 h-10 bg-gradient-to-br from-primary via-primary/90 to-primary/80 rounded-xl flex items-center justify-center shadow-lg group-hover:shadow-primary/25 transition-all duration-300 motion-safe:group-hover:scale-105">
+                      <Palette className="w-5 h-5 text-primary-foreground" aria-hidden="true" />
+                    </div>
+                    <div className="absolute -inset-1 bg-gradient-to-br from-primary/20 to-transparent rounded-xl opacity-0 group-hover:opacity-100 blur transition-all duration-300 pointer-events-none"></div>
+                  </div>
+                  
+                  {/* Brand Name */}
+                  <div className="hidden sm:block">
+                    <div className="flex items-baseline space-x-2">
+                      <h1 className="text-xl font-bold text-foreground tracking-tight" data-testid="text-app-title">
+                        Paint<span className="text-primary">NFT</span>
+                      </h1>
+                      <span className="px-2 py-0.5 text-xs font-medium bg-primary/10 text-primary rounded-full tracking-wide">
+                        Studio
+                      </span>
+                    </div>
+                    <p className="text-xs text-muted-foreground font-medium tracking-wider mt-0.5" data-testid="text-app-subtitle">
+                      Professional NFT Creation
+                    </p>
+                  </div>
                 </div>
-                <div className="absolute inset-0 bg-gradient-to-br from-primary to-primary/80 rounded-lg sm:rounded-xl opacity-0 group-hover:opacity-20 blur motion-safe:transition-all motion-safe:duration-300 motion-reduce:transition-none pointer-events-none"></div>
               </div>
               
-              {/* Modern Typography - Responsive */}
-              <div className="flex flex-col">
-                <h1 className="text-lg sm:text-xl font-semibold text-foreground tracking-tight" data-testid="text-app-title">Paint NFT</h1>
-                <p className="text-xs text-muted-foreground font-medium tracking-wide hidden sm:block" data-testid="text-app-subtitle">Create • Mint • Own</p>
-              </div>
+              {/* Navigation Items - Desktop */}
+              <nav className="hidden lg:flex items-center space-x-1">
+                <div className="px-3 py-2 text-sm font-medium text-primary bg-primary/5 rounded-lg border border-primary/20">
+                  Create
+                </div>
+                <div className="px-3 py-2 text-sm font-medium text-muted-foreground hover:text-foreground hover:bg-accent rounded-lg transition-colors cursor-not-allowed opacity-60">
+                  Gallery
+                </div>
+                <div className="px-3 py-2 text-sm font-medium text-muted-foreground hover:text-foreground hover:bg-accent rounded-lg transition-colors cursor-not-allowed opacity-60">
+                  Analytics
+                </div>
+              </nav>
             </div>
             
-            <WalletConnection />
+            {/* Right: Actions */}
+            <div className="flex items-center space-x-4">
+              {/* Network Status */}
+              <div className="hidden sm:flex items-center space-x-2 px-3 py-1.5 bg-emerald-50 dark:bg-emerald-900/20 border border-emerald-200 dark:border-emerald-800 rounded-lg">
+                <div className="w-2 h-2 bg-emerald-500 rounded-full animate-pulse"></div>
+                <span className="text-xs font-medium text-emerald-700 dark:text-emerald-300 tracking-wide">
+                  Solana Mainnet
+                </span>
+              </div>
+              
+              <WalletConnection />
+            </div>
           </div>
         </div>
       </header>
 
-      <main className="flex-1 overflow-hidden bg-muted/30" style={{ background: 'linear-gradient(145deg, hsl(var(--muted)/0.3), hsl(var(--muted)/0.5))' }}>
+      <main className="flex-1 overflow-hidden bg-gradient-to-br from-background via-muted/10 to-muted/20">
         {appState === 'drawing' && (
-          <div className="flex flex-col lg:flex-row h-full gap-2 p-2 lg:gap-1 lg:p-1">
-            {/* Drawing Toolbar - Responsive Design */}
-            <div className="w-full lg:w-64 flex-shrink-0 order-2 lg:order-1">
-              <DrawingToolbar
-                selectedColor={selectedColor}
-                onColorChange={setSelectedColor}
-                brushSize={brushSize}
-                onBrushSizeChange={setBrushSize}
-                drawingMode={drawingMode}
-                onModeChange={setDrawingMode}
-                onUndo={handleUndo}
-                onRedo={handleRedo}
-                onClear={handleClear}
-                canUndo={canUndo}
-                canRedo={canRedo}
-              />
+          <div className="max-w-7xl mx-auto h-full flex flex-col lg:flex-row gap-6 p-6">
+            {/* Professional Sidebar - Tools Panel */}
+            <div className="w-full lg:w-80 flex-shrink-0 order-2 lg:order-1">
+              <div className="h-full max-h-[calc(100vh-8rem)] lg:sticky lg:top-6">
+                <DrawingToolbar
+                  selectedColor={selectedColor}
+                  onColorChange={setSelectedColor}
+                  brushSize={brushSize}
+                  onBrushSizeChange={setBrushSize}
+                  drawingMode={drawingMode}
+                  onModeChange={setDrawingMode}
+                  onUndo={handleUndo}
+                  onRedo={handleRedo}
+                  onClear={handleClear}
+                  canUndo={canUndo}
+                  canRedo={canRedo}
+                />
+              </div>
             </div>
             
-            {/* Paint Canvas - Responsive Design */}
-            <div className="flex-1 order-1 lg:order-2 min-h-0">
-              <PaintCanvas
-                selectedColor={selectedColor}
-                brushSize={brushSize}
-                drawingMode={drawingMode}
-                onSave={handleSaveImage}
-                onUndoRedoChange={handleUndoRedoChange}
-                shouldUndo={shouldUndo}
-                shouldRedo={shouldRedo}
-                shouldClear={shouldClear}
-                onActionComplete={handleActionComplete}
-              />
+            {/* Main Canvas Area - Professional Layout */}
+            <div className="flex-1 order-1 lg:order-2 min-h-0 flex flex-col">
+              <div className="bg-card/60 backdrop-blur-xl border border-border/40 rounded-2xl shadow-xl p-1 h-full">
+                <div className="h-full rounded-xl overflow-hidden">
+                  <PaintCanvas
+                    selectedColor={selectedColor}
+                    brushSize={brushSize}
+                    drawingMode={drawingMode}
+                    onSave={handleSaveImage}
+                    onUndoRedoChange={handleUndoRedoChange}
+                    shouldUndo={shouldUndo}
+                    shouldRedo={shouldRedo}
+                    shouldClear={shouldClear}
+                    onActionComplete={handleActionComplete}
+                  />
+                </div>
+              </div>
             </div>
           </div>
         )}
@@ -135,37 +180,85 @@ export default function PaintPage() {
         )}
 
         {appState === 'minting' && (
-          <div className="flex justify-center items-center min-h-0 bg-gradient-to-br from-muted/20 via-transparent to-muted/30 p-4 sm:p-6">
-            <Card className="bg-card/90 backdrop-blur-xl border border-border/50 p-6 sm:p-8 max-w-lg w-full shadow-2xl" data-testid="card-minting-progress" role="status" aria-live="polite">
-              {/* Modern Header */}
-              <div className="bg-gradient-to-r from-primary/10 via-primary/5 to-transparent border-b border-border/30 px-4 sm:px-6 py-4 -mx-6 sm:-mx-8 -mt-6 sm:-mt-8 mb-6 sm:mb-8">
-                <h3 className="text-base sm:text-lg font-semibold text-foreground flex items-center tracking-wide">
-                  <FileText className="mr-2 sm:mr-3 w-4 h-4 sm:w-5 sm:h-5" aria-hidden="true" />
-                  Minting Your NFT
-                </h3>
+          <div className="max-w-7xl mx-auto p-6 min-h-0 flex items-center justify-center">
+            <Card className="bg-card/95 backdrop-blur-2xl border border-border/30 p-8 max-w-lg w-full shadow-2xl" data-testid="card-minting-progress" role="status" aria-live="polite">
+              {/* Professional Progress Header */}
+              <div className="bg-gradient-to-r from-primary/8 via-primary/4 to-transparent border-b border-border/20 px-6 py-4 -mx-8 -mt-8 mb-8">
+                <div className="flex items-center justify-between">
+                  <div className="flex items-center space-x-3">
+                    <div className="w-10 h-10 bg-primary/10 rounded-xl flex items-center justify-center">
+                      <FileText className="w-5 h-5 text-primary" aria-hidden="true" />
+                    </div>
+                    <div>
+                      <h3 className="text-lg font-bold text-foreground tracking-tight">
+                        Minting NFT
+                      </h3>
+                      <p className="text-sm text-muted-foreground font-medium">
+                        Creating your digital asset...
+                      </p>
+                    </div>
+                  </div>
+                  <div className="px-3 py-1.5 bg-primary/10 text-primary text-sm font-semibold rounded-lg">
+                    Step 3/3
+                  </div>
+                </div>
               </div>
               
-              <div className="flex flex-col items-center space-y-4 sm:space-y-6">
-                {/* Modern Loading Spinner - Responsive */}
+              <div className="flex flex-col items-center space-y-8">
+                {/* Professional Loading Animation */}
                 <div className="relative">
-                  <div className="w-12 h-12 sm:w-16 sm:h-16 border-3 sm:border-4 border-primary/20 rounded-full"></div>
-                  <div className="absolute inset-0 w-12 h-12 sm:w-16 sm:h-16 border-3 sm:border-4 border-primary border-t-transparent rounded-full motion-safe:animate-spin"></div>
-                  <div className="absolute inset-1 sm:inset-2 w-10 h-10 sm:w-12 sm:h-12 bg-gradient-to-br from-primary/20 to-transparent rounded-full"></div>
+                  {/* Main spinner */}
+                  <div className="w-20 h-20 border-4 border-primary/20 rounded-full"></div>
+                  <div className="absolute inset-0 w-20 h-20 border-4 border-primary border-t-transparent rounded-full animate-spin"></div>
+                  
+                  {/* Inner glow */}
+                  <div className="absolute inset-2 w-16 h-16 bg-gradient-to-br from-primary/10 via-primary/5 to-transparent rounded-full animate-pulse"></div>
+                  
+                  {/* Center icon */}
+                  <div className="absolute inset-0 flex items-center justify-center">
+                    <div className="w-8 h-8 bg-primary/20 rounded-lg flex items-center justify-center">
+                      <span className="text-lg">🎨</span>
+                    </div>
+                  </div>
+                  
+                  {/* Floating dots */}
+                  <div className="absolute -top-2 left-1/2 w-2 h-2 bg-primary rounded-full animate-bounce transform -translate-x-1/2"></div>
+                  <div className="absolute top-1/2 -right-2 w-1.5 h-1.5 bg-primary/60 rounded-full animate-bounce transform -translate-y-1/2" style={{animationDelay: '0.3s'}}></div>
+                  <div className="absolute -bottom-2 left-1/2 w-1.5 h-1.5 bg-primary/60 rounded-full animate-bounce transform -translate-x-1/2" style={{animationDelay: '0.6s'}}></div>
                 </div>
                 
-                <div className="space-y-4 text-center">
-                  <div className="flex items-center justify-center space-x-3">
-                    <Globe className="w-5 h-5" aria-hidden="true" />
-                    <span className="text-foreground font-medium">Uploading artwork to IPFS...</span>
+                {/* Progress Steps */}
+                <div className="space-y-6 text-center w-full">
+                  <div className="space-y-3">
+                    <div className="flex items-center justify-center space-x-3">
+                      <div className="w-8 h-8 bg-primary/10 rounded-lg flex items-center justify-center">
+                        <Globe className="w-4 h-4 text-primary" aria-hidden="true" />
+                      </div>
+                      <span className="text-foreground font-semibold">Uploading to IPFS</span>
+                    </div>
+                    <div className="text-sm text-muted-foreground">Securing your artwork on the decentralized web</div>
                   </div>
-                  <div className="text-sm text-muted-foreground">This may take a few moments</div>
                   
-                  {/* Modern Info Alert */}
-                  <div className="bg-amber-50 dark:bg-amber-950 border border-amber-200 dark:border-amber-800 rounded-lg p-4 mt-4">
-                    <div className="flex items-start space-x-2">
-                      <AlertTriangle className="w-5 h-5 text-amber-600 dark:text-amber-400" aria-hidden="true" />
-                      <div className="text-sm text-amber-800 dark:text-amber-200">
-                        If the process takes too long, try again with a higher SOL balance for faster confirmation
+                  {/* Professional Progress Bar */}
+                  <div className="w-full max-w-sm mx-auto">
+                    <div className="h-2 bg-muted/30 rounded-full overflow-hidden">
+                      <div className="h-full bg-gradient-to-r from-primary to-primary/80 rounded-full animate-pulse" style={{width: '75%'}}></div>
+                    </div>
+                    <div className="flex justify-between text-xs text-muted-foreground mt-2">
+                      <span>Uploading...</span>
+                      <span>75%</span>
+                    </div>
+                  </div>
+                  
+                  {/* Professional Tip */}
+                  <div className="bg-blue-50 dark:bg-blue-950/50 border border-blue-200 dark:border-blue-800 rounded-xl p-4">
+                    <div className="flex items-start space-x-3">
+                      <div className="w-5 h-5 bg-blue-500/20 rounded-lg flex items-center justify-center mt-0.5">
+                        <AlertTriangle className="w-3 h-3 text-blue-600 dark:text-blue-400" aria-hidden="true" />
+                      </div>
+                      <div className="text-sm text-blue-800 dark:text-blue-200 text-left">
+                        <div className="font-semibold mb-1">Pro Tip</div>
+                        <div>Keep sufficient SOL for network fees. Process may take 30-60 seconds for optimal confirmation.</div>
                       </div>
                     </div>
                   </div>

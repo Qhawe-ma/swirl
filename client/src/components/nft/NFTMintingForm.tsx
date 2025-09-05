@@ -177,91 +177,147 @@ export function NFTMintingForm({ imageData, onMintSuccess, onMintStart }: NFTMin
   };
 
   return (
-    <div className="flex justify-center items-center min-h-0 bg-gradient-to-br from-muted/20 via-transparent to-muted/30 p-6">
-      <Card className="bg-card/90 backdrop-blur-xl border border-border/50 max-w-4xl w-full shadow-2xl" data-testid="form-nft-minting">
-        {/* Modern Header */}
-        <div className="bg-gradient-to-r from-primary/10 via-primary/5 to-transparent border-b border-border/30 px-6 py-4">
-          <h2 className="text-lg font-semibold text-foreground flex items-center tracking-wide">
-            <span className="mr-3 text-xl">💎</span>
-            Mint as NFT
-          </h2>
+    <div className="max-w-7xl mx-auto p-6 min-h-0">
+      <Card className="bg-card/95 backdrop-blur-2xl border border-border/30 max-w-5xl mx-auto shadow-2xl" data-testid="form-nft-minting">
+        {/* Professional Header */}
+        <div className="bg-gradient-to-r from-primary/8 via-primary/4 to-transparent border-b border-border/20 px-6 py-5">
+          <div className="flex items-center justify-between">
+            <div className="flex items-center space-x-4">
+              <div className="w-12 h-12 bg-gradient-to-br from-primary to-primary/80 rounded-xl flex items-center justify-center shadow-lg">
+                <span className="text-2xl">💎</span>
+              </div>
+              <div>
+                <h2 className="text-xl font-bold text-foreground tracking-tight">
+                  Mint Your Artwork
+                </h2>
+                <p className="text-sm text-muted-foreground font-medium">
+                  Transform your creation into a permanent NFT on Solana
+                </p>
+              </div>
+            </div>
+            <div className="px-3 py-1.5 bg-primary/10 text-primary text-sm font-semibold rounded-lg">
+              Step 2/3
+            </div>
+          </div>
         </div>
 
         <div className="p-6">
-          <div className="flex gap-8">
-            {/* Modern Artwork Preview */}
-            <div className="w-64 flex-shrink-0">
-              <h3 className="text-sm font-medium text-muted-foreground uppercase tracking-wider mb-3">Your Artwork</h3>
-              <div className="bg-card border border-border/50 rounded-xl p-4 shadow-lg">
-                <img 
-                  src={imageData} 
-                  alt="User artwork preview" 
-                  className="w-full rounded-lg border border-border/30 shadow-sm"
-                  data-testid="img-artwork-preview"
-                />
+          <div className="grid lg:grid-cols-5 gap-8">
+            {/* Professional Artwork Preview */}
+            <div className="lg:col-span-2 space-y-4">
+              <div className="flex items-center justify-between">
+                <h3 className="text-sm font-bold text-foreground uppercase tracking-wider">Preview</h3>
+                <div className="text-xs text-muted-foreground font-medium">High Quality</div>
+              </div>
+              <div className="relative group">
+                <div className="absolute inset-0 bg-gradient-to-r from-primary/20 to-primary/10 rounded-2xl opacity-0 group-hover:opacity-100 transition-opacity duration-300 blur"></div>
+                <div className="relative bg-card/80 border border-border/40 rounded-2xl p-4 shadow-xl backdrop-blur-sm">
+                  <img 
+                    src={imageData} 
+                    alt="User artwork preview" 
+                    className="w-full rounded-xl border border-border/20 shadow-lg"
+                    data-testid="img-artwork-preview"
+                  />
+                  <div className="absolute top-2 right-2 px-2 py-1 bg-emerald-500/90 text-white text-xs font-semibold rounded-lg backdrop-blur-sm">
+                    Ready to Mint
+                  </div>
+                </div>
               </div>
             </div>
             
-            {/* Modern NFT Details Form */}
-            <div className="flex-1">
+            {/* Professional NFT Details Form */}
+            <div className="lg:col-span-3 space-y-6">
               <div className="space-y-6">
-                <div className="space-y-2">
-                  <label htmlFor="nft-name" className="text-sm font-medium text-foreground">NFT Name *</label>
+                <div className="space-y-3">
+                  <div className="flex items-center justify-between">
+                    <label htmlFor="nft-name" className="text-sm font-bold text-foreground">Collection Name *</label>
+                    <div className="text-xs text-muted-foreground">{nftName.length}/50 characters</div>
+                  </div>
                   <Input
                     id="nft-name"
                     type="text" 
-                    placeholder="e.g., Abstract Dreams #1" 
+                    placeholder="Enter a unique name for your NFT..." 
                     value={nftName}
-                    onChange={(e) => setNftName(e.target.value)}
+                    onChange={(e) => setNftName(e.target.value.slice(0, 50))}
                     disabled={isLoading}
-                    className="text-base focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2"
+                    className="text-base h-12 bg-muted/20 border-border/40 focus-visible:ring-2 focus-visible:ring-primary focus-visible:border-primary transition-all"
                     data-testid="input-nft-name"
                   />
                 </div>
                 
-                <div className="space-y-2">
-                  <label htmlFor="nft-description" className="text-sm font-medium text-foreground">Description</label>
+                <div className="space-y-3">
+                  <div className="flex items-center justify-between">
+                    <label htmlFor="nft-description" className="text-sm font-bold text-foreground">Description</label>
+                    <div className="text-xs text-muted-foreground">{nftDescription.length}/200 characters</div>
+                  </div>
                   <Textarea
                     id="nft-description"
-                    placeholder="Describe your artwork..." 
+                    placeholder="Tell collectors about your artwork, inspiration, or story..." 
                     rows={4} 
                     value={nftDescription}
-                    onChange={(e) => setNftDescription(e.target.value)}
+                    onChange={(e) => setNftDescription(e.target.value.slice(0, 200))}
                     disabled={isLoading}
-                    className="resize-none text-base focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2"
+                    className="resize-none text-base bg-muted/20 border-border/40 focus-visible:ring-2 focus-visible:ring-primary focus-visible:border-primary transition-all"
                     data-testid="textarea-nft-description"
                   />
                 </div>
                 
-                {/* Modern Cost Info Alert */}
-                <Alert className="border-amber-200 bg-amber-50 dark:border-amber-800 dark:bg-amber-950">
-                  <span className="text-lg">⚠️</span>
-                  <AlertDescription className="text-amber-800 dark:text-amber-200">
-                    <div className="font-semibold mb-1">Mainnet Minting Cost</div>
-                    <div className="text-sm">
-                      Estimated: ~0.002-0.01 SOL for transaction fees<br/>
-                      Please ensure sufficient SOL in your wallet
+                {/* Professional Cost & Network Info */}
+                <div className="grid sm:grid-cols-2 gap-4">
+                  <Alert className="border-emerald-200 bg-emerald-50 dark:border-emerald-800 dark:bg-emerald-950">
+                    <div className="w-5 h-5 bg-emerald-500 rounded-full flex items-center justify-center">
+                      <div className="w-2 h-2 bg-white rounded-full"></div>
                     </div>
-                  </AlertDescription>
-                </Alert>
+                    <AlertDescription className="text-emerald-800 dark:text-emerald-200">
+                      <div className="font-semibold mb-1">Solana Mainnet</div>
+                      <div className="text-xs">
+                        Fast & affordable blockchain for NFTs
+                      </div>
+                    </AlertDescription>
+                  </Alert>
+                  
+                  <Alert className="border-blue-200 bg-blue-50 dark:border-blue-800 dark:bg-blue-950">
+                    <span className="text-lg">💰</span>
+                    <AlertDescription className="text-blue-800 dark:text-blue-200">
+                      <div className="font-semibold mb-1">Minting Cost</div>
+                      <div className="text-xs">
+                        ~0.002-0.01 SOL transaction fee
+                      </div>
+                    </AlertDescription>
+                  </Alert>
+                </div>
               </div>
             </div>
           </div>
           
-          {/* Modern Mint Button */}
-          <div className="mt-8 flex justify-center">
-            <Button
-              size="lg"
-              className={`px-8 py-4 text-base font-semibold bg-gradient-to-r from-primary to-primary/90 hover:from-primary/90 hover:to-primary/80 text-primary-foreground shadow-lg hover:shadow-xl transition-all duration-300 motion-safe:hover:scale-105 focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 ${
-                isLoading || !connected ? 'opacity-50 cursor-not-allowed' : ''
-              }`}
-              onClick={handleMintNFT}
-              disabled={isLoading || !connected}
-              data-testid="button-mint-nft"
-            >
-              <span className="mr-2 text-lg">💎</span>
-              {isLoading ? 'Minting...' : 'Mint NFT on Solana'}
-            </Button>
+          {/* Professional Action Section */}
+          <div className="border-t border-border/30 px-6 py-6 bg-muted/10">
+            <div className="flex flex-col sm:flex-row items-center justify-between gap-4">
+              <div className="flex items-center space-x-3">
+                <div className="w-8 h-8 bg-primary/10 rounded-lg flex items-center justify-center">
+                  <span className="material-icons text-primary text-sm">security</span>
+                </div>
+                <div className="text-sm">
+                  <div className="font-semibold text-foreground">Secure & Permanent</div>
+                  <div className="text-muted-foreground">Stored forever on IPFS & Solana</div>
+                </div>
+              </div>
+              
+              <Button
+                size="lg"
+                className={`px-8 py-3 text-base font-bold bg-gradient-to-r from-primary via-primary/95 to-primary/90 hover:from-primary/90 hover:via-primary/85 hover:to-primary/80 text-primary-foreground shadow-lg hover:shadow-xl transition-all duration-300 motion-safe:hover:scale-[1.02] focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 rounded-xl ${
+                  isLoading || !connected ? 'opacity-50 cursor-not-allowed' : ''
+                }`}
+                onClick={handleMintNFT}
+                disabled={isLoading || !connected || !nftName.trim()}
+                data-testid="button-mint-nft"
+              >
+                <div className="flex items-center space-x-2">
+                  <span className="text-lg">💎</span>
+                  <span>{isLoading ? 'Minting NFT...' : 'Mint NFT on Solana'}</span>
+                </div>
+              </Button>
+            </div>
           </div>
         </div>
       </Card>
