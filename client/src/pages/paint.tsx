@@ -134,7 +134,7 @@ export default function PaintPage() {
 
       <main className="flex-1 bg-gradient-to-br from-background via-muted/10 to-muted/20 min-h-0">
         {appState === 'drawing' && (
-          <div className="h-full flex gap-2 p-2 min-h-0">
+          <div className="h-full flex gap-1 p-1 min-h-0">
             {/* Collapsible Professional Sidebar - Tools Panel */}
             <div className={`relative transition-all duration-500 ease-in-out flex-shrink-0 ${
               sidebarCollapsed 
@@ -180,7 +180,7 @@ export default function PaintPage() {
                 
                 {/* Collapsed Mini Toolbar - Robust compact design */}
                 {sidebarCollapsed && (
-                  <div className="w-full h-full bg-white/98 dark:bg-slate-900/98 backdrop-blur-2xl border border-slate-200/60 dark:border-slate-700/60 rounded-xl shadow-2xl ring-1 ring-slate-900/5 dark:ring-white/10 flex flex-col items-center justify-evenly py-2">
+                  <div className="w-full h-full bg-white/98 dark:bg-slate-900/98 backdrop-blur-2xl border border-slate-200/60 dark:border-slate-700/60 rounded-xl shadow-2xl ring-1 ring-slate-900/5 dark:ring-white/10 flex flex-col items-center justify-start pt-4 gap-3">
                     {/* Mini Mode Indicator */}
                     <div className="w-8 h-8 bg-gradient-to-br from-primary/15 via-primary/10 to-primary/5 rounded-lg flex items-center justify-center ring-1 ring-primary/20">
                       <Palette className="h-3 w-3 text-primary" />
