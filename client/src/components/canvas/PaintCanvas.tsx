@@ -47,6 +47,9 @@ export function PaintCanvas({
     
     if (!ctx) return;
 
+    // Save current canvas content before resizing
+    const previousContent = canvasElement.width > 0 ? canvasElement.toDataURL() : null;
+    
     // Dynamic canvas sizing based on format
     const container = canvasElement.parentElement;
     if (container) {
@@ -83,6 +86,16 @@ export function PaintCanvas({
       // Set white background
       ctx.fillStyle = '#ffffff';
       ctx.fillRect(0, 0, canvasWidth, canvasHeight);
+      
+      // Restore previous content if it exists
+      if (previousContent && previousContent !== 'data:,') {
+        const img = new Image();
+        img.onload = () => {
+          // Scale the image to fit the new canvas size
+          ctx.drawImage(img, 0, 0, canvasWidth, canvasHeight);
+        };
+        img.src = previousContent;
+      }
       
       // Enable smooth drawing
       ctx.imageSmoothingEnabled = true;
@@ -245,12 +258,16 @@ export function PaintCanvas({
         context.ellipse(centerX, centerY, radiusX, radiusY, 0, 0, 2 * Math.PI);
         break;
       case 'triangle':
+        // Make triangle bigger and more proportional
+        const triangleWidth = Math.abs(width) * 1.2; // 20% bigger
+        const triangleHeight = Math.abs(height) * 1.2; // 20% bigger
+        
         const topX = startX + width / 2;
         const topY = startY;
-        const leftX = startX;
-        const leftY = endY;
-        const rightX = endX;
-        const rightY = endY;
+        const leftX = startX - (triangleWidth - Math.abs(width)) / 2;
+        const leftY = startY + triangleHeight;
+        const rightX = endX + (triangleWidth - Math.abs(width)) / 2;
+        const rightY = startY + triangleHeight;
         
         context.moveTo(topX, topY);
         context.lineTo(leftX, leftY);
