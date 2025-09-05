@@ -233,22 +233,16 @@ export function PaintCanvas({
     const canvasX = (clientX - rect.left) * (canvas.width / rect.width);
     const canvasY = (clientY - rect.top) * (canvas.height / rect.height);
     
-    // Clamp coordinates to canvas bounds while allowing full canvas drawing
-    const clampedX = Math.max(0, Math.min(canvas.width - 1, canvasX));
-    const clampedY = Math.max(0, Math.min(canvas.height - 1, canvasY));
-    
     // For 1px brush, use exact coordinates. For larger brushes, center them.
     if (brushSize <= 1) {
       return {
-        x: Math.floor(clampedX),
-        y: Math.floor(clampedY)
+        x: Math.floor(canvasX),
+        y: Math.floor(canvasY)
       };
     } else {
-      // For larger brushes, ensure they don't go outside canvas bounds
-      const halfBrush = brushSize / 2;
       return {
-        x: Math.max(halfBrush, Math.min(canvas.width - halfBrush, clampedX)),
-        y: Math.max(halfBrush, Math.min(canvas.height - halfBrush, clampedY))
+        x: canvasX,
+        y: canvasY
       };
     }
   };
