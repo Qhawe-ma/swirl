@@ -44,10 +44,10 @@ export function PaintCanvas({
     const container = canvasElement.parentElement;
     if (container) {
       const containerRect = container.getBoundingClientRect();
-      // Use smaller dimension to create perfect square
+      // Use smaller dimension to create perfect square - bigger canvas
       const availableWidth = containerRect.width - 16;
       const availableHeight = containerRect.height - 16;
-      const squareSize = Math.min(Math.max(availableWidth, 400), Math.max(availableHeight, 400));
+      const squareSize = Math.min(Math.max(availableWidth, 600), Math.max(availableHeight, 600));
       
       canvasElement.width = squareSize;
       canvasElement.height = squareSize;
