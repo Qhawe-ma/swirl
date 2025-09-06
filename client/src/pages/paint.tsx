@@ -81,19 +81,19 @@ export default function PaintPage() {
         <div className="relative max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
           <div className="flex justify-between items-center h-16 lg:h-18">
             {/* Left: Brand Section */}
-            <div className="flex items-center space-x-6">
+            <div className="flex items-center space-x-2 sm:space-x-6">
               {/* Professional Logo */}
               <div className="relative group cursor-pointer" data-testid="app-logo">
                 <div className="flex items-center gap-2">
                   <img 
                     src="https://res.cloudinary.com/dl8f1ztsy/image/upload/v1757143508/Swirl_Logo_wbpo9t.png" 
                     alt="Logo" 
-                    className="w-12 h-12"
+                    className="w-8 h-8 sm:w-12 sm:h-12"
                     data-testid="img-app-icon"
                   />
                   
                   {/* Brand Name */}
-                  <span className="text-3xl font-bold text-foreground hidden sm:block -ml-1" data-testid="text-app-title">
+                  <span className="text-xl sm:text-3xl font-bold text-foreground -ml-1" data-testid="text-app-title">
                     Swirl
                   </span>
                 </div>
@@ -114,19 +114,26 @@ export default function PaintPage() {
                   </div>
                 </div>
               </nav>
+
+              {/* Mobile Navigation */}
+              <nav className="flex lg:hidden items-center space-x-1 ml-2">
+                <Link href="/gallery" className="px-2 py-1 text-xs font-medium text-muted-foreground hover:text-foreground hover:bg-accent rounded-md transition-colors cursor-pointer" data-testid="link-gallery-mobile">
+                  Gallery
+                </Link>
+              </nav>
             </div>
             
             {/* Right: Actions */}
-            <div className="flex items-center space-x-4">
+            <div className="flex items-center space-x-2 sm:space-x-4">
               {/* Canvas Format Selection */}
               {appState === 'drawing' && (
-                <div className="flex items-center space-x-3">
-                  {/* Canvas Format Selection */}
-                  <div className="hidden sm:flex items-center space-x-1 px-2 py-1.5 bg-muted/50 border border-border/40 rounded-lg">
-                    <span className="text-xs font-medium text-muted-foreground mr-2">Format:</span>
+                <div className="flex items-center space-x-2 sm:space-x-3">
+                  {/* Canvas Format Selection - Always visible, responsive sizing */}
+                  <div className="flex items-center space-x-1 px-1.5 sm:px-2 py-1 sm:py-1.5 bg-muted/50 border border-border/40 rounded-lg">
+                    <span className="text-xs font-medium text-muted-foreground mr-1 sm:mr-2 hidden sm:inline">Format:</span>
                     <button
                       onClick={() => setCanvasFormat('square')}
-                      className={`px-2 py-1 text-xs font-medium rounded-md transition-all duration-200 flex items-center space-x-1 ${
+                      className={`px-1.5 sm:px-2 py-1 text-xs font-medium rounded-md transition-all duration-200 flex items-center space-x-1 ${
                         canvasFormat === 'square'
                           ? 'bg-primary text-primary-foreground shadow-sm'
                           : 'text-muted-foreground hover:text-foreground hover:bg-accent'
@@ -134,11 +141,11 @@ export default function PaintPage() {
                       data-testid="button-format-square"
                     >
                       <Square className="w-3 h-3" />
-                      <span>Square</span>
+                      <span className="hidden sm:inline">Square</span>
                     </button>
                     <button
                       onClick={() => setCanvasFormat('rectangle')}
-                      className={`px-2 py-1 text-xs font-medium rounded-md transition-all duration-200 flex items-center space-x-1 ${
+                      className={`px-1.5 sm:px-2 py-1 text-xs font-medium rounded-md transition-all duration-200 flex items-center space-x-1 ${
                         canvasFormat === 'rectangle'
                           ? 'bg-primary text-primary-foreground shadow-sm'
                           : 'text-muted-foreground hover:text-foreground hover:bg-accent'
@@ -146,7 +153,7 @@ export default function PaintPage() {
                       data-testid="button-format-rectangle"
                     >
                       <RectangleHorizontal className="w-3 h-3" />
-                      <span>Rectangle</span>
+                      <span className="hidden sm:inline">Rectangle</span>
                     </button>
                   </div>
                 </div>
@@ -161,18 +168,18 @@ export default function PaintPage() {
 
       <main className="flex-1 bg-gradient-to-br from-background via-muted/10 to-muted/20 min-h-0">
         {appState === 'drawing' && (
-          <div className="h-full flex gap-1 p-1 min-h-0">
-            {/* Collapsible Professional Sidebar - Tools Panel */}
-            <div className={`relative transition-all duration-500 ease-in-out flex-shrink-0 ${
+          <div className="h-full flex flex-col lg:flex-row gap-1 p-1 min-h-0">
+            {/* Mobile Toolbar - Top on mobile, sidebar on desktop */}
+            <div className={`relative transition-all duration-500 ease-in-out flex-shrink-0 lg:h-auto ${
               sidebarCollapsed 
-                ? 'w-16' 
-                : 'w-80'
+                ? 'lg:w-16 h-auto' 
+                : 'lg:w-80 h-auto'
             }`}>
-              <div className="h-full relative">
-                {/* Sidebar Toggle Button */}
+              <div className="h-full lg:h-full relative">
+                {/* Sidebar Toggle Button - Hidden on mobile */}
                 <Button
                   onClick={() => setSidebarCollapsed(!sidebarCollapsed)}
-                  className={`absolute top-4 z-20 w-10 h-10 p-0 bg-primary hover:bg-primary/90 text-primary-foreground shadow-lg hover:shadow-xl transition-all duration-300 motion-safe:hover:scale-105 rounded-xl border-2 border-white/20 ${
+                  className={`hidden lg:block absolute top-4 z-20 w-10 h-10 p-0 bg-primary hover:bg-primary/90 text-primary-foreground shadow-lg hover:shadow-xl transition-all duration-300 motion-safe:hover:scale-105 rounded-xl border-2 border-white/20 ${
                     sidebarCollapsed ? 'right-2' : '-right-5'
                   }`}
                   aria-label={sidebarCollapsed ? 'Expand sidebar' : 'Collapse sidebar'}
@@ -185,8 +192,26 @@ export default function PaintPage() {
                   )}
                 </Button>
                 
-                {/* Sidebar Content */}
-                <div className={`transition-all duration-500 ease-in-out overflow-hidden ${
+                {/* Mobile Toolbar - Always visible on mobile */}
+                <div className="lg:hidden w-full">
+                  <DrawingToolbar
+                    selectedColor={selectedColor}
+                    onColorChange={setSelectedColor}
+                    brushSize={brushSize}
+                    onBrushSizeChange={setBrushSize}
+                    drawingMode={drawingMode}
+                    onModeChange={setDrawingMode}
+                    onUndo={handleUndo}
+                    onRedo={handleRedo}
+                    onClear={handleClear}
+                    canUndo={canUndo}
+                    canRedo={canRedo}
+                    isCollapsed={false}
+                  />
+                </div>
+
+                {/* Desktop Sidebar Content */}
+                <div className={`hidden lg:block transition-all duration-500 ease-in-out overflow-hidden ${
                   sidebarCollapsed ? 'opacity-0 pointer-events-none' : 'opacity-100'
                 }`}>
                   <DrawingToolbar
@@ -205,9 +230,9 @@ export default function PaintPage() {
                   />
                 </div>
                 
-                {/* Collapsed Mini Toolbar - Robust compact design */}
+                {/* Collapsed Mini Toolbar - Desktop only */}
                 {sidebarCollapsed && (
-                  <div className="absolute top-20 left-0 right-0 bottom-0 bg-white/98 dark:bg-slate-900/98 backdrop-blur-2xl border border-slate-200/60 dark:border-slate-700/60 rounded-xl shadow-2xl ring-1 ring-slate-900/5 dark:ring-white/10 flex flex-col items-center justify-start pt-4 pb-4 gap-2 overflow-y-auto">
+                  <div className="hidden lg:flex absolute top-20 left-0 right-0 bottom-0 bg-white/98 dark:bg-slate-900/98 backdrop-blur-2xl border border-slate-200/60 dark:border-slate-700/60 rounded-xl shadow-2xl ring-1 ring-slate-900/5 dark:ring-white/10 flex-col items-center justify-start pt-4 pb-4 gap-2 overflow-y-auto">
                     {/* Mini Mode Indicator */}
                     <div className="w-8 h-8 bg-gradient-to-br from-primary/15 via-primary/10 to-primary/5 rounded-lg flex items-center justify-center ring-1 ring-primary/20">
                       <Palette className="h-3 w-3 text-primary" />
@@ -267,7 +292,7 @@ export default function PaintPage() {
             </div>
             
             {/* Main Canvas Area - Full canvas display */}
-            <div className="flex-1 min-h-0 min-w-0">
+            <div className="flex-1 min-h-0 min-w-0 lg:min-w-0">
               <div className="bg-card/60 backdrop-blur-xl border border-border/40 rounded-xl shadow-xl p-1 h-full">
                 <div className="h-full rounded-lg overflow-hidden">
                   <PaintCanvas

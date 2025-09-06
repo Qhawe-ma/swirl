@@ -44,9 +44,9 @@ export function DrawingToolbar({
   const [showColorPicker, setShowColorPicker] = useState(false);
 
   return (
-    <div className="bg-white/98 dark:bg-slate-900/98 backdrop-blur-2xl border border-slate-200/60 dark:border-slate-700/60 h-auto max-h-[calc(100vh-6rem)] overflow-y-auto rounded-2xl shadow-2xl ring-1 ring-slate-900/5 dark:ring-white/10" data-testid="toolbar-drawing-tools">
-      {/* Compact Header */}
-      <div className="bg-gradient-to-r from-slate-50/95 via-white/98 to-slate-50/95 dark:from-slate-800/95 dark:via-slate-900/98 dark:to-slate-800/95 border-b border-slate-200/50 dark:border-slate-700/50 px-4 py-3 backdrop-blur-xl">
+    <div className="bg-white/98 dark:bg-slate-900/98 backdrop-blur-2xl border border-slate-200/60 dark:border-slate-700/60 h-auto lg:max-h-[calc(100vh-6rem)] overflow-y-auto lg:overflow-y-auto overflow-x-auto rounded-2xl shadow-2xl ring-1 ring-slate-900/5 dark:ring-white/10" data-testid="toolbar-drawing-tools">
+      {/* Compact Header - Hidden on mobile */}
+      <div className="hidden lg:block bg-gradient-to-r from-slate-50/95 via-white/98 to-slate-50/95 dark:from-slate-800/95 dark:via-slate-900/98 dark:to-slate-800/95 border-b border-slate-200/50 dark:border-slate-700/50 px-4 py-3 backdrop-blur-xl">
         <div className="flex items-center justify-between">
           <div className="flex items-center space-x-2">
             <div className="w-7 h-7 bg-gradient-to-br from-primary/15 via-primary/10 to-primary/5 rounded-lg flex items-center justify-center ring-1 ring-primary/20">
@@ -64,7 +64,122 @@ export function DrawingToolbar({
         </div>
       </div>
 
-      <div className="p-4 space-y-4">
+      {/* Mobile Layout - Horizontal */}
+      <div className="lg:hidden p-2">
+        <div className="flex items-center space-x-4 min-w-max">
+          {/* Mode Toggle */}
+          <div className="flex space-x-1">
+            <Button
+              variant={drawingMode === 'brush' ? 'default' : 'outline'}
+              size="sm"
+              onClick={() => onModeChange('brush')}
+              className="h-8 w-8 p-0"
+              data-testid="button-mobile-brush"
+            >
+              <Brush className="h-4 w-4" />
+            </Button>
+            <Button
+              variant={drawingMode === 'eraser' ? 'default' : 'outline'}
+              size="sm"
+              onClick={() => onModeChange('eraser')}
+              className="h-8 w-8 p-0"
+              data-testid="button-mobile-eraser"
+            >
+              <Eraser className="h-4 w-4" />
+            </Button>
+          </div>
+
+          {/* Color Selection */}
+          <div className="flex items-center space-x-2">
+            <div 
+              className="w-8 h-8 border-2 border-slate-200 dark:border-slate-700 rounded-lg cursor-pointer shadow-sm"
+              style={{ backgroundColor: selectedColor }}
+              onClick={() => setShowColorPicker(true)}
+              data-testid="mobile-color-current"
+            />
+            <div className="flex space-x-1">
+              {COLOR_PRESETS.slice(0, 4).map((color) => (
+                <div
+                  key={color}
+                  className={`w-6 h-6 rounded-md cursor-pointer border transition-all ${
+                    selectedColor === color ? 'border-primary border-2 scale-110' : 'border-slate-300'
+                  }`}
+                  style={{ backgroundColor: color }}
+                  onClick={() => onColorChange(color)}
+                  data-testid={`mobile-color-${color.replace('#', '')}`}
+                />
+              ))}
+            </div>
+          </div>
+
+          {/* Brush Size */}
+          <div className="flex items-center space-x-2 min-w-[120px]">
+            <div className="text-xs font-medium">{brushSize}</div>
+            <Slider
+              value={[brushSize]}
+              onValueChange={(value) => onBrushSizeChange(value[0])}
+              max={50}
+              min={1}
+              step={1}
+              className="flex-1"
+              data-testid="mobile-brush-size"
+            />
+          </div>
+
+          {/* Actions */}
+          <div className="flex space-x-1">
+            <Button
+              variant="outline"
+              size="sm"
+              onClick={onUndo}
+              disabled={!canUndo}
+              className="h-8 w-8 p-0"
+              data-testid="button-mobile-undo"
+            >
+              <Undo2 className="h-3 w-3" />
+            </Button>
+            <Button
+              variant="outline"
+              size="sm"
+              onClick={onRedo}
+              disabled={!canRedo}
+              className="h-8 w-8 p-0"
+              data-testid="button-mobile-redo"
+            >
+              <Redo2 className="h-3 w-3" />
+            </Button>
+            <AlertDialog>
+              <AlertDialogTrigger asChild>
+                <Button
+                  variant="outline"
+                  size="sm"
+                  className="h-8 w-8 p-0 text-red-600 hover:bg-red-50"
+                  data-testid="button-mobile-clear"
+                >
+                  <Trash2 className="h-3 w-3" />
+                </Button>
+              </AlertDialogTrigger>
+              <AlertDialogContent>
+                <AlertDialogHeader>
+                  <AlertDialogTitle>Clear Canvas</AlertDialogTitle>
+                  <AlertDialogDescription>
+                    Are you sure you want to clear the entire canvas? This action cannot be undone.
+                  </AlertDialogDescription>
+                </AlertDialogHeader>
+                <AlertDialogFooter>
+                  <AlertDialogCancel>Cancel</AlertDialogCancel>
+                  <AlertDialogAction onClick={onClear} className="bg-destructive text-destructive-foreground hover:bg-destructive/90">
+                    Clear Canvas
+                  </AlertDialogAction>
+                </AlertDialogFooter>
+              </AlertDialogContent>
+            </AlertDialog>
+          </div>
+        </div>
+      </div>
+
+      {/* Desktop Layout - Vertical */}
+      <div className="hidden lg:block p-4 space-y-4">
         {/* Clean Drawing Mode */}
         <div className="space-y-3">
           <div className="flex items-center justify-between">
