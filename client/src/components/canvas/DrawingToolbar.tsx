@@ -175,7 +175,10 @@ export function DrawingToolbar({
                   max={50}
                   min={1}
                   step={1}
-                  className="w-full [&>span[data-orientation=horizontal]]:h-3 [&>span[data-orientation=horizontal]]:bg-slate-200 [&>span[data-orientation=horizontal]]:dark:bg-slate-600 [&>span[data-orientation=horizontal]]:rounded-full [&_[role=slider]]:w-5 [&_[role=slider]]:h-5 [&_[role=slider]]:border-3 [&_[role=slider]]:border-white [&_[role=slider]]:bg-primary [&_[role=slider]]:shadow-lg [&_[role=slider]]:ring-2 [&_[role=slider]]:ring-primary/30"
+                  className="w-full [&>span[data-orientation=horizontal]]:h-3 [&>span[data-orientation=horizontal]]:bg-slate-200 [&>span[data-orientation=horizontal]]:dark:bg-slate-600 [&>span[data-orientation=horizontal]]:rounded-full [&_[role=slider]]:w-5 [&_[role=slider]]:h-5 [&_[role=slider]]:border-3 [&_[role=slider]]:border-white [&_[role=slider]]:shadow-lg [&_[role=slider]]:ring-2 [&_[role=slider]]:ring-white/50"
+                  style={{
+                    '--slider-thumb-bg': drawingMode === 'brush' ? selectedColor : '#6b7280'
+                  } as React.CSSProperties & { '--slider-thumb-bg': string }}
                   aria-label="Brush size control"
                   data-testid="slider-brush-size"
                 />
