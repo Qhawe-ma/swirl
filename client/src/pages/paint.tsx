@@ -48,7 +48,6 @@ export default function PaintPage() {
   };
 
   const handleSaveImage = (imageData: string) => {
-    console.log('Saving image data:', imageData.substring(0, 50) + '...');
     setSavedImageData(imageData);
     setAppState('minting-form');
   };
@@ -69,7 +68,6 @@ export default function PaintPage() {
   };
 
   const handleBackToDrawing = () => {
-    console.log('Going back to drawing with saved data:', savedImageData.substring(0, 50) + '...');
     setAppState('drawing');
   };
 
@@ -109,6 +107,14 @@ export default function PaintPage() {
                 <Link href="/gallery" className="px-3 py-2 text-sm font-medium text-muted-foreground hover:text-foreground hover:bg-accent rounded-lg transition-colors cursor-pointer" data-testid="link-gallery">
                   Gallery
                 </Link>
+                <div className="relative group">
+                  <div className="px-3 py-2 text-sm font-medium text-muted-foreground hover:text-foreground hover:bg-accent rounded-lg transition-colors cursor-pointer" data-testid="link-create-with-friends">
+                    Create With Friends
+                  </div>
+                  <div className="absolute bottom-full left-1/2 transform -translate-x-1/2 mb-2 px-3 py-1 bg-gray-900 text-white text-xs rounded-lg opacity-0 group-hover:opacity-100 transition-opacity duration-200 pointer-events-none whitespace-nowrap">
+                    Coming Soon
+                  </div>
+                </div>
               </nav>
             </div>
             
