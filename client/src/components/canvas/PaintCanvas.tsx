@@ -96,15 +96,18 @@ export function PaintCanvas({
         img.onload = () => {
           // Scale the image to fit the new canvas size
           ctx.drawImage(img, 0, 0, canvasWidth, canvasHeight);
-          // Add to history if this is initial image data
-          if (imageToLoad === initialImageData) {
-            const newState = canvasElement.toDataURL();
-            setHistory([newState]);
-            setHistoryIndex(0);
-            onUndoRedoChange(false, false);
-          }
+          // Set history with the loaded image
+          const newState = canvasElement.toDataURL();
+          setHistory([newState]);
+          setHistoryIndex(0);
+          onUndoRedoChange(false, false);
         };
         img.src = imageToLoad;
+      } else {
+        // Only set blank history if no image to load
+        const initialData = canvasElement.toDataURL();
+        setHistory([initialData]);
+        setHistoryIndex(0);
       }
       
       // Enable smooth drawing
@@ -114,9 +117,6 @@ export function PaintCanvas({
     
     setCanvas(canvasElement);
     setContext(ctx);
-    const initialData = canvasElement.toDataURL();
-    setHistory([initialData]);
-    setHistoryIndex(0);
     
     // Use setTimeout to avoid calling setState during render
     setTimeout(() => {
