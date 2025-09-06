@@ -89,8 +89,8 @@ export function PaintCanvas({
       ctx.fillStyle = '#ffffff';
       ctx.fillRect(0, 0, canvasWidth, canvasHeight);
       
-      // Restore previous content if it exists, or load initial image data
-      const imageToLoad = previousContent && previousContent !== 'data:,' ? previousContent : initialImageData;
+      // Prioritize initialImageData (saved artwork) over previousContent
+      const imageToLoad = initialImageData || (previousContent && previousContent !== 'data:,' ? previousContent : null);
       console.log('PaintCanvas: imageToLoad exists?', !!imageToLoad, 'previousContent?', !!previousContent, 'initialImageData?', !!initialImageData);
       if (imageToLoad) {
         const img = new Image();
