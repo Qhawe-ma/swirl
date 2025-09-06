@@ -48,6 +48,7 @@ export default function PaintPage() {
   };
 
   const handleSaveImage = (imageData: string) => {
+    console.log('Saving image data:', imageData.substring(0, 50) + '...');
     setSavedImageData(imageData);
     setAppState('minting-form');
   };
@@ -68,6 +69,7 @@ export default function PaintPage() {
   };
 
   const handleBackToDrawing = () => {
+    console.log('Going back to drawing with saved data:', savedImageData.substring(0, 50) + '...');
     setAppState('drawing');
   };
 

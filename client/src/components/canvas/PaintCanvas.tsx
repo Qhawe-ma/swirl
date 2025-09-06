@@ -91,9 +91,11 @@ export function PaintCanvas({
       
       // Restore previous content if it exists, or load initial image data
       const imageToLoad = previousContent && previousContent !== 'data:,' ? previousContent : initialImageData;
+      console.log('PaintCanvas: imageToLoad exists?', !!imageToLoad, 'previousContent?', !!previousContent, 'initialImageData?', !!initialImageData);
       if (imageToLoad) {
         const img = new Image();
         img.onload = () => {
+          console.log('PaintCanvas: Image loaded successfully, drawing to canvas');
           // Scale the image to fit the new canvas size
           ctx.drawImage(img, 0, 0, canvasWidth, canvasHeight);
           // Set history with the loaded image
@@ -102,8 +104,12 @@ export function PaintCanvas({
           setHistoryIndex(0);
           onUndoRedoChange(false, false);
         };
+        img.onerror = () => {
+          console.error('PaintCanvas: Failed to load image');
+        };
         img.src = imageToLoad;
       } else {
+        console.log('PaintCanvas: No image to load, setting blank canvas');
         // Only set blank history if no image to load
         const initialData = canvasElement.toDataURL();
         setHistory([initialData]);
