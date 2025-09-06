@@ -205,10 +205,10 @@ export function ThreeStepMinting({ imageData, onMintSuccess, onBack }: ThreeStep
   };
 
   return (
-    <div className="fixed inset-0 bg-black/60 backdrop-blur-md z-50 flex items-center justify-center p-4">
-      <Card className="bg-white dark:bg-gray-900 w-full max-w-4xl h-auto max-h-[95vh] overflow-hidden shadow-2xl border border-gray-200/20 dark:border-gray-700/30" style={{borderRadius: 'var(--radius)'}} data-testid="three-step-minting">
-        {/* Modern Header */}
-        <div className="border-b border-gray-200/30 dark:border-gray-700/30 px-6 py-5 bg-gray-50/50 dark:bg-gray-800/50">
+    <div className="fixed inset-0 bg-black/50 backdrop-blur-sm z-50 flex items-center justify-center p-4">
+      <Card className="bg-white dark:bg-gray-900 w-full max-w-4xl h-auto max-h-[95vh] overflow-hidden shadow-xl rounded-2xl border-0" data-testid="three-step-minting">
+        {/* Header */}
+        <div className="border-b border-gray-200 dark:border-gray-700 px-6 py-4">
           <div className="flex items-center justify-between">
             <div className="flex items-center space-x-4">
               {onBack && currentStep === 'details' && (
@@ -221,12 +221,12 @@ export function ThreeStepMinting({ imageData, onMintSuccess, onBack }: ThreeStep
                 </button>
               )}
               <div>
-                <h2 className="text-xl font-bold text-gray-900 dark:text-white tracking-tight">
+                <h2 className="text-xl font-semibold text-gray-900 dark:text-white">
                   {currentStep === 'details' && 'Step 1: NFT Details'}
                   {currentStep === 'processing' && 'Step 2: Creating NFT'}
                   {currentStep === 'success' && 'Step 3: Success!'}
                 </h2>
-                <p className="text-sm text-gray-600 dark:text-gray-400 font-medium">
+                <p className="text-sm text-gray-500 dark:text-gray-400">
                   {currentStep === 'details' && 'Add name and description for your NFT'}
                   {currentStep === 'processing' && 'Uploading and minting your NFT'}
                   {currentStep === 'success' && 'Your NFT has been created successfully'}
@@ -262,8 +262,8 @@ export function ThreeStepMinting({ imageData, onMintSuccess, onBack }: ThreeStep
             <div className="grid md:grid-cols-2 gap-8">
               {/* Artwork Preview - Left Side */}
               <div className="space-y-3">
-                <h3 className="text-sm font-semibold text-gray-900 dark:text-white tracking-tight">Preview</h3>
-                <div className="relative bg-gray-50/80 dark:bg-gray-800/80 border border-gray-200/50 dark:border-gray-700/50 rounded-xl p-4 backdrop-blur-sm">
+                <h3 className="text-sm font-medium text-gray-900 dark:text-white">Preview</h3>
+                <div className="relative bg-gray-50 dark:bg-gray-800 border border-gray-200 dark:border-gray-700 rounded-xl p-4">
                   <img 
                     src={imageData} 
                     alt="User artwork preview" 
@@ -278,8 +278,8 @@ export function ThreeStepMinting({ imageData, onMintSuccess, onBack }: ThreeStep
                 <div className="space-y-6">
                   <div className="space-y-2">
                     <div className="flex items-center justify-between">
-                      <label htmlFor="nft-name" className="text-sm font-semibold text-gray-900 dark:text-white tracking-tight">NFT Name *</label>
-                      <div className="text-xs text-gray-500 font-mono">{nftName.length}/50</div>
+                      <label htmlFor="nft-name" className="text-sm font-medium text-gray-900 dark:text-white">NFT Name *</label>
+                      <div className="text-xs text-gray-500">{nftName.length}/50</div>
                     </div>
                     <Input
                       id="nft-name"
@@ -295,8 +295,8 @@ export function ThreeStepMinting({ imageData, onMintSuccess, onBack }: ThreeStep
                   
                   <div className="space-y-2">
                     <div className="flex items-center justify-between">
-                      <label htmlFor="nft-description" className="text-sm font-semibold text-gray-900 dark:text-white tracking-tight">Description</label>
-                      <div className="text-xs text-gray-500 font-mono">{nftDescription.length}/200</div>
+                      <label htmlFor="nft-description" className="text-sm font-medium text-gray-900 dark:text-white">Description</label>
+                      <div className="text-xs text-gray-500">{nftDescription.length}/200</div>
                     </div>
                     <Textarea
                       id="nft-description"
@@ -310,16 +310,16 @@ export function ThreeStepMinting({ imageData, onMintSuccess, onBack }: ThreeStep
                     />
                   </div>
                   
-                  {/* Modern Cost Info */}
-                  <div className="p-4 bg-blue-50/80 dark:bg-blue-900/30 rounded-xl border border-blue-200/50 dark:border-blue-800/50 backdrop-blur-sm">
+                  {/* Cost Info */}
+                  <div className="p-4 bg-blue-50 dark:bg-blue-900/20 rounded-xl border border-blue-200 dark:border-blue-800">
                     <div className="flex items-center justify-between">
                       <div className="flex items-center space-x-3">
-                        <div className="w-6 h-6 bg-blue-500 rounded-full flex items-center justify-center shadow-sm">
+                        <div className="w-6 h-6 bg-blue-500 rounded-full flex items-center justify-center">
                           <Zap className="w-3 h-3 text-white" />
                         </div>
-                        <span className="font-semibold text-gray-900 dark:text-white tracking-tight">Minting Fee</span>
+                        <span className="font-medium text-gray-900 dark:text-white">Minting Fee</span>
                       </div>
-                      <span className="font-mono font-bold text-gray-800 dark:text-gray-200">~0.02 SOL</span>
+                      <span className="font-mono font-semibold text-gray-700 dark:text-gray-300">~0.02 SOL</span>
                     </div>
                   </div>
                 </div>
@@ -443,11 +443,11 @@ export function ThreeStepMinting({ imageData, onMintSuccess, onBack }: ThreeStep
           </div>
         )}
         
-        {/* Modern Footer */}
+        {/* Footer */}
         {currentStep === 'details' && (
-          <div className="border-t border-gray-200/30 dark:border-gray-700/30 px-6 py-5 bg-gray-50/30 dark:bg-gray-800/30 backdrop-blur-sm">
+          <div className="border-t border-gray-200 dark:border-gray-700 px-6 py-4">
             <div className="flex items-center justify-between">
-              <div className="text-sm text-gray-600 dark:text-gray-400 font-medium">
+              <div className="text-sm text-gray-600 dark:text-gray-400">
                 Secure & permanent on Solana blockchain
               </div>
               
@@ -459,12 +459,12 @@ export function ThreeStepMinting({ imageData, onMintSuccess, onBack }: ThreeStep
               ) : (
                 <Button
                   size="lg"
-                  className="bg-gradient-to-r from-blue-600 to-purple-600 hover:from-blue-700 hover:to-purple-700 text-white px-8 py-3 font-semibold text-sm disabled:opacity-50 disabled:cursor-not-allowed shadow-lg border-0 transition-all duration-200"
+                  className="bg-blue-600 hover:bg-blue-700 text-white px-8 py-3 font-medium text-sm disabled:opacity-50 disabled:cursor-not-allowed rounded-lg transition-colors"
                   onClick={handleStartMinting}
                   disabled={isLoading || !nftName.trim()}
                   data-testid="button-start-minting"
                 >
-                  Select Wallet
+                  {connected ? 'Mint NFT' : 'Select Wallet'}
                 </Button>
               )}
             </div>
