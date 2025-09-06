@@ -101,6 +101,9 @@ export default function PaintPage() {
               
               {/* Navigation Items - Desktop */}
               <nav className="hidden lg:flex items-center space-x-1">
+                <Link href="/" className="px-3 py-2 text-sm font-medium text-muted-foreground hover:text-foreground hover:bg-accent rounded-lg transition-colors cursor-pointer" data-testid="link-home">
+                  Home
+                </Link>
                 <div className="px-3 py-2 text-sm font-medium text-primary bg-primary/5 rounded-lg border border-primary/20">
                   Create
                 </div>
@@ -117,6 +120,9 @@ export default function PaintPage() {
 
               {/* Mobile Navigation */}
               <nav className="flex lg:hidden items-center space-x-1 ml-2">
+                <Link href="/" className="px-2 py-1 text-xs font-medium text-muted-foreground hover:text-foreground hover:bg-accent rounded-md transition-colors cursor-pointer" data-testid="link-home-mobile">
+                  Home
+                </Link>
                 <Link href="/gallery" className="px-2 py-1 text-xs font-medium text-muted-foreground hover:text-foreground hover:bg-accent rounded-md transition-colors cursor-pointer" data-testid="link-gallery-mobile">
                   Gallery
                 </Link>
