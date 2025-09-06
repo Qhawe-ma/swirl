@@ -65,7 +65,38 @@ export function getUserMints(walletAddress: string, callback: (mints: MintRecord
   });
   
   // Return unsubscribe function
-  return () => off(mintsRef, 'value', unsubscribe);
+  return unsubscribe;
+}
+
+// Get all mints from all users for the gallery
+export function getAllMints(callback: (mints: MintRecord[]) => void): () => void {
+  const mintsRef = ref(database, 'mints');
+  
+  const unsubscribe = onValue(mintsRef, (snapshot) => {
+    const data = snapshot.val();
+    if (data) {
+      const allMints: MintRecord[] = [];
+      
+      // Iterate through all wallet addresses
+      Object.values(data).forEach((walletMints: any) => {
+        if (walletMints && typeof walletMints === 'object') {
+          // Add all mints from this wallet
+          Object.values(walletMints).forEach((mint: any) => {
+            allMints.push(mint as MintRecord);
+          });
+        }
+      });
+      
+      // Sort by timestamp, newest first
+      allMints.sort((a, b) => b.timestamp - a.timestamp);
+      callback(allMints);
+    } else {
+      callback([]);
+    }
+  });
+  
+  // Return unsubscribe function
+  return unsubscribe;
 }
 
 export { database };

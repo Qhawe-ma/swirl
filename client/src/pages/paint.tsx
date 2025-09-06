@@ -8,6 +8,7 @@ import { MintsHistory } from '@/components/wallet/MintsHistory';
 import { Card } from '@/components/ui/card';
 import { Button } from '@/components/ui/button';
 import { useWallet } from '@solana/wallet-adapter-react';
+import { Link } from 'wouter';
 import { FileText, Globe, Palette, AlertTriangle, ChevronLeft, ChevronRight, Menu, Brush, Eraser, Undo2, Redo2, Square, RectangleHorizontal } from 'lucide-react';
 
 type AppState = 'drawing' | 'minting-form' | 'minting' | 'success';
@@ -113,9 +114,9 @@ export default function PaintPage() {
                 <div className="px-3 py-2 text-sm font-medium text-primary bg-primary/5 rounded-lg border border-primary/20">
                   Create
                 </div>
-                <div className="px-3 py-2 text-sm font-medium text-muted-foreground hover:text-foreground hover:bg-accent rounded-lg transition-colors cursor-not-allowed opacity-60">
+                <Link href="/gallery" className="px-3 py-2 text-sm font-medium text-muted-foreground hover:text-foreground hover:bg-accent rounded-lg transition-colors cursor-pointer" data-testid="link-gallery">
                   Gallery
-                </div>
+                </Link>
                 <div className="px-3 py-2 text-sm font-medium text-muted-foreground hover:text-foreground hover:bg-accent rounded-lg transition-colors cursor-not-allowed opacity-60">
                   Analytics
                 </div>
