@@ -147,12 +147,9 @@ export default function LandingPage() {
             <div className="grid grid-cols-1 md:grid-cols-3 gap-8 lg:gap-12">
               {/* Step 1 */}
               <div className="text-center" data-testid="step-draw">
-                <div className="relative mx-auto mb-6">
-                  <div className="w-20 h-20 bg-primary/10 rounded-2xl flex items-center justify-center mx-auto border-4 border-primary/20">
-                    <Palette className="w-10 h-10 text-primary" />
-                  </div>
-                  <div className="absolute -top-2 -right-2 w-8 h-8 bg-primary text-primary-foreground rounded-full flex items-center justify-center text-sm font-bold">
-                    1
+                <div className="mx-auto mb-6">
+                  <div className="w-20 h-20 bg-background border-2 border-foreground/20 rounded-2xl flex items-center justify-center mx-auto shadow-lg">
+                    <span className="text-2xl font-black text-foreground">1</span>
                   </div>
                 </div>
                 <h3 className="text-xl font-bold text-foreground mb-4">Draw & Create</h3>
@@ -164,12 +161,9 @@ export default function LandingPage() {
 
               {/* Step 2 */}
               <div className="text-center" data-testid="step-customize">
-                <div className="relative mx-auto mb-6">
-                  <div className="w-20 h-20 bg-primary/10 rounded-2xl flex items-center justify-center mx-auto border-4 border-primary/20">
-                    <Sparkles className="w-10 h-10 text-primary" />
-                  </div>
-                  <div className="absolute -top-2 -right-2 w-8 h-8 bg-primary text-primary-foreground rounded-full flex items-center justify-center text-sm font-bold">
-                    2
+                <div className="mx-auto mb-6">
+                  <div className="w-20 h-20 bg-background border-2 border-foreground/20 rounded-2xl flex items-center justify-center mx-auto shadow-lg">
+                    <span className="text-2xl font-black text-foreground">2</span>
                   </div>
                 </div>
                 <h3 className="text-xl font-bold text-foreground mb-4">Add Details</h3>
@@ -181,12 +175,9 @@ export default function LandingPage() {
 
               {/* Step 3 */}
               <div className="text-center" data-testid="step-mint">
-                <div className="relative mx-auto mb-6">
-                  <div className="w-20 h-20 bg-primary/10 rounded-2xl flex items-center justify-center mx-auto border-4 border-primary/20">
-                    <Zap className="w-10 h-10 text-primary" />
-                  </div>
-                  <div className="absolute -top-2 -right-2 w-8 h-8 bg-primary text-primary-foreground rounded-full flex items-center justify-center text-sm font-bold">
-                    3
+                <div className="mx-auto mb-6">
+                  <div className="w-20 h-20 bg-background border-2 border-foreground/20 rounded-2xl flex items-center justify-center mx-auto shadow-lg">
+                    <span className="text-2xl font-black text-foreground">3</span>
                   </div>
                 </div>
                 <h3 className="text-xl font-bold text-foreground mb-4">Mint as NFT</h3>
