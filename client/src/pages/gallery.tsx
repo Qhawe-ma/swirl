@@ -296,13 +296,24 @@ export default function GalleryPage() {
   }, []);
 
   useEffect(() => {
+    console.log('🎯 Gallery useEffect: Setting up getAllMints subscription');
+    
     // Subscribe to all mints
     const unsubscribeAll = getAllMints((mints) => {
+      console.log('📨 Gallery: Received mints callback with', mints.length, 'mints');
       setAllMints(mints);
       setLoadingAll(false);
     });
 
+    // Fallback timeout in case Firebase is slow or stuck
+    const timeout = setTimeout(() => {
+      console.log('⏰ Gallery: Timeout reached, setting loading to false');
+      setLoadingAll(false);
+    }, 10000); // 10 second timeout
+
     return () => {
+      console.log('🧹 Gallery: Cleaning up getAllMints subscription');
+      clearTimeout(timeout);
       unsubscribeAll();
     };
   }, []);

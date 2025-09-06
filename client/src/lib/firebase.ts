@@ -13,8 +13,16 @@ const firebaseConfig = {
 };
 
 // Initialize Firebase
+console.log('🚀 Initializing Firebase with config:', {
+  projectId: firebaseConfig.projectId,
+  databaseURL: firebaseConfig.databaseURL,
+  hasApiKey: !!firebaseConfig.apiKey
+});
+
 const app = initializeApp(firebaseConfig);
 const database = getDatabase(app);
+
+console.log('✅ Firebase initialized successfully');
 
 export interface MintRecord {
   id: string;
@@ -73,10 +81,14 @@ export function getUserMints(walletAddress: string, callback: (mints: MintRecord
 
 // Get all mints from all users for the gallery
 export function getAllMints(callback: (mints: MintRecord[]) => void): () => void {
+  console.log('🔍 Setting up getAllMints Firebase listener...');
   const mintsRef = ref(database, 'mints');
   
   const unsubscribe = onValue(mintsRef, (snapshot) => {
+    console.log('🔄 Firebase getAllMints callback triggered');
     const data = snapshot.val();
+    console.log('📊 Firebase data received:', data);
+    
     if (data) {
       const allMints: MintRecord[] = [];
       
@@ -92,8 +104,10 @@ export function getAllMints(callback: (mints: MintRecord[]) => void): () => void
       
       // Sort by timestamp, newest first
       allMints.sort((a, b) => b.timestamp - a.timestamp);
+      console.log(`✅ Found ${allMints.length} total mints in Firebase`);
       callback(allMints);
     } else {
+      console.log('📭 No data found in Firebase - calling callback with empty array');
       callback([]);
     }
   }, (error) => {
