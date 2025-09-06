@@ -17,7 +17,7 @@ export default function PaintPage() {
   const { connected } = useWallet();
   const [selectedColor, setSelectedColor] = useState('#000000');
   const [brushSize, setBrushSize] = useState(15);
-  const [drawingMode, setDrawingMode] = useState<'brush' | 'eraser' | 'rectangle' | 'circle' | 'triangle'>('brush');
+  const [drawingMode, setDrawingMode] = useState<'brush' | 'eraser' | 'rectangle' | 'circle' | 'triangle' | 'fill'>('brush');
   const [canUndo, setCanUndo] = useState(false);
   const [canRedo, setCanRedo] = useState(false);
   const [shouldUndo, setShouldUndo] = useState(false);
@@ -83,7 +83,7 @@ export default function PaintPage() {
             {/* Left: Brand Section */}
             <div className="flex items-center space-x-2 sm:space-x-6">
               {/* Professional Logo */}
-              <div className="relative group cursor-pointer" data-testid="app-logo">
+              <Link href="/" className="relative group cursor-pointer" data-testid="app-logo">
                 <div className="flex items-center gap-2">
                   <img 
                     src="https://res.cloudinary.com/dl8f1ztsy/image/upload/v1757143508/Swirl_Logo_wbpo9t.png" 
@@ -97,7 +97,7 @@ export default function PaintPage() {
                     Swirl
                   </span>
                 </div>
-              </div>
+              </Link>
               
               {/* Navigation Items - Desktop */}
               <nav className="hidden lg:flex items-center space-x-1">
