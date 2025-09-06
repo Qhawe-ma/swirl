@@ -60,12 +60,14 @@ export default function LandingPage() {
                 <Link href="/create">
                   <Button 
                     size="lg" 
-                    className="w-full sm:w-auto px-8 py-4 text-lg font-semibold bg-primary hover:bg-primary/90 text-primary-foreground shadow-lg hover:shadow-xl transition-all duration-300 motion-safe:hover:scale-105 rounded-xl border-2 border-white/20"
+                    className="group w-full sm:w-auto px-10 py-5 text-lg font-bold bg-gradient-to-r from-primary via-primary to-primary/90 hover:from-primary/90 hover:via-primary hover:to-primary text-primary-foreground shadow-2xl hover:shadow-3xl transition-all duration-500 ease-out motion-safe:hover:scale-[1.02] motion-safe:hover:-translate-y-1 rounded-2xl border-0 relative overflow-hidden"
                     data-testid="button-create-now"
                   >
-                    <Palette className="w-5 h-5 mr-2" />
-                    CREATE NOW
-                    <ArrowRight className="w-5 h-5 ml-2" />
+                    <div className="absolute inset-0 bg-gradient-to-r from-white/0 via-white/20 to-white/0 translate-x-[-100%] group-hover:translate-x-[100%] transition-transform duration-700 ease-out"></div>
+                    <span className="relative z-10 flex items-center">
+                      CREATE NOW
+                      <ArrowRight className="w-5 h-5 ml-3 transition-transform duration-300 group-hover:translate-x-1" />
+                    </span>
                   </Button>
                 </Link>
                 <Link href="/gallery">
