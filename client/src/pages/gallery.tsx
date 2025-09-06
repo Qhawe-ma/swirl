@@ -36,14 +36,14 @@ function NFTDetailModal({ mint }: { mint: MintRecord }) {
   };
 
   return (
-    <DialogContent className="max-w-4xl max-h-[90vh] overflow-y-auto bg-white dark:bg-gray-900 border-2 shadow-2xl">
+    <DialogContent className="max-w-4xl max-h-[90vh] overflow-y-auto bg-white dark:bg-gray-900 border-2 shadow-2xl mx-2 sm:mx-auto">
       <DialogHeader>
-        <DialogTitle className="text-xl font-bold">{mint.name}</DialogTitle>
+        <DialogTitle className="text-lg sm:text-xl font-bold pr-8">{mint.name}</DialogTitle>
       </DialogHeader>
       
-      <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
+      <div className="grid grid-cols-1 lg:grid-cols-2 gap-4 sm:gap-6">
         {/* NFT Image */}
-        <div className="space-y-4">
+        <div className="space-y-3 sm:space-y-4">
           <div className="aspect-square overflow-hidden rounded-lg border-2 border-border">
             <img 
               src={mint.imageData} 
@@ -55,25 +55,25 @@ function NFTDetailModal({ mint }: { mint: MintRecord }) {
         </div>
         
         {/* NFT Details */}
-        <div className="space-y-6">
+        <div className="space-y-4 sm:space-y-6">
           {/* Basic Info */}
           <div className="space-y-3">
             <div>
-              <h3 className="text-sm font-medium text-muted-foreground mb-1">Token Name</h3>
-              <p className="text-lg font-semibold" data-testid={`modal-name-${mint.id}`}>{mint.name}</p>
+              <h3 className="text-xs sm:text-sm font-medium text-muted-foreground mb-1">Token Name</h3>
+              <p className="text-base sm:text-lg font-semibold" data-testid={`modal-name-${mint.id}`}>{mint.name}</p>
             </div>
             
             <div>
-              <h3 className="text-sm font-medium text-muted-foreground mb-1">Created</h3>
+              <h3 className="text-xs sm:text-sm font-medium text-muted-foreground mb-1">Created</h3>
               <p className="text-sm" data-testid={`modal-date-${mint.id}`}>{formatDate(mint.timestamp)}</p>
             </div>
           </div>
           
           {/* Creator Info */}
-          <div className="space-y-3 p-4 bg-muted/30 rounded-lg">
-            <h3 className="text-sm font-medium text-muted-foreground">Creator</h3>
-            <div className="flex items-center justify-between">
-              <span className="text-sm font-mono" data-testid={`modal-creator-${mint.id}`}>
+          <div className="space-y-3 p-3 sm:p-4 bg-muted/30 rounded-lg">
+            <h3 className="text-xs sm:text-sm font-medium text-muted-foreground">Creator</h3>
+            <div className="flex items-center justify-between gap-2">
+              <span className="text-xs sm:text-sm font-mono break-all" data-testid={`modal-creator-${mint.id}`}>
                 {formatAddress(mint.walletAddress)}
               </span>
               <Button 
@@ -82,18 +82,19 @@ function NFTDetailModal({ mint }: { mint: MintRecord }) {
                 onClick={() => copyToClipboard(mint.walletAddress)}
                 aria-label="Copy creator address"
                 data-testid={`modal-copy-creator-${mint.id}`}
+                className="flex-shrink-0"
               >
-                <Copy className="h-4 w-4 mr-2" />
-                Copy
+                <Copy className="h-3 w-3 sm:h-4 sm:w-4 mr-1 sm:mr-2" />
+                <span className="hidden sm:inline">Copy</span>
               </Button>
             </div>
           </div>
           
           {/* Mint Address */}
-          <div className="space-y-3 p-4 bg-muted/30 rounded-lg">
-            <h3 className="text-sm font-medium text-muted-foreground">Mint Address</h3>
-            <div className="flex items-center justify-between">
-              <span className="text-sm font-mono break-all" data-testid={`modal-mint-address-${mint.id}`}>
+          <div className="space-y-3 p-3 sm:p-4 bg-muted/30 rounded-lg">
+            <h3 className="text-xs sm:text-sm font-medium text-muted-foreground">Mint Address</h3>
+            <div className="flex items-center justify-between gap-2">
+              <span className="text-xs sm:text-sm font-mono break-all" data-testid={`modal-mint-address-${mint.id}`}>
                 {formatAddress(mint.mintAddress)}
               </span>
               <Button 
@@ -102,9 +103,10 @@ function NFTDetailModal({ mint }: { mint: MintRecord }) {
                 onClick={() => copyToClipboard(mint.mintAddress)}
                 aria-label="Copy mint address"
                 data-testid={`modal-copy-mint-${mint.id}`}
+                className="flex-shrink-0"
               >
-                <Copy className="h-4 w-4 mr-2" />
-                Copy
+                <Copy className="h-3 w-3 sm:h-4 sm:w-4 mr-1 sm:mr-2" />
+                <span className="hidden sm:inline">Copy</span>
               </Button>
             </div>
           </div>
@@ -113,7 +115,7 @@ function NFTDetailModal({ mint }: { mint: MintRecord }) {
           <div className="space-y-3">
             <Button 
               asChild
-              className="w-full"
+              className="w-full h-10 sm:h-11 text-sm"
               data-testid={`modal-view-transaction-${mint.id}`}
             >
               <a 
@@ -122,7 +124,7 @@ function NFTDetailModal({ mint }: { mint: MintRecord }) {
                 rel="noopener noreferrer"
                 aria-label="View transaction on Solscan"
               >
-                <ExternalLink className="h-4 w-4 mr-2" />
+                <ExternalLink className="h-3 w-3 sm:h-4 sm:w-4 mr-2" />
                 View on Solscan
               </a>
             </Button>
@@ -155,17 +157,17 @@ function MintGrid({ mints, loading }: { mints: MintRecord[], loading: boolean })
 
   if (loading) {
     return (
-      <div className="text-center py-8">
-        <div className="text-muted-foreground">Loading NFTs...</div>
+      <div className="text-center py-6 sm:py-8 px-4">
+        <div className="text-muted-foreground text-sm sm:text-base">Loading NFTs...</div>
       </div>
     );
   }
 
   if (mints.length === 0) {
     return (
-      <div className="text-center py-12">
-        <div className="text-muted-foreground text-lg">No mints found</div>
-        <p className="text-sm text-muted-foreground mt-2">
+      <div className="text-center py-8 sm:py-12 px-4">
+        <div className="text-muted-foreground text-base sm:text-lg">No mints found</div>
+        <p className="text-xs sm:text-sm text-muted-foreground mt-2">
           Be the first to create an NFT!
         </p>
       </div>
@@ -173,7 +175,7 @@ function MintGrid({ mints, loading }: { mints: MintRecord[], loading: boolean })
   }
 
   return (
-    <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-6 xl:grid-cols-8 gap-3">
+    <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-6 xl:grid-cols-8 gap-2 sm:gap-3 px-2 sm:px-0">
       {mints.map((mint) => (
         <Dialog key={mint.id}>
           <DialogTrigger asChild>
@@ -203,18 +205,18 @@ function MintGrid({ mints, loading }: { mints: MintRecord[], loading: boolean })
               </div>
           
               {/* Mint Info */}
-              <div className="p-2">
+              <div className="p-1.5 sm:p-2">
                 <div className="flex items-start justify-between mb-1">
-                  <h3 className="font-semibold text-xs truncate flex-1" data-testid={`text-mint-name-${mint.id}`}>
+                  <h3 className="font-semibold text-[10px] sm:text-xs truncate flex-1" data-testid={`text-mint-name-${mint.id}`}>
                     {mint.name}
                   </h3>
-                  <Badge variant="outline" className="ml-1 text-[10px] px-1 py-0">
+                  <Badge variant="outline" className="ml-1 text-[8px] sm:text-[10px] px-1 py-0">
                     NFT
                   </Badge>
                 </div>
                 
-                {/* Creator Address */}
-                <div className="flex items-center justify-between mb-1">
+                {/* Creator Address - Hidden on very small screens */}
+                <div className="hidden sm:flex items-center justify-between mb-1">
                   <span className="text-[10px] text-muted-foreground">Creator:</span>
                   <div className="flex items-center space-x-1">
                     <span className="text-[10px] font-mono" data-testid={`text-creator-${mint.id}`}>
@@ -234,34 +236,35 @@ function MintGrid({ mints, loading }: { mints: MintRecord[], loading: boolean })
                 </div>
                 
                 {/* Date */}
-                <div className="text-[10px] text-muted-foreground mb-2" data-testid={`text-mint-date-${mint.id}`}>
+                <div className="text-[8px] sm:text-[10px] text-muted-foreground mb-1 sm:mb-2" data-testid={`text-mint-date-${mint.id}`}>
                   {formatDate(mint.timestamp)}
                 </div>
                 
-                {/* Actions */}
+                {/* Actions - Simplified for mobile */}
                 <div className="flex items-center justify-between">
                   <Button 
                     variant="ghost" 
                     size="sm" 
-                    className="h-6 px-2 text-[10px]"
+                    className="h-5 sm:h-6 px-1 sm:px-2 text-[8px] sm:text-[10px]"
                     onClick={() => copyToClipboard(mint.mintAddress)}
                     aria-label="Copy mint address"
                     data-testid={`button-copy-address-${mint.id}`}
                   >
-                    <Copy className="h-2.5 w-2.5 mr-1" />
-                    Copy
+                    <Copy className="h-2 w-2 sm:h-2.5 sm:w-2.5 mr-0.5 sm:mr-1" />
+                    <span className="hidden sm:inline">Copy</span>
                   </Button>
                   
                   <a 
                     href={`https://solscan.io/tx/${mint.transactionSignature}`}
                     target="_blank"
                     rel="noopener noreferrer"
-                    className="inline-flex items-center text-[10px] text-primary hover:text-primary/80 transition-colors"
+                    className="inline-flex items-center text-[8px] sm:text-[10px] text-primary hover:text-primary/80 transition-colors"
                     aria-label="View transaction on Solscan"
                     data-testid={`link-transaction-${mint.id}`}
                   >
-                    <ExternalLink className="h-2.5 w-2.5 mr-1" />
-                    View
+                    <ExternalLink className="h-2 w-2 sm:h-2.5 sm:w-2.5 mr-0.5 sm:mr-1" />
+                    <span className="hidden sm:inline">View</span>
+                    <span className="sm:hidden">Tx</span>
                   </a>
                 </div>
               </div>
@@ -344,19 +347,19 @@ export default function GalleryPage() {
     <div className="min-h-screen bg-background">
       {/* Header */}
       <div className="border-b bg-card/50 backdrop-blur-sm sticky top-0 z-10">
-        <div className="container mx-auto px-4 py-4">
+        <div className="container mx-auto px-2 sm:px-4 py-3 sm:py-4">
           <div className="flex items-center justify-between">
-            <div className="flex items-center space-x-4">
+            <div className="flex items-center space-x-2 sm:space-x-4">
               <Button variant="ghost" size="sm" asChild data-testid="button-back-to-create">
                 <Link href="/">
                   <ArrowLeft className="h-4 w-4" />
                 </Link>
               </Button>
               <div>
-                <h1 className="text-2xl font-bold text-foreground" data-testid="text-gallery-title">
+                <h1 className="text-lg sm:text-2xl font-bold text-foreground" data-testid="text-gallery-title">
                   NFT Gallery
                 </h1>
-                <p className="text-sm text-muted-foreground" data-testid="text-gallery-subtitle">
+                <p className="text-xs sm:text-sm text-muted-foreground hidden sm:block" data-testid="text-gallery-subtitle">
                   Discover amazing digital artwork created by our community
                 </p>
               </div>
@@ -366,49 +369,51 @@ export default function GalleryPage() {
       </div>
 
       {/* Content */}
-      <div className="container mx-auto px-4 py-8">
+      <div className="container mx-auto px-2 sm:px-4 py-4 sm:py-8">
         {/* Search Bar */}
-        <div className="max-w-md mx-auto mb-8">
+        <div className="max-w-md mx-auto mb-4 sm:mb-8 px-2 sm:px-0">
           <div className="relative">
             <Search className="absolute left-3 top-1/2 transform -translate-y-1/2 text-muted-foreground h-4 w-4" />
             <Input
               placeholder="Search by name or creator..."
               value={searchQuery}
               onChange={(e) => setSearchQuery(e.target.value)}
-              className="pl-10"
+              className="pl-10 text-sm"
               data-testid="input-search"
             />
           </div>
         </div>
 
         <Tabs defaultValue="all" className="w-full">
-          <TabsList className="grid w-full max-w-md mx-auto grid-cols-2 mb-8">
-            <TabsTrigger value="all" data-testid="tab-all-mints">
-              All Mints ({filteredAllMints.length})
+          <TabsList className="grid w-full max-w-md mx-auto grid-cols-2 mb-4 sm:mb-8">
+            <TabsTrigger value="all" data-testid="tab-all-mints" className="text-xs sm:text-sm">
+              <span className="hidden sm:inline">All Mints ({filteredAllMints.length})</span>
+              <span className="sm:hidden">All ({filteredAllMints.length})</span>
             </TabsTrigger>
-            <TabsTrigger value="my" data-testid="tab-my-mints">
-              My Mints ({filteredUserMints.length})
+            <TabsTrigger value="my" data-testid="tab-my-mints" className="text-xs sm:text-sm">
+              <span className="hidden sm:inline">My Mints ({filteredUserMints.length})</span>
+              <span className="sm:hidden">Mine ({filteredUserMints.length})</span>
             </TabsTrigger>
           </TabsList>
           
-          <TabsContent value="all" className="space-y-6">
+          <TabsContent value="all" className="space-y-4 sm:space-y-6">
             <div>
-              <h2 className="text-lg font-semibold mb-4" data-testid="text-all-mints-title">
+              <h2 className="text-base sm:text-lg font-semibold mb-3 sm:mb-4 px-2 sm:px-0" data-testid="text-all-mints-title">
                 All Community Creations
               </h2>
               <MintGrid mints={filteredAllMints} loading={loadingAll} />
             </div>
           </TabsContent>
           
-          <TabsContent value="my" className="space-y-6">
+          <TabsContent value="my" className="space-y-4 sm:space-y-6">
             <div>
-              <h2 className="text-lg font-semibold mb-4" data-testid="text-my-mints-title">
+              <h2 className="text-base sm:text-lg font-semibold mb-3 sm:mb-4 px-2 sm:px-0" data-testid="text-my-mints-title">
                 Your NFT Collection
               </h2>
               {!publicKey ? (
-                <div className="text-center py-12">
-                  <div className="text-muted-foreground text-lg">Connect your wallet</div>
-                  <p className="text-sm text-muted-foreground mt-2">
+                <div className="text-center py-8 sm:py-12 px-4">
+                  <div className="text-muted-foreground text-base sm:text-lg">Connect your wallet</div>
+                  <p className="text-xs sm:text-sm text-muted-foreground mt-2">
                     Connect your wallet to view your minted NFTs
                   </p>
                 </div>

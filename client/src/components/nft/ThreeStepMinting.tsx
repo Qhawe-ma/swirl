@@ -204,28 +204,28 @@ export function ThreeStepMinting({ imageData, onMintSuccess, onBack }: ThreeStep
   };
 
   return (
-    <div className="fixed inset-0 bg-black/50 backdrop-blur-sm z-50 flex items-center justify-center p-4">
+    <div className="fixed inset-0 bg-black/50 backdrop-blur-sm z-50 flex items-center justify-center p-2 sm:p-4">
       <div className="bg-white dark:bg-gray-900 w-full max-w-4xl h-auto max-h-[95vh] overflow-hidden rounded-2xl shadow-xl border border-gray-200 dark:border-gray-700" data-testid="three-step-minting">
         {/* Header */}
-        <div className="border-b border-gray-200 dark:border-gray-700 px-6 py-4">
+        <div className="border-b border-gray-200 dark:border-gray-700 px-3 sm:px-6 py-3 sm:py-4">
           <div className="flex items-center justify-between">
-            <div className="flex items-center space-x-4">
+            <div className="flex items-center space-x-2 sm:space-x-4">
               {onBack && currentStep === 'details' && (
                 <button 
                   onClick={onBack}
-                  className="p-2 hover:bg-gray-100 dark:hover:bg-gray-800 rounded-lg transition-colors"
+                  className="p-1.5 sm:p-2 hover:bg-gray-100 dark:hover:bg-gray-800 rounded-lg transition-colors"
                   data-testid="button-back"
                 >
-                  <ArrowLeft className="w-5 h-5 text-gray-600 dark:text-gray-400" />
+                  <ArrowLeft className="w-4 h-4 sm:w-5 sm:h-5 text-gray-600 dark:text-gray-400" />
                 </button>
               )}
               <div>
-                <h2 className="text-xl font-semibold text-gray-900 dark:text-white">
+                <h2 className="text-lg sm:text-xl font-semibold text-gray-900 dark:text-white">
                   {currentStep === 'details' && 'Step 1: NFT Details'}
                   {currentStep === 'processing' && 'Step 2: Creating NFT'}
                   {currentStep === 'success' && 'Step 3: Success!'}
                 </h2>
-                <p className="text-sm text-gray-600 dark:text-gray-400">
+                <p className="text-xs sm:text-sm text-gray-600 dark:text-gray-400 hidden sm:block">
                   {currentStep === 'details' && 'Add name and description for your NFT'}
                   {currentStep === 'processing' && 'Uploading and minting your NFT'}
                   {currentStep === 'success' && 'Your NFT has been created successfully'}
@@ -234,22 +234,22 @@ export function ThreeStepMinting({ imageData, onMintSuccess, onBack }: ThreeStep
             </div>
             
             {/* Step Indicator */}
-            <div className="flex items-center space-x-2">
-              <div className={`w-8 h-8 rounded-full flex items-center justify-center text-sm font-medium ${
+            <div className="flex items-center space-x-1 sm:space-x-2">
+              <div className={`w-6 h-6 sm:w-8 sm:h-8 rounded-full flex items-center justify-center text-xs sm:text-sm font-medium ${
                 currentStep === 'details' ? 'bg-gray-600 text-white' : 'bg-gray-500 text-white'
               }`}>
-                {currentStep === 'details' ? '1' : <Check className="w-4 h-4" />}
+                {currentStep === 'details' ? '1' : <Check className="w-3 h-3 sm:w-4 sm:h-4" />}
               </div>
-              <div className={`w-8 h-8 rounded-full flex items-center justify-center text-sm font-medium ${
+              <div className={`w-6 h-6 sm:w-8 sm:h-8 rounded-full flex items-center justify-center text-xs sm:text-sm font-medium ${
                 currentStep === 'processing' ? 'bg-gray-600 text-white' : 
                 currentStep === 'success' ? 'bg-gray-500 text-white' : 'bg-gray-300 text-gray-600'
               }`}>
-                {currentStep === 'success' ? <Check className="w-4 h-4" /> : '2'}
+                {currentStep === 'success' ? <Check className="w-3 h-3 sm:w-4 sm:h-4" /> : '2'}
               </div>
-              <div className={`w-8 h-8 rounded-full flex items-center justify-center text-sm font-medium ${
+              <div className={`w-6 h-6 sm:w-8 sm:h-8 rounded-full flex items-center justify-center text-xs sm:text-sm font-medium ${
                 currentStep === 'success' ? 'bg-gray-500 text-white' : 'bg-gray-300 text-gray-600'
               }`}>
-                {currentStep === 'success' ? <Check className="w-4 h-4" /> : '3'}
+                {currentStep === 'success' ? <Check className="w-3 h-3 sm:w-4 sm:h-4" /> : '3'}
               </div>
             </div>
           </div>
@@ -257,12 +257,12 @@ export function ThreeStepMinting({ imageData, onMintSuccess, onBack }: ThreeStep
         
         {/* Step Content */}
         {currentStep === 'details' && (
-          <div className="p-6 overflow-y-auto max-h-[70vh]">
-            <div className="grid md:grid-cols-2 gap-8">
+          <div className="p-3 sm:p-6 overflow-y-auto max-h-[70vh]">
+            <div className="grid grid-cols-1 md:grid-cols-2 gap-4 sm:gap-8">
               {/* Artwork Preview - Left Side */}
               <div className="space-y-3">
                 <h3 className="text-sm font-medium text-gray-900 dark:text-white">Preview</h3>
-                <div className="relative bg-gray-50 dark:bg-gray-800 border border-gray-200 dark:border-gray-700 rounded-xl p-4">
+                <div className="relative bg-gray-50 dark:bg-gray-800 border border-gray-200 dark:border-gray-700 rounded-xl p-3 sm:p-4">
                   <img 
                     src={imageData} 
                     alt="User artwork preview" 
@@ -273,8 +273,8 @@ export function ThreeStepMinting({ imageData, onMintSuccess, onBack }: ThreeStep
               </div>
               
               {/* NFT Details Form - Right Side */}
-              <div className="space-y-6">
-                <div className="space-y-6">
+              <div className="space-y-4 sm:space-y-6">
+                <div className="space-y-4 sm:space-y-6">
                   <div className="space-y-2">
                     <div className="flex items-center justify-between">
                       <label htmlFor="nft-name" className="text-sm font-medium text-gray-900 dark:text-white">NFT Name *</label>
@@ -287,7 +287,7 @@ export function ThreeStepMinting({ imageData, onMintSuccess, onBack }: ThreeStep
                       value={nftName}
                       onChange={(e) => setNftName(e.target.value.slice(0, 50))}
                       disabled={isLoading}
-                      className="h-12 border-gray-300 dark:border-gray-600 focus:border-gray-500 focus:ring-gray-500"
+                      className="h-10 sm:h-12 border-gray-300 dark:border-gray-600 focus:border-gray-500 focus:ring-gray-500"
                       data-testid="input-nft-name"
                     />
                   </div>
@@ -310,15 +310,15 @@ export function ThreeStepMinting({ imageData, onMintSuccess, onBack }: ThreeStep
                   </div>
                   
                   {/* Cost Info */}
-                  <div className="p-4 bg-gray-50 dark:bg-gray-800/50 rounded-xl border border-gray-200 dark:border-gray-700">
+                  <div className="p-3 sm:p-4 bg-gray-50 dark:bg-gray-800/50 rounded-xl border border-gray-200 dark:border-gray-700">
                     <div className="flex items-center justify-between">
-                      <div className="flex items-center space-x-3">
-                        <div className="w-6 h-6 bg-gray-500 rounded-full flex items-center justify-center">
+                      <div className="flex items-center space-x-2 sm:space-x-3">
+                        <div className="w-5 h-5 sm:w-6 sm:h-6 bg-gray-500 rounded-full flex items-center justify-center">
                           <Zap className="w-3 h-3 text-white" />
                         </div>
-                        <span className="font-medium text-gray-900 dark:text-white">Minting Fee</span>
+                        <span className="text-sm sm:text-base font-medium text-gray-900 dark:text-white">Minting Fee</span>
                       </div>
-                      <span className="font-mono font-semibold text-gray-700 dark:text-gray-300">~0.02 SOL</span>
+                      <span className="font-mono font-semibold text-sm sm:text-base text-gray-700 dark:text-gray-300">~0.02 SOL</span>
                     </div>
                   </div>
                 </div>
@@ -328,32 +328,32 @@ export function ThreeStepMinting({ imageData, onMintSuccess, onBack }: ThreeStep
         )}
         
         {currentStep === 'processing' && (
-          <div className="p-8">
-            <div className="max-w-md mx-auto text-center space-y-8">
+          <div className="p-4 sm:p-8">
+            <div className="max-w-md mx-auto text-center space-y-6 sm:space-y-8">
               {/* Progress Animation */}
               <div className="relative">
-                <div className="w-24 h-24 border-4 border-gray-200 rounded-full mx-auto"></div>
-                <div className="absolute inset-0 w-24 h-24 border-4 border-gray-500 border-t-transparent rounded-full animate-spin mx-auto"></div>
+                <div className="w-20 h-20 sm:w-24 sm:h-24 border-4 border-gray-200 rounded-full mx-auto"></div>
+                <div className="absolute inset-0 w-20 h-20 sm:w-24 sm:h-24 border-4 border-gray-500 border-t-transparent rounded-full animate-spin mx-auto"></div>
                 <div className="absolute inset-0 flex items-center justify-center">
-                  <div className="w-12 h-12 bg-gray-100 dark:bg-gray-800 rounded-lg flex items-center justify-center">
-                    {processingStep === 'uploading' && <Upload className="w-6 h-6 text-gray-600" />}
-                    {processingStep === 'minting' && <Zap className="w-6 h-6 text-gray-600" />}
-                    {processingStep === 'confirming' && <Zap className="w-6 h-6 text-gray-600 animate-pulse" />}
-                    {processingStep === 'saving' && <Check className="w-6 h-6 text-gray-600" />}
+                  <div className="w-10 h-10 sm:w-12 sm:h-12 bg-gray-100 dark:bg-gray-800 rounded-lg flex items-center justify-center">
+                    {processingStep === 'uploading' && <Upload className="w-5 h-5 sm:w-6 sm:h-6 text-gray-600" />}
+                    {processingStep === 'minting' && <Zap className="w-5 h-5 sm:w-6 sm:h-6 text-gray-600" />}
+                    {processingStep === 'confirming' && <Zap className="w-5 h-5 sm:w-6 sm:h-6 text-gray-600 animate-pulse" />}
+                    {processingStep === 'saving' && <Check className="w-5 h-5 sm:w-6 sm:h-6 text-gray-600" />}
                   </div>
                 </div>
               </div>
               
               {/* Step Information */}
-              <div className="space-y-4">
-                <h3 className="text-xl font-bold text-gray-900 dark:text-white">
+              <div className="space-y-3 sm:space-y-4">
+                <h3 className="text-lg sm:text-xl font-bold text-gray-900 dark:text-white">
                   {processingStep === 'uploading' && 'Uploading to IPFS'}
                   {processingStep === 'minting' && 'Preparing Transaction'}
                   {processingStep === 'confirming' && 'Confirm in Wallet'}
                   {processingStep === 'saving' && 'Finalizing NFT'}
                 </h3>
                 
-                <p className="text-gray-600 dark:text-gray-400">
+                <p className="text-sm sm:text-base text-gray-600 dark:text-gray-400 px-2">
                   {processingStep === 'uploading' && 'Securing your artwork on the decentralized web...'}
                   {processingStep === 'minting' && 'Setting up your NFT transaction...'}
                   {processingStep === 'confirming' && 'Please approve the transaction in your wallet to mint your NFT!'}

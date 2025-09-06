@@ -446,13 +446,13 @@ export function PaintCanvas({
   return (
     <div className="h-full flex flex-col bg-white/98 dark:bg-slate-900/98 backdrop-blur-2xl border border-slate-200/60 dark:border-slate-700/60 rounded-2xl shadow-2xl overflow-hidden" data-testid="card-paint-canvas">
       {/* Canvas Header with Shape Tools */}
-      <div className="flex items-center justify-between bg-gradient-to-r from-slate-50/90 via-white/95 to-slate-50/90 dark:from-slate-800/90 dark:via-slate-900/95 dark:to-slate-800/90 border-b border-slate-200/50 dark:border-slate-700/50 px-4 py-2 backdrop-blur-xl">
+      <div className="flex items-center justify-between bg-gradient-to-r from-slate-50/90 via-white/95 to-slate-50/90 dark:from-slate-800/90 dark:via-slate-900/95 dark:to-slate-800/90 border-b border-slate-200/50 dark:border-slate-700/50 px-2 sm:px-4 py-2 backdrop-blur-xl">
         {/* Shape Tools */}
-        <div className="flex items-center space-x-2">
-          <span className="text-xs font-medium text-muted-foreground mr-2">Shapes:</span>
+        <div className="flex items-center space-x-1 sm:space-x-2">
+          <span className="text-xs font-medium text-muted-foreground mr-1 sm:mr-2 hidden sm:inline">Shapes:</span>
           <button
             onClick={() => onModeChange('rectangle')}
-            className={`p-2 rounded-lg transition-all duration-200 flex items-center justify-center ${
+            className={`p-1.5 sm:p-2 rounded-lg transition-all duration-200 flex items-center justify-center touch-manipulation ${
               drawingMode === 'rectangle'
                 ? 'bg-primary text-primary-foreground shadow-sm'
                 : 'text-muted-foreground hover:text-foreground hover:bg-accent'
@@ -460,11 +460,11 @@ export function PaintCanvas({
             data-testid="button-shape-rectangle"
             title="Rectangle"
           >
-            <RectangleHorizontal className="w-4 h-4" />
+            <RectangleHorizontal className="w-3 h-3 sm:w-4 sm:h-4" />
           </button>
           <button
             onClick={() => onModeChange('circle')}
-            className={`p-2 rounded-lg transition-all duration-200 flex items-center justify-center ${
+            className={`p-1.5 sm:p-2 rounded-lg transition-all duration-200 flex items-center justify-center touch-manipulation ${
               drawingMode === 'circle'
                 ? 'bg-primary text-primary-foreground shadow-sm'
                 : 'text-muted-foreground hover:text-foreground hover:bg-accent'
@@ -472,11 +472,11 @@ export function PaintCanvas({
             data-testid="button-shape-circle"
             title="Circle"
           >
-            <Circle className="w-4 h-4" />
+            <Circle className="w-3 h-3 sm:w-4 sm:h-4" />
           </button>
           <button
             onClick={() => onModeChange('triangle')}
-            className={`p-2 rounded-lg transition-all duration-200 flex items-center justify-center ${
+            className={`p-1.5 sm:p-2 rounded-lg transition-all duration-200 flex items-center justify-center touch-manipulation ${
               drawingMode === 'triangle'
                 ? 'bg-primary text-primary-foreground shadow-sm'
                 : 'text-muted-foreground hover:text-foreground hover:bg-accent'
@@ -484,21 +484,22 @@ export function PaintCanvas({
             data-testid="button-shape-triangle"
             title="Triangle"
           >
-            <Triangle className="w-4 h-4" />
+            <Triangle className="w-3 h-3 sm:w-4 sm:h-4" />
           </button>
         </div>
         
         {/* Save Button */}
         <Button
           onClick={handleSave}
-          className="bg-white/90 dark:bg-slate-800/90 hover:bg-slate-50 dark:hover:bg-slate-700 text-slate-900 dark:text-slate-100 shadow-md hover:shadow-lg transition-all duration-200 px-4 py-2 rounded-lg font-semibold text-sm border border-slate-200/80 dark:border-slate-600/80 hover:border-slate-300 dark:hover:border-slate-500"
+          className="bg-white/90 dark:bg-slate-800/90 hover:bg-slate-50 dark:hover:bg-slate-700 text-slate-900 dark:text-slate-100 shadow-md hover:shadow-lg transition-all duration-200 px-2 sm:px-4 py-2 rounded-lg font-semibold text-xs sm:text-sm border border-slate-200/80 dark:border-slate-600/80 hover:border-slate-300 dark:hover:border-slate-500 touch-manipulation"
           data-testid="button-save-artwork"
         >
-          <div className="flex items-center space-x-2">
-            <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+          <div className="flex items-center space-x-1 sm:space-x-2">
+            <svg className="w-3 h-3 sm:w-4 sm:h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
               <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M8 7H5a2 2 0 00-2 2v9a2 2 0 002 2h14a2 2 0 002-2V9a2 2 0 00-2-2h-3m-1 4l-3-3m0 0l-3 3m3-3v12" />
             </svg>
-            <span>Save Artwork</span>
+            <span className="hidden sm:inline">Save Artwork</span>
+            <span className="sm:hidden">Save</span>
           </div>
         </Button>
       </div>
@@ -507,7 +508,7 @@ export function PaintCanvas({
       <div className="flex-1 p-1 bg-gradient-to-br from-slate-50/40 via-white/20 to-slate-100/30 dark:from-slate-900/40 dark:via-slate-800/20 dark:to-slate-900/30">
         <div className="relative h-full w-full group flex items-center justify-center">
           {/* Dynamic Canvas Container */}
-          <div className={`${canvasFormat === 'square' ? 'aspect-square w-[min(85vw,85vh)] max-w-[85%] max-h-[85%]' : 'aspect-video w-[min(95vw,85vh)] max-w-[95%] max-h-[85%]'} bg-white dark:bg-slate-50 border-2 border-slate-200/80 dark:border-slate-700/80 rounded-2xl overflow-hidden shadow-2xl ring-1 ring-slate-900/5 dark:ring-white/10 transition-all duration-300 group-hover:shadow-3xl group-hover:ring-slate-900/10`}>
+          <div className={`${canvasFormat === 'square' ? 'aspect-square w-[min(90vw,85vh)] sm:w-[min(85vw,85vh)] max-w-[90%] sm:max-w-[85%] max-h-[85%]' : 'aspect-video w-[min(95vw,85vh)] max-w-[95%] max-h-[85%]'} bg-white dark:bg-slate-50 border-2 border-slate-200/80 dark:border-slate-700/80 rounded-2xl overflow-hidden shadow-2xl ring-1 ring-slate-900/5 dark:ring-white/10 transition-all duration-300 group-hover:shadow-3xl group-hover:ring-slate-900/10`}>
             {/* Subtle Grid Pattern */}
             <div 
               className="absolute inset-0 opacity-[0.03] dark:opacity-[0.08] pointer-events-none" 
@@ -556,7 +557,8 @@ export function PaintCanvas({
           {/* Floating Action Hint */}
           <div className="absolute top-4 left-1/2 transform -translate-x-1/2 opacity-0 group-hover:opacity-100 transition-all duration-300 pointer-events-none">
             <div className="bg-slate-900/90 dark:bg-white/90 text-white dark:text-slate-900 text-xs font-semibold px-3 py-1.5 rounded-full backdrop-blur-sm">
-              Click and drag to create
+              <span className="hidden sm:inline">Click and drag to create</span>
+              <span className="sm:hidden">Tap and drag to draw</span>
             </div>
           </div>
         </div>
