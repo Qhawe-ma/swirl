@@ -19,11 +19,12 @@ interface ThreeStepMintingProps {
 }
 
 type MintingStep = 'details' | 'processing' | 'success';
-type ProcessingSubStep = 'uploading' | 'minting' | 'saving';
+type ProcessingSubStep = 'uploading' | 'minting' | 'confirming' | 'saving';
 
 export function ThreeStepMinting({ imageData, onMintSuccess, onBack }: ThreeStepMintingProps) {
   const [currentStep, setCurrentStep] = useState<MintingStep>('details');
   const [processingStep, setProcessingStep] = useState<ProcessingSubStep>('uploading');
+  const [showWalletPrompt, setShowWalletPrompt] = useState(false);
   const [nftName, setNftName] = useState('');
   const [nftDescription, setNftDescription] = useState('');
   const [isLoading, setIsLoading] = useState(false);
@@ -108,46 +109,58 @@ export function ThreeStepMinting({ imageData, onMintSuccess, onBack }: ThreeStep
       // Step 2: Mint NFT
       setProcessingStep('minting');
       
+      // Show wallet confirmation prompt
+      setShowWalletPrompt(true);
       toast({
         title: "Ready to Mint!",
         description: "Please confirm the transaction in your wallet to mint on Solana mainnet.",
       });
       
       console.log('🚀 Requesting wallet signature for Solana mainnet minting...');
+      
+      // Update to confirming step when wallet prompt appears
+      setProcessingStep('confirming');
       const walletAdapter = { publicKey, signTransaction };
-      const mintResult = await mintNFT(
-        connection,
-        walletAdapter,
-        metadataUri,
-        nftName.trim()
-      );
+      
+      // Add timeout for minting process
+      const mintWithTimeout = Promise.race([
+        mintNFT(connection, walletAdapter, metadataUri, nftName.trim()),
+        new Promise((_, reject) => 
+          setTimeout(() => reject(new Error('Minting timeout after 60 seconds')), 60000)
+        )
+      ]);
+      
+      const mintResult = await mintWithTimeout as any;
       console.log('🎉 NFT minted with address:', mintResult.mintAddress);
       
-      // Step 3: Save record
-      setProcessingStep('saving');
+      // Hide wallet prompt and show immediate success
+      setShowWalletPrompt(false);
       
-      console.log('💾 Saving mint record to Firebase...');
-      try {
-        await saveMintRecord({
-          walletAddress: publicKey.toBase58(),
-          mintAddress: mintResult.mintAddress,
-          name: nftName.trim(),
-          imageData: imageData,
-          metadataUri: metadataUri,
-          transactionSignature: mintResult.transactionSignature
-        });
-        console.log('✅ Mint record saved to Firebase');
-      } catch (firebaseError) {
-        console.error('⚠️ Failed to save to Firebase (NFT still minted):', firebaseError);
-      }
-      
+      // IMMEDIATE SUCCESS FEEDBACK - Show success right after minting!
       setMintAddress(mintResult.mintAddress);
       setCurrentStep('success');
       onMintSuccess(mintResult.mintAddress);
       
+      // Show immediate success toast
       toast({
-        title: "NFT Minted Successfully!",
-        description: `Your artwork is now a real NFT on Solana mainnet!`,
+        title: "🎉 NFT Minted Successfully!",
+        description: `Your artwork is now live on Solana blockchain!`,
+        duration: 5000,
+      });
+      
+      // Step 3: Save record in background (don't block success)
+      console.log('💾 Saving mint record to Firebase in background...');
+      saveMintRecord({
+        walletAddress: publicKey.toBase58(),
+        mintAddress: mintResult.mintAddress,
+        name: nftName.trim(),
+        imageData: imageData,
+        metadataUri: metadataUri,
+        transactionSignature: mintResult.transactionSignature
+      }).then(() => {
+        console.log('✅ Mint record saved to Firebase');
+      }).catch((firebaseError) => {
+        console.error('⚠️ Failed to save to Firebase (NFT still minted):', firebaseError);
       });
       
     } catch (error: any) {
@@ -156,21 +169,33 @@ export function ThreeStepMinting({ imageData, onMintSuccess, onBack }: ThreeStep
       let errorTitle = "Minting Failed";
       let errorDescription = "Failed to mint NFT. Please try again.";
       
-      if (error.message?.includes('timeout') || error.message?.includes('timed out')) {
+      // More specific error handling
+      if (error.message?.includes('Minting timeout')) {
         errorTitle = "Transaction Timeout";
-        errorDescription = "Transaction took too long to confirm. Check Solana Explorer with the transaction signature to see if it succeeded.";
+        errorDescription = "Minting took too long. Your NFT may still be processing - check your wallet in a few minutes.";
+      } else if (error.message?.includes('timeout') || error.message?.includes('timed out')) {
+        errorTitle = "Network Timeout";
+        errorDescription = "Network is slow. Check Solana Explorer with your wallet to see if transaction succeeded.";
       } else if (error.message?.includes('insufficient funds') || error.message?.includes('SOL')) {
         errorTitle = "Insufficient SOL";
-        errorDescription = "You need more SOL in your wallet for transaction fees. Add at least 0.01 SOL and try again.";
+        errorDescription = "You need more SOL for transaction fees. Add at least 0.01 SOL and try again.";
       } else if (error.message?.includes('rejected') || error.message?.includes('cancelled')) {
         errorTitle = "Transaction Cancelled";
-        errorDescription = "Transaction was cancelled in your wallet. Please try again and approve the transaction.";
+        errorDescription = "You cancelled the transaction in your wallet. Try again when ready.";
+      } else if (error.message?.includes('blockhash')) {
+        errorTitle = "Transaction Expired";
+        errorDescription = "Transaction expired. Please try minting again.";
+      } else if (error.message?.includes('network')) {
+        errorTitle = "Network Error";
+        errorDescription = "Solana network issue. Please try again in a moment.";
       }
       
+      // IMMEDIATE ERROR FEEDBACK
       toast({
         title: errorTitle,
         description: errorDescription,
         variant: "destructive",
+        duration: 8000,
       });
       
       setCurrentStep('details');
@@ -314,6 +339,7 @@ export function ThreeStepMinting({ imageData, onMintSuccess, onBack }: ThreeStep
                   <div className="w-12 h-12 bg-blue-100 dark:bg-blue-900/50 rounded-lg flex items-center justify-center">
                     {processingStep === 'uploading' && <Upload className="w-6 h-6 text-blue-600" />}
                     {processingStep === 'minting' && <Zap className="w-6 h-6 text-blue-600" />}
+                    {processingStep === 'confirming' && <Zap className="w-6 h-6 text-blue-600 animate-pulse" />}
                     {processingStep === 'saving' && <Check className="w-6 h-6 text-blue-600" />}
                   </div>
                 </div>
@@ -323,19 +349,21 @@ export function ThreeStepMinting({ imageData, onMintSuccess, onBack }: ThreeStep
               <div className="space-y-4">
                 <h3 className="text-xl font-bold text-gray-900 dark:text-white">
                   {processingStep === 'uploading' && 'Uploading to IPFS'}
-                  {processingStep === 'minting' && 'Minting on Solana'}
+                  {processingStep === 'minting' && 'Preparing Transaction'}
+                  {processingStep === 'confirming' && 'Confirm in Wallet'}
                   {processingStep === 'saving' && 'Finalizing NFT'}
                 </h3>
                 
                 <p className="text-gray-600 dark:text-gray-400">
                   {processingStep === 'uploading' && 'Securing your artwork on the decentralized web...'}
-                  {processingStep === 'minting' && 'Creating your NFT on Solana blockchain...'}
+                  {processingStep === 'minting' && 'Setting up your NFT transaction...'}
+                  {processingStep === 'confirming' && 'Please approve the transaction in your wallet to mint your NFT!'}
                   {processingStep === 'saving' && 'Saving your NFT details...'}
                 </p>
                 
                 {/* Progress Steps */}
                 <div className="flex justify-center space-x-4 pt-4">
-                  <div className={`flex items-center space-x-2 ${processingStep === 'uploading' ? 'text-blue-600' : processingStep === 'minting' || processingStep === 'saving' ? 'text-green-600' : 'text-gray-400'}`}>
+                  <div className={`flex items-center space-x-2 ${processingStep === 'uploading' ? 'text-blue-600' : (processingStep === 'minting' || processingStep === 'confirming' || processingStep === 'saving') ? 'text-green-600' : 'text-gray-400'}`}>
                     {processingStep === 'uploading' ? (
                       <Clock className="w-4 h-4 animate-pulse" />
                     ) : (
@@ -344,8 +372,8 @@ export function ThreeStepMinting({ imageData, onMintSuccess, onBack }: ThreeStep
                     <span className="text-sm font-medium">Upload</span>
                   </div>
                   
-                  <div className={`flex items-center space-x-2 ${processingStep === 'minting' ? 'text-blue-600' : processingStep === 'saving' ? 'text-green-600' : 'text-gray-400'}`}>
-                    {processingStep === 'minting' ? (
+                  <div className={`flex items-center space-x-2 ${(processingStep === 'minting' || processingStep === 'confirming') ? 'text-blue-600' : processingStep === 'saving' ? 'text-green-600' : 'text-gray-400'}`}>
+                    {(processingStep === 'minting' || processingStep === 'confirming') ? (
                       <Clock className="w-4 h-4 animate-pulse" />
                     ) : processingStep === 'saving' ? (
                       <CheckCircle className="w-4 h-4" />
@@ -366,12 +394,20 @@ export function ThreeStepMinting({ imageData, onMintSuccess, onBack }: ThreeStep
                 </div>
               </div>
               
-              {/* Pro Tip */}
-              <Alert className="bg-blue-50 dark:bg-blue-900/20 border-blue-200 dark:border-blue-800">
-                <AlertDescription className="text-blue-800 dark:text-blue-200 text-sm">
-                  <strong>Tip:</strong> Keep sufficient SOL for network fees. This process may take 30-60 seconds.
-                </AlertDescription>
-              </Alert>
+              {/* Dynamic Alerts */}
+              {processingStep === 'confirming' && showWalletPrompt ? (
+                <Alert className="bg-orange-50 dark:bg-orange-900/20 border-orange-200 dark:border-orange-800 animate-pulse">
+                  <AlertDescription className="text-orange-800 dark:text-orange-200 text-sm">
+                    <strong>Action Required:</strong> Check your wallet and approve the transaction to complete minting!
+                  </AlertDescription>
+                </Alert>
+              ) : (
+                <Alert className="bg-blue-50 dark:bg-blue-900/20 border-blue-200 dark:border-blue-800">
+                  <AlertDescription className="text-blue-800 dark:text-blue-200 text-sm">
+                    <strong>Tip:</strong> Keep sufficient SOL for network fees. This process may take 30-60 seconds.
+                  </AlertDescription>
+                </Alert>
+              )}
             </div>
           </div>
         )}
