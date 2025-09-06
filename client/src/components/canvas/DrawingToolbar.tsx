@@ -45,24 +45,6 @@ export function DrawingToolbar({
 
   return (
     <div className="bg-white/98 dark:bg-slate-900/98 backdrop-blur-2xl border border-slate-200/60 dark:border-slate-700/60 h-auto lg:max-h-[calc(100vh-6rem)] overflow-y-auto lg:overflow-y-auto overflow-x-auto rounded-2xl shadow-2xl ring-1 ring-slate-900/5 dark:ring-white/10" data-testid="toolbar-drawing-tools">
-      {/* Compact Header - Hidden on mobile */}
-      <div className="hidden lg:block bg-gradient-to-r from-slate-50/95 via-white/98 to-slate-50/95 dark:from-slate-800/95 dark:via-slate-900/98 dark:to-slate-800/95 border-b border-slate-200/50 dark:border-slate-700/50 px-4 py-3 backdrop-blur-xl">
-        <div className="flex items-center justify-between">
-          <div className="flex items-center space-x-2">
-            <div className="w-7 h-7 bg-gradient-to-br from-primary/15 via-primary/10 to-primary/5 rounded-lg flex items-center justify-center ring-1 ring-primary/20">
-              <Palette className="h-4 w-4 text-primary" aria-hidden="true" />
-            </div>
-            <div>
-              <h2 className="text-sm font-bold text-slate-900 dark:text-slate-100 tracking-tight">
-                Studio
-              </h2>
-            </div>
-          </div>
-          <div className="px-2 py-1 bg-gradient-to-r from-primary/10 to-primary/5 border border-primary/20 text-primary text-xs font-black rounded-lg tracking-wide uppercase">
-            Pro
-          </div>
-        </div>
-      </div>
 
       {/* Mobile Layout - Horizontal */}
       <div className="lg:hidden p-2">
@@ -182,12 +164,6 @@ export function DrawingToolbar({
       <div className="hidden lg:block p-4 space-y-4">
         {/* Clean Drawing Mode */}
         <div className="space-y-3">
-          <div className="flex items-center justify-between">
-            <label className="text-xs font-bold text-slate-900 dark:text-slate-100">Mode</label>
-            <div className="text-xs font-semibold text-slate-600 dark:text-slate-400">
-              {drawingMode === 'brush' ? '🖌️' : '🧹'} {drawingMode === 'brush' ? 'Paint' : 'Erase'}
-            </div>
-          </div>
           <ToggleGroup
             type="single"
             value={drawingMode}
