@@ -86,10 +86,12 @@ export default function PaintPage() {
               <div className="relative group cursor-pointer" data-testid="app-logo">
                 <div className="flex items-center space-x-3">
                   <div className="relative">
-                    <div className="w-10 h-10 bg-gradient-to-br from-primary via-primary/90 to-primary/80 rounded-xl flex items-center justify-center shadow-lg group-hover:shadow-primary/25 transition-all duration-300 motion-safe:group-hover:scale-105">
-                      <Palette className="w-5 h-5 text-primary-foreground" aria-hidden="true" />
-                    </div>
-                    <div className="absolute -inset-1 bg-gradient-to-br from-primary/20 to-transparent rounded-xl opacity-0 group-hover:opacity-100 blur transition-all duration-300 pointer-events-none"></div>
+                    <img 
+                      src="https://res.cloudinary.com/dl8f1ztsy/image/upload/v1757143508/Swirl_Logo_wbpo9t.png" 
+                      alt="Logo" 
+                      className="w-14 h-14 rounded-xl shadow-lg group-hover:shadow-primary/25 transition-all duration-300 motion-safe:group-hover:scale-105"
+                      data-testid="img-app-icon"
+                    />
                   </div>
                   
                   {/* Brand Name */}
