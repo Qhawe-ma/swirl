@@ -205,131 +205,123 @@ export function ThreeStepMinting({ imageData, onMintSuccess, onBack }: ThreeStep
   };
 
   return (
-    <div className="fixed inset-0 bg-black/60 backdrop-blur-sm z-50 flex items-center justify-center p-4">
-      <div className="bg-white dark:bg-slate-900 w-full max-w-2xl max-h-[90vh] overflow-y-auto rounded-2xl shadow-2xl border border-slate-200/60 dark:border-slate-700/60" data-testid="three-step-minting">
-        {/* Modern Header with Step Progress */}
-        <div className="relative bg-gradient-to-r from-slate-50/95 via-white/98 to-slate-50/95 dark:from-slate-800/95 dark:via-slate-900/98 dark:to-slate-800/95 border-b border-slate-200/60 dark:border-slate-700/60 px-6 py-5 rounded-t-2xl">
-          {/* Back Button */}
-          {onBack && currentStep === 'details' && (
-            <button 
-              onClick={onBack}
-              className="absolute left-4 top-1/2 -translate-y-1/2 p-2 hover:bg-slate-100 dark:hover:bg-slate-800 rounded-lg transition-all duration-200"
-              data-testid="button-back"
-            >
-              <ArrowLeft className="w-5 h-5 text-slate-600 dark:text-slate-400" />
-            </button>
-          )}
-          
-          {/* Center Content */}
-          <div className="text-center space-y-3">
-            <div className="flex items-center justify-center space-x-3">
-              {/* Step Indicator Circles */}
-              <div className={`w-10 h-10 rounded-full flex items-center justify-center text-sm font-bold transition-all duration-300 ${
-                currentStep === 'details' ? 'bg-blue-600 text-white shadow-lg shadow-blue-500/30' : 
-                currentStep === 'processing' || currentStep === 'success' ? 'bg-blue-600 text-white' : 'bg-slate-200 dark:bg-slate-700 text-slate-600 dark:text-slate-400'
-              }`}>
-                {currentStep === 'processing' || currentStep === 'success' ? <Check className="w-5 h-5" /> : '1'}
-              </div>
-              
-              <div className={`h-0.5 w-8 rounded-full transition-all duration-300 ${
-                currentStep === 'processing' || currentStep === 'success' ? 'bg-blue-600' : 'bg-slate-200 dark:bg-slate-700'
-              }`}></div>
-              
-              <div className={`w-10 h-10 rounded-full flex items-center justify-center text-sm font-bold transition-all duration-300 ${
-                currentStep === 'processing' ? 'bg-blue-600 text-white shadow-lg shadow-blue-500/30' : 
-                currentStep === 'success' ? 'bg-blue-600 text-white' : 'bg-slate-200 dark:bg-slate-700 text-slate-600 dark:text-slate-400'
-              }`}>
-                {currentStep === 'success' ? <Check className="w-5 h-5" /> : '2'}
-              </div>
-              
-              <div className={`h-0.5 w-8 rounded-full transition-all duration-300 ${
-                currentStep === 'success' ? 'bg-blue-600' : 'bg-slate-200 dark:bg-slate-700'
-              }`}></div>
-              
-              <div className={`w-10 h-10 rounded-full flex items-center justify-center text-sm font-bold transition-all duration-300 ${
-                currentStep === 'success' ? 'bg-blue-600 text-white shadow-lg shadow-blue-500/30' : 'bg-slate-200 dark:bg-slate-700 text-slate-600 dark:text-slate-400'
-              }`}>
-                {currentStep === 'success' ? <Check className="w-5 h-5" /> : '3'}
+    <div className="fixed inset-0 bg-black/50 backdrop-blur-sm z-50 flex items-center justify-center p-4">
+      <Card className="bg-white dark:bg-gray-900 w-full max-w-4xl max-h-[90vh] overflow-y-auto shadow-2xl rounded-2xl border-0" data-testid="three-step-minting">
+        {/* Professional Header */}
+        <div className="border-b border-gray-200 dark:border-gray-700 px-6 py-4">
+          <div className="flex items-center justify-between">
+            <div className="flex items-center space-x-4">
+              {onBack && currentStep === 'details' && (
+                <button 
+                  onClick={onBack}
+                  className="p-2 hover:bg-gray-100 dark:hover:bg-gray-800 rounded-lg transition-colors"
+                  data-testid="button-back"
+                >
+                  <ArrowLeft className="w-5 h-5 text-gray-600 dark:text-gray-400" />
+                </button>
+              )}
+              <div>
+                <h2 className="text-xl font-bold text-gray-900 dark:text-white">
+                  {currentStep === 'details' && 'Step 1: NFT Details'}
+                  {currentStep === 'processing' && 'Step 2: Creating NFT'}
+                  {currentStep === 'success' && 'Step 3: Success!'}
+                </h2>
+                <p className="text-sm text-gray-600 dark:text-gray-400">
+                  {currentStep === 'details' && 'Add name and description for your NFT'}
+                  {currentStep === 'processing' && 'Uploading and minting your NFT'}
+                  {currentStep === 'success' && 'Your NFT has been created successfully'}
+                </p>
               </div>
             </div>
             
-            <div>
-              <h2 className="text-lg font-bold text-slate-900 dark:text-white">
-                {currentStep === 'details' && 'Step 1: NFT Details'}
-                {currentStep === 'processing' && 'Step 2: Creating NFT'}
-                {currentStep === 'success' && 'Step 3: Success!'}
-              </h2>
-              <p className="text-sm text-slate-600 dark:text-slate-400">
-                {currentStep === 'details' && 'Add name and description for your NFT'}
-                {currentStep === 'processing' && 'Uploading and minting your NFT'}
-                {currentStep === 'success' && 'Your NFT has been created successfully'}
-              </p>
+            {/* Step Indicator */}
+            <div className="flex items-center space-x-2">
+              <div className={`w-8 h-8 rounded-full flex items-center justify-center text-sm font-medium ${
+                currentStep === 'details' ? 'bg-blue-500 text-white' : 'bg-green-500 text-white'
+              }`}>
+                {currentStep === 'details' ? '1' : <Check className="w-4 h-4" />}
+              </div>
+              <div className={`w-8 h-8 rounded-full flex items-center justify-center text-sm font-medium ${
+                currentStep === 'processing' ? 'bg-blue-500 text-white' : 
+                currentStep === 'success' ? 'bg-green-500 text-white' : 'bg-gray-300 text-gray-600'
+              }`}>
+                {currentStep === 'success' ? <Check className="w-4 h-4" /> : '2'}
+              </div>
+              <div className={`w-8 h-8 rounded-full flex items-center justify-center text-sm font-medium ${
+                currentStep === 'success' ? 'bg-green-500 text-white' : 'bg-gray-300 text-gray-600'
+              }`}>
+                {currentStep === 'success' ? <Check className="w-4 h-4" /> : '3'}
+              </div>
             </div>
           </div>
         </div>
         
         {/* Step Content */}
         {currentStep === 'details' && (
-          <div className="p-6 space-y-6">
-            {/* Preview Section */}
-            <div className="space-y-3">
-              <h3 className="text-sm font-semibold text-slate-900 dark:text-white">Preview</h3>
-              <div className="relative bg-gradient-to-br from-slate-50 to-slate-100 dark:from-slate-800 dark:to-slate-900 border border-slate-200/60 dark:border-slate-700/60 rounded-xl p-3">
-                <img 
-                  src={imageData} 
-                  alt="User artwork preview" 
-                  className="w-full h-48 object-cover rounded-lg shadow-md"
-                  data-testid="img-artwork-preview"
-                />
-              </div>
-            </div>
-            
-            {/* Form Section */}
-            <div className="space-y-5">
-              <div className="space-y-2">
-                <div className="flex items-center justify-between">
-                  <label htmlFor="nft-name" className="text-sm font-semibold text-slate-900 dark:text-white">NFT Name *</label>
-                  <div className="text-xs text-slate-500 dark:text-slate-400">{nftName.length}/50</div>
+          <div className="p-6">
+            <div className="grid md:grid-cols-2 gap-8">
+              {/* Artwork Preview - Left Side */}
+              <div className="space-y-3">
+                <h3 className="text-sm font-medium text-gray-900 dark:text-white">Preview</h3>
+                <div className="relative bg-gray-50 dark:bg-gray-800 border border-gray-200 dark:border-gray-700 rounded-xl p-4">
+                  <img 
+                    src={imageData} 
+                    alt="User artwork preview" 
+                    className="w-full aspect-square object-cover rounded-lg"
+                    data-testid="img-artwork-preview"
+                  />
                 </div>
-                <Input
-                  id="nft-name"
-                  type="text" 
-                  placeholder="Enter your NFT name..." 
-                  value={nftName}
-                  onChange={(e) => setNftName(e.target.value.slice(0, 50))}
-                  disabled={isLoading}
-                  className="h-12 border-slate-200 dark:border-slate-700 focus:border-blue-500 focus:ring-blue-500/20 bg-white dark:bg-slate-900 rounded-lg transition-all duration-200"
-                  data-testid="input-nft-name"
-                />
               </div>
               
-              <div className="space-y-2">
-                <div className="flex items-center justify-between">
-                  <label htmlFor="nft-description" className="text-sm font-semibold text-slate-900 dark:text-white">Description</label>
-                  <div className="text-xs text-slate-500 dark:text-slate-400">{nftDescription.length}/200</div>
-                </div>
-                <Textarea
-                  id="nft-description"
-                  placeholder="Describe your artwork..." 
-                  rows={4} 
-                  value={nftDescription}
-                  onChange={(e) => setNftDescription(e.target.value.slice(0, 200))}
-                  disabled={isLoading}
-                  className="resize-none border-slate-200 dark:border-slate-700 focus:border-blue-500 focus:ring-blue-500/20 bg-white dark:bg-slate-900 rounded-lg transition-all duration-200"
-                  data-testid="textarea-nft-description"
-                />
-              </div>
-              
-              {/* Modern Cost Info */}
-              <div className="bg-gradient-to-r from-blue-50 to-blue-50/50 dark:from-blue-900/20 dark:to-blue-900/10 border border-blue-200/60 dark:border-blue-800/60 rounded-xl p-4">
-                <div className="flex items-center justify-between">
-                  <div className="flex items-center space-x-3">
-                    <div className="w-8 h-8 bg-blue-600 rounded-lg flex items-center justify-center shadow-md shadow-blue-600/30">
-                      <Zap className="w-4 h-4 text-white" />
+              {/* NFT Details Form - Right Side */}
+              <div className="space-y-6">
+                <div className="space-y-6">
+                  <div className="space-y-2">
+                    <div className="flex items-center justify-between">
+                      <label htmlFor="nft-name" className="text-sm font-medium text-gray-900 dark:text-white">NFT Name *</label>
+                      <div className="text-xs text-gray-500">{nftName.length}/50</div>
                     </div>
-                    <span className="font-semibold text-slate-900 dark:text-white">Minting Fee</span>
+                    <Input
+                      id="nft-name"
+                      type="text" 
+                      placeholder="Enter your NFT name..." 
+                      value={nftName}
+                      onChange={(e) => setNftName(e.target.value.slice(0, 50))}
+                      disabled={isLoading}
+                      className="h-12 border-gray-300 dark:border-gray-600 focus:border-blue-500 focus:ring-blue-500"
+                      data-testid="input-nft-name"
+                    />
                   </div>
-                  <span className="font-mono font-bold text-slate-700 dark:text-slate-300 bg-white/60 dark:bg-slate-800/60 px-3 py-1 rounded-lg">~0.02 SOL</span>
+                  
+                  <div className="space-y-2">
+                    <div className="flex items-center justify-between">
+                      <label htmlFor="nft-description" className="text-sm font-medium text-gray-900 dark:text-white">Description</label>
+                      <div className="text-xs text-gray-500">{nftDescription.length}/200</div>
+                    </div>
+                    <Textarea
+                      id="nft-description"
+                      placeholder="Describe your artwork..." 
+                      rows={4} 
+                      value={nftDescription}
+                      onChange={(e) => setNftDescription(e.target.value.slice(0, 200))}
+                      disabled={isLoading}
+                      className="resize-none border-gray-300 dark:border-gray-600 focus:border-blue-500 focus:ring-blue-500"
+                      data-testid="textarea-nft-description"
+                    />
+                  </div>
+                  
+                  {/* Professional Cost Info */}
+                  <div className="p-4 bg-blue-50 dark:bg-blue-900/20 rounded-xl border border-blue-200 dark:border-blue-800">
+                    <div className="flex items-center justify-between">
+                      <div className="flex items-center space-x-3">
+                        <div className="w-6 h-6 bg-blue-500 rounded-full flex items-center justify-center">
+                          <Zap className="w-3 h-3 text-white" />
+                        </div>
+                        <span className="font-medium text-gray-900 dark:text-white">Minting Fee</span>
+                      </div>
+                      <span className="font-mono font-semibold text-gray-700 dark:text-gray-300">~0.02 SOL</span>
+                    </div>
+                  </div>
                 </div>
               </div>
             </div>
@@ -338,80 +330,80 @@ export function ThreeStepMinting({ imageData, onMintSuccess, onBack }: ThreeStep
         
         {currentStep === 'processing' && (
           <div className="p-8">
-            <div className="max-w-sm mx-auto text-center space-y-8">
-              {/* Modern Progress Animation */}
+            <div className="max-w-md mx-auto text-center space-y-8">
+              {/* Progress Animation */}
               <div className="relative">
-                <div className="w-28 h-28 border-4 border-blue-100 dark:border-blue-900/40 rounded-full mx-auto"></div>
-                <div className="absolute inset-0 w-28 h-28 border-4 border-blue-600 border-t-transparent rounded-full animate-spin mx-auto"></div>
+                <div className="w-24 h-24 border-4 border-blue-200 rounded-full mx-auto"></div>
+                <div className="absolute inset-0 w-24 h-24 border-4 border-blue-500 border-t-transparent rounded-full animate-spin mx-auto"></div>
                 <div className="absolute inset-0 flex items-center justify-center">
-                  <div className="w-14 h-14 bg-blue-600 rounded-xl flex items-center justify-center shadow-lg shadow-blue-600/30">
-                    {processingStep === 'uploading' && <Upload className="w-7 h-7 text-white" />}
-                    {processingStep === 'minting' && <Zap className="w-7 h-7 text-white" />}
-                    {processingStep === 'confirming' && <Zap className="w-7 h-7 text-white animate-pulse" />}
-                    {processingStep === 'saving' && <Check className="w-7 h-7 text-white" />}
+                  <div className="w-12 h-12 bg-blue-100 dark:bg-blue-900/50 rounded-lg flex items-center justify-center">
+                    {processingStep === 'uploading' && <Upload className="w-6 h-6 text-blue-600" />}
+                    {processingStep === 'minting' && <Zap className="w-6 h-6 text-blue-600" />}
+                    {processingStep === 'confirming' && <Zap className="w-6 h-6 text-blue-600 animate-pulse" />}
+                    {processingStep === 'saving' && <Check className="w-6 h-6 text-blue-600" />}
                   </div>
                 </div>
               </div>
               
               {/* Step Information */}
               <div className="space-y-4">
-                <h3 className="text-xl font-bold text-slate-900 dark:text-white">
+                <h3 className="text-xl font-bold text-gray-900 dark:text-white">
                   {processingStep === 'uploading' && 'Uploading to IPFS'}
                   {processingStep === 'minting' && 'Preparing Transaction'}
                   {processingStep === 'confirming' && 'Confirm in Wallet'}
                   {processingStep === 'saving' && 'Finalizing NFT'}
                 </h3>
                 
-                <p className="text-slate-600 dark:text-slate-400">
+                <p className="text-gray-600 dark:text-gray-400">
                   {processingStep === 'uploading' && 'Securing your artwork on the decentralized web...'}
                   {processingStep === 'minting' && 'Setting up your NFT transaction...'}
                   {processingStep === 'confirming' && 'Please approve the transaction in your wallet to mint your NFT!'}
                   {processingStep === 'saving' && 'Saving your NFT details...'}
                 </p>
                 
-                {/* Modern Progress Steps */}
-                <div className="flex justify-center space-x-6 pt-4">
-                  <div className={`flex items-center space-x-2 transition-all duration-300 ${processingStep === 'uploading' ? 'text-blue-600' : (processingStep === 'minting' || processingStep === 'confirming' || processingStep === 'saving') ? 'text-green-600' : 'text-slate-400'}`}>
+                {/* Progress Steps */}
+                <div className="flex justify-center space-x-4 pt-4">
+                  <div className={`flex items-center space-x-2 ${processingStep === 'uploading' ? 'text-blue-600' : (processingStep === 'minting' || processingStep === 'confirming' || processingStep === 'saving') ? 'text-green-600' : 'text-gray-400'}`}>
                     {processingStep === 'uploading' ? (
-                      <Clock className="w-5 h-5 animate-pulse" />
+                      <Clock className="w-4 h-4 animate-pulse" />
                     ) : (
-                      <CheckCircle className="w-5 h-5" />
+                      <CheckCircle className="w-4 h-4" />
                     )}
-                    <span className="text-sm font-semibold">Upload</span>
+                    <span className="text-sm font-medium">Upload</span>
                   </div>
                   
-                  <div className={`flex items-center space-x-2 transition-all duration-300 ${(processingStep === 'minting' || processingStep === 'confirming') ? 'text-blue-600' : processingStep === 'saving' ? 'text-green-600' : 'text-slate-400'}`}>
+                  <div className={`flex items-center space-x-2 ${(processingStep === 'minting' || processingStep === 'confirming') ? 'text-blue-600' : processingStep === 'saving' ? 'text-green-600' : 'text-gray-400'}`}>
                     {(processingStep === 'minting' || processingStep === 'confirming') ? (
-                      <Clock className="w-5 h-5 animate-pulse" />
+                      <Clock className="w-4 h-4 animate-pulse" />
                     ) : processingStep === 'saving' ? (
-                      <CheckCircle className="w-5 h-5" />
+                      <CheckCircle className="w-4 h-4" />
                     ) : (
-                      <Zap className="w-5 h-5" />
+                      <Zap className="w-4 h-4" />
                     )}
-                    <span className="text-sm font-semibold">Mint</span>
+                    <span className="text-sm font-medium">Mint</span>
                   </div>
                   
-                  <div className={`flex items-center space-x-2 transition-all duration-300 ${processingStep === 'saving' ? 'text-blue-600' : 'text-slate-400'}`}>
+                  <div className={`flex items-center space-x-2 ${processingStep === 'saving' ? 'text-blue-600' : 'text-gray-400'}`}>
                     {processingStep === 'saving' ? (
-                      <Clock className="w-5 h-5 animate-pulse" />
+                      <Clock className="w-4 h-4 animate-pulse" />
                     ) : (
-                      <Trophy className="w-5 h-5" />
+                      <Trophy className="w-4 h-4" />
                     )}
-                    <span className="text-sm font-semibold">Complete</span>
+                    <span className="text-sm font-medium">Complete</span>
                   </div>
                 </div>
               </div>
               
-              {/* Modern Alerts */}
+              {/* Dynamic Alerts */}
               {processingStep === 'confirming' && showWalletPrompt ? (
-                <Alert className="bg-gradient-to-r from-orange-50 to-orange-50/50 dark:from-orange-900/20 dark:to-orange-900/10 border border-orange-200/60 dark:border-orange-800/60 rounded-xl animate-pulse">
-                  <AlertDescription className="text-orange-800 dark:text-orange-200 text-sm font-medium">
+                <Alert className="bg-orange-50 dark:bg-orange-900/20 border-orange-200 dark:border-orange-800 animate-pulse">
+                  <AlertDescription className="text-orange-800 dark:text-orange-200 text-sm">
                     <strong>Action Required:</strong> Check your wallet and approve the transaction to complete minting!
                   </AlertDescription>
                 </Alert>
               ) : (
-                <Alert className="bg-gradient-to-r from-blue-50 to-blue-50/50 dark:from-blue-900/20 dark:to-blue-900/10 border border-blue-200/60 dark:border-blue-800/60 rounded-xl">
-                  <AlertDescription className="text-blue-800 dark:text-blue-200 text-sm font-medium">
+                <Alert className="bg-blue-50 dark:bg-blue-900/20 border-blue-200 dark:border-blue-800">
+                  <AlertDescription className="text-blue-800 dark:text-blue-200 text-sm">
                     <strong>Tip:</strong> Keep sufficient SOL for network fees. This process may take 30-60 seconds.
                   </AlertDescription>
                 </Alert>
@@ -422,29 +414,28 @@ export function ThreeStepMinting({ imageData, onMintSuccess, onBack }: ThreeStep
         
         {currentStep === 'success' && (
           <div className="p-8">
-            <div className="max-w-sm mx-auto text-center space-y-8">
-              {/* Modern Success Animation */}
+            <div className="max-w-md mx-auto text-center space-y-8">
+              {/* Success Animation */}
               <div className="relative">
-                <div className="w-28 h-28 bg-green-600 rounded-2xl mx-auto flex items-center justify-center shadow-2xl shadow-green-600/40">
-                  <Trophy className="w-14 h-14 text-white" />
+                <div className="w-24 h-24 bg-green-500 rounded-full mx-auto flex items-center justify-center">
+                  <Trophy className="w-12 h-12 text-white" />
                 </div>
-                <div className="absolute -top-3 -right-3 w-10 h-10 bg-green-400 rounded-full animate-bounce shadow-lg shadow-green-400/50"></div>
-                <div className="absolute -bottom-2 -left-2 w-6 h-6 bg-green-300 rounded-full animate-pulse"></div>
+                <div className="absolute -top-2 -right-2 w-8 h-8 bg-green-400 rounded-full animate-bounce"></div>
               </div>
               
-              <div className="space-y-5">
-                <h3 className="text-2xl font-bold text-slate-900 dark:text-white">
+              <div className="space-y-4">
+                <h3 className="text-2xl font-bold text-gray-900 dark:text-white">
                   🎉 NFT Minted Successfully!
                 </h3>
                 
-                <p className="text-slate-600 dark:text-slate-400 leading-relaxed">
+                <p className="text-gray-600 dark:text-gray-400">
                   Your artwork is now permanently stored on the Solana blockchain as an NFT!
                 </p>
                 
-                <div className="bg-gradient-to-r from-green-50 to-green-50/50 dark:from-green-900/20 dark:to-green-900/10 border border-green-200/60 dark:border-green-800/60 rounded-xl p-5">
-                  <p className="text-sm text-green-800 dark:text-green-200 font-medium">
+                <div className="bg-green-50 dark:bg-green-900/20 border border-green-200 dark:border-green-800 rounded-lg p-4">
+                  <p className="text-sm text-green-800 dark:text-green-200">
                     <strong>Mint Address:</strong><br/>
-                    <span className="font-mono text-xs break-all bg-white/60 dark:bg-green-800/30 px-2 py-1 rounded mt-2 inline-block">{mintAddress}</span>
+                    <span className="font-mono text-xs break-all">{mintAddress}</span>
                   </p>
                 </div>
               </div>
@@ -452,34 +443,34 @@ export function ThreeStepMinting({ imageData, onMintSuccess, onBack }: ThreeStep
           </div>
         )}
         
-        {/* Modern Footer */}
+        {/* Footer */}
         {currentStep === 'details' && (
-          <div className="bg-gradient-to-r from-slate-50/80 via-white/90 to-slate-50/80 dark:from-slate-800/80 dark:via-slate-900/90 dark:to-slate-800/80 border-t border-slate-200/60 dark:border-slate-700/60 px-6 py-5 rounded-b-2xl">
+          <div className="border-t border-gray-200 dark:border-gray-700 px-6 py-4">
             <div className="flex items-center justify-between">
-              <div className="text-sm text-slate-600 dark:text-slate-400 font-medium">
+              <div className="text-sm text-gray-600 dark:text-gray-400">
                 Secure & permanent on Solana blockchain
               </div>
               
               {!connected ? (
                 <WalletMultiButton 
-                  className="!bg-blue-600 hover:!bg-blue-700 !text-white !px-6 !py-3 !rounded-xl !font-semibold !text-sm !transition-all !duration-200 !border-0 !shadow-lg !shadow-blue-600/30"
+                  className="!bg-gray-600 hover:!bg-gray-700 !text-white !px-6 !py-3 !rounded-lg !font-medium !text-sm !transition-all !duration-200 !border-0"
                   data-testid="button-connect-wallet"
                 />
               ) : (
                 <Button
                   size="lg"
-                  className="bg-blue-600 hover:bg-blue-700 text-white px-8 py-3 font-semibold text-sm rounded-xl shadow-lg shadow-blue-600/30 disabled:opacity-50 disabled:cursor-not-allowed transition-all duration-200"
+                  className="bg-blue-600 hover:bg-blue-700 text-white px-8 py-3 font-medium text-sm disabled:opacity-50 disabled:cursor-not-allowed"
                   onClick={handleStartMinting}
                   disabled={isLoading || !nftName.trim()}
                   data-testid="button-start-minting"
                 >
-                  Select Wallet
+                  Start Minting Process
                 </Button>
               )}
             </div>
           </div>
         )}
-      </div>
+      </Card>
     </div>
   );
 }
