@@ -98,99 +98,36 @@ export default function LandingPage() {
           </div>
         </section>
 
-        {/* Features Section */}
+        {/* Create With Friends Section */}
         <section className="py-16 sm:py-20 lg:py-24 bg-background">
-          <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-            <div className="text-center mb-16">
-              <h2 className="text-3xl sm:text-4xl lg:text-5xl font-bold text-foreground mb-4" data-testid="features-title">
-                Professional Tools, Simple Process
-              </h2>
-              <p className="text-lg text-muted-foreground max-w-2xl mx-auto" data-testid="features-description">
-                Everything you need to create, customize, and mint your digital masterpieces
+          <div className="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div className="text-center">
+              <button 
+                className="group w-full max-w-2xl mx-auto px-16 py-12 text-2xl sm:text-3xl lg:text-4xl font-black bg-gradient-to-r from-muted/30 via-muted/40 to-muted/30 hover:from-muted/50 hover:via-muted/60 hover:to-muted/50 border-2 border-muted/40 hover:border-muted/60 shadow-2xl hover:shadow-3xl transition-all duration-500 ease-out motion-safe:hover:scale-[1.02] motion-safe:hover:-translate-y-2 rounded-3xl relative overflow-hidden active:scale-[0.98] active:translate-y-0"
+                data-testid="button-create-with-friends"
+                disabled
+              >
+                {/* Shimmer effect */}
+                <div className="absolute inset-0 bg-gradient-to-r from-transparent via-white/20 to-transparent translate-x-[-100%] group-hover:translate-x-[100%] transition-transform duration-1000 ease-out"></div>
+                
+                {/* Click effect */}
+                <div className="absolute inset-0 bg-foreground/10 rounded-full scale-0 group-active:scale-100 transition-transform duration-300 ease-out origin-center"></div>
+                
+                {/* Text that changes on hover */}
+                <span className="relative z-10 flex items-center justify-center tracking-wide">
+                  <Users className="w-8 h-8 sm:w-10 sm:h-10 lg:w-12 lg:h-12 mr-4 sm:mr-6 transition-all duration-300 group-hover:rotate-12 group-hover:scale-110" />
+                  <span className="transition-all duration-300 group-hover:opacity-0 group-hover:scale-95">
+                    Create With Friends
+                  </span>
+                  <span className="absolute inset-0 flex items-center justify-center opacity-0 scale-105 group-hover:opacity-100 group-hover:scale-100 transition-all duration-300 text-primary font-black">
+                    COMING SOON
+                  </span>
+                </span>
+              </button>
+              
+              <p className="text-lg text-muted-foreground mt-8 max-w-2xl mx-auto">
+                Collaborate on artwork in real-time with friends. Share canvases, work together, and create amazing pieces as a team.
               </p>
-            </div>
-            
-            <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
-              {/* Feature 1 - Professional Tools */}
-              <Card className="p-8 bg-card/60 backdrop-blur-xl border border-border/40 shadow-xl hover:shadow-2xl transition-all duration-300 motion-safe:hover:scale-105" data-testid="card-professional-tools">
-                <div className="w-12 h-12 bg-primary/10 rounded-xl flex items-center justify-center mb-6">
-                  <Palette className="w-6 h-6 text-primary" />
-                </div>
-                <h3 className="text-xl font-bold text-foreground mb-4">Professional Drawing Tools</h3>
-                <p className="text-muted-foreground leading-relaxed mb-6">
-                  Full-featured canvas with brushes, shapes, colors, and unlimited undo/redo. 
-                  Create in square or rectangle formats.
-                </p>
-                <ul className="space-y-2">
-                  <li className="flex items-center text-sm text-muted-foreground">
-                    <Check className="w-4 h-4 text-primary mr-2" />
-                    Multiple brush sizes & tools
-                  </li>
-                  <li className="flex items-center text-sm text-muted-foreground">
-                    <Check className="w-4 h-4 text-primary mr-2" />
-                    Custom color picker
-                  </li>
-                  <li className="flex items-center text-sm text-muted-foreground">
-                    <Check className="w-4 h-4 text-primary mr-2" />
-                    Shape tools & eraser
-                  </li>
-                </ul>
-              </Card>
-
-              {/* Feature 2 - Blockchain Integration */}
-              <Card className="p-8 bg-card/60 backdrop-blur-xl border border-border/40 shadow-xl hover:shadow-2xl transition-all duration-300 motion-safe:hover:scale-105" data-testid="card-blockchain">
-                <div className="w-12 h-12 bg-primary/10 rounded-xl flex items-center justify-center mb-6">
-                  <Zap className="w-6 h-6 text-primary" />
-                </div>
-                <h3 className="text-xl font-bold text-foreground mb-4">Instant NFT Minting</h3>
-                <p className="text-muted-foreground leading-relaxed mb-6">
-                  Connect your Solana wallet and mint your artwork directly to the blockchain. 
-                  Fast, secure, and permanent.
-                </p>
-                <ul className="space-y-2">
-                  <li className="flex items-center text-sm text-muted-foreground">
-                    <Check className="w-4 h-4 text-primary mr-2" />
-                    Solana mainnet integration
-                  </li>
-                  <li className="flex items-center text-sm text-muted-foreground">
-                    <Check className="w-4 h-4 text-primary mr-2" />
-                    IPFS decentralized storage
-                  </li>
-                  <li className="flex items-center text-sm text-muted-foreground">
-                    <Check className="w-4 h-4 text-primary mr-2" />
-                    Low transaction fees
-                  </li>
-                </ul>
-              </Card>
-
-              {/* Feature 3 - Coming Soon */}
-              <Card className="p-8 bg-card/60 backdrop-blur-xl border border-border/40 shadow-xl hover:shadow-2xl transition-all duration-300 motion-safe:hover:scale-105 relative overflow-hidden" data-testid="card-collaboration">
-                <div className="absolute top-4 right-4 px-2 py-1 bg-primary/10 text-primary text-xs font-semibold rounded-full">
-                  Coming Soon
-                </div>
-                <div className="w-12 h-12 bg-muted/50 rounded-xl flex items-center justify-center mb-6">
-                  <Users className="w-6 h-6 text-muted-foreground" />
-                </div>
-                <h3 className="text-xl font-bold text-foreground mb-4">Create With Friends</h3>
-                <p className="text-muted-foreground leading-relaxed mb-6">
-                  Collaborate on artwork in real-time with friends. Share canvases, 
-                  work together, and create amazing pieces as a team.
-                </p>
-                <ul className="space-y-2 opacity-60">
-                  <li className="flex items-center text-sm text-muted-foreground">
-                    <Check className="w-4 h-4 text-muted-foreground mr-2" />
-                    Real-time collaboration
-                  </li>
-                  <li className="flex items-center text-sm text-muted-foreground">
-                    <Check className="w-4 h-4 text-muted-foreground mr-2" />
-                    Shared canvas sessions
-                  </li>
-                  <li className="flex items-center text-sm text-muted-foreground">
-                    <Check className="w-4 h-4 text-muted-foreground mr-2" />
-                    Team NFT ownership
-                  </li>
-                </ul>
-              </Card>
             </div>
           </div>
         </section>
