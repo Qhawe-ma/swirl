@@ -159,13 +159,6 @@ export default function PaintPage() {
                 </div>
               )}
               
-              {/* Network Status */}
-              <div className="hidden sm:flex items-center space-x-2 px-3 py-1.5 bg-emerald-50 dark:bg-emerald-900/20 border border-emerald-200 dark:border-emerald-800 rounded-lg">
-                <div className="w-2 h-2 bg-emerald-500 rounded-full animate-pulse"></div>
-                <span className="text-xs font-medium text-emerald-700 dark:text-emerald-300 tracking-wide">
-                  Solana Mainnet
-                </span>
-              </div>
               
               <WalletConnection />
             </div>

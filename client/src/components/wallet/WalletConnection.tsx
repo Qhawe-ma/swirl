@@ -33,26 +33,18 @@ export function WalletConnection() {
           data-testid="button-connect-wallet"
         />
       ) : (
-        <div className="flex items-center space-x-3 px-4 py-2.5 bg-card/80 backdrop-blur-sm border border-border/50 rounded-lg shadow-sm hover:shadow-md transition-all duration-200 focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2" tabIndex={0} data-testid="wallet-connected">
-          <div className="flex items-center space-x-2.5">
-            {/* Wallet Icon */}
-            <div className="w-8 h-8 bg-primary/10 rounded-lg flex items-center justify-center">
-              <span className="material-icons text-base text-primary">account_balance_wallet</span>
+        <div className="flex items-center px-4 py-2.5 bg-white dark:bg-gray-900 border border-gray-200 dark:border-gray-700 shadow-sm hover:shadow-md transition-all duration-200 focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2" tabIndex={0} data-testid="wallet-connected">
+          <div className="flex flex-col">
+            <div className="font-semibold text-sm text-foreground tracking-wide" data-testid="text-wallet-address">
+              {shortAddress}
             </div>
-            
-            {/* Wallet Info */}
-            <div className="flex flex-col">
-              <div className="font-semibold text-sm text-foreground tracking-wide" data-testid="text-wallet-address">
-                {shortAddress}
-              </div>
-              <div className="text-xs text-muted-foreground font-medium" data-testid="text-wallet-balance">
-                {balance !== null ? `${balance.toFixed(3)} SOL` : 'Connected'}
-              </div>
+            <div className="text-xs text-muted-foreground font-medium" data-testid="text-wallet-balance">
+              {balance !== null ? `${balance.toFixed(3)} SOL` : 'Connected'}
             </div>
-            
-            {/* Status Indicator */}
-            <div className="w-2 h-2 bg-emerald-500 rounded-full ml-2"></div>
           </div>
+          
+          {/* Status Indicator */}
+          <div className="w-2 h-2 bg-emerald-500 rounded-full ml-3"></div>
         </div>
       )}
     </div>
