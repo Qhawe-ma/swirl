@@ -2,9 +2,10 @@ import { useState } from 'react';
 import { WalletConnection } from '@/components/wallet/WalletConnection';
 import { PaintCanvas } from '@/components/canvas/PaintCanvas';
 import { DrawingToolbar } from '@/components/canvas/DrawingToolbar';
-import { NFTMintingForm } from '@/components/nft/NFTMintingForm';
+import { ThreeStepMinting } from '@/components/nft/ThreeStepMinting';
 import { MintSuccess } from '@/components/nft/MintSuccess';
 import { MintsHistory } from '@/components/wallet/MintsHistory';
+import { CaveArtGallery } from '@/components/gallery/CaveArtGallery';
 import { Card } from '@/components/ui/card';
 import { Button } from '@/components/ui/button';
 import { useWallet } from '@solana/wallet-adapter-react';
@@ -70,6 +71,11 @@ export default function PaintPage() {
     setAppState('drawing');
   };
 
+  const handleSelectCaveArt = (imageData: string) => {
+    setSavedImageData(imageData);
+    // The canvas will automatically load this image via the initialImageData prop
+  };
+
   return (
     <div className="h-screen bg-background font-sans flex flex-col">
       {/* Professional Header - NFT Marketplace Style */}
@@ -123,34 +129,40 @@ export default function PaintPage() {
             
             {/* Right: Actions */}
             <div className="flex items-center space-x-4">
-              {/* Canvas Format Selection */}
+              {/* Cave Art Gallery and Canvas Format Selection */}
               {appState === 'drawing' && (
-                <div className="hidden sm:flex items-center space-x-1 px-2 py-1.5 bg-muted/50 border border-border/40 rounded-lg">
-                  <span className="text-xs font-medium text-muted-foreground mr-2">Format:</span>
-                  <button
-                    onClick={() => setCanvasFormat('square')}
-                    className={`px-2 py-1 text-xs font-medium rounded-md transition-all duration-200 flex items-center space-x-1 ${
-                      canvasFormat === 'square'
-                        ? 'bg-primary text-primary-foreground shadow-sm'
-                        : 'text-muted-foreground hover:text-foreground hover:bg-accent'
-                    }`}
-                    data-testid="button-format-square"
-                  >
-                    <Square className="w-3 h-3" />
-                    <span>Square</span>
-                  </button>
-                  <button
-                    onClick={() => setCanvasFormat('rectangle')}
-                    className={`px-2 py-1 text-xs font-medium rounded-md transition-all duration-200 flex items-center space-x-1 ${
-                      canvasFormat === 'rectangle'
-                        ? 'bg-primary text-primary-foreground shadow-sm'
-                        : 'text-muted-foreground hover:text-foreground hover:bg-accent'
-                    }`}
-                    data-testid="button-format-rectangle"
-                  >
-                    <RectangleHorizontal className="w-3 h-3" />
-                    <span>Rectangle</span>
-                  </button>
+                <div className="flex items-center space-x-3">
+                  {/* Cave Art Gallery */}
+                  <CaveArtGallery onSelectArt={handleSelectCaveArt} />
+                  
+                  {/* Canvas Format Selection */}
+                  <div className="hidden sm:flex items-center space-x-1 px-2 py-1.5 bg-muted/50 border border-border/40 rounded-lg">
+                    <span className="text-xs font-medium text-muted-foreground mr-2">Format:</span>
+                    <button
+                      onClick={() => setCanvasFormat('square')}
+                      className={`px-2 py-1 text-xs font-medium rounded-md transition-all duration-200 flex items-center space-x-1 ${
+                        canvasFormat === 'square'
+                          ? 'bg-primary text-primary-foreground shadow-sm'
+                          : 'text-muted-foreground hover:text-foreground hover:bg-accent'
+                      }`}
+                      data-testid="button-format-square"
+                    >
+                      <Square className="w-3 h-3" />
+                      <span>Square</span>
+                    </button>
+                    <button
+                      onClick={() => setCanvasFormat('rectangle')}
+                      className={`px-2 py-1 text-xs font-medium rounded-md transition-all duration-200 flex items-center space-x-1 ${
+                        canvasFormat === 'rectangle'
+                          ? 'bg-primary text-primary-foreground shadow-sm'
+                          : 'text-muted-foreground hover:text-foreground hover:bg-accent'
+                      }`}
+                      data-testid="button-format-rectangle"
+                    >
+                      <RectangleHorizontal className="w-3 h-3" />
+                      <span>Rectangle</span>
+                    </button>
+                  </div>
                 </div>
               )}
               
@@ -284,6 +296,7 @@ export default function PaintPage() {
                     brushSize={brushSize}
                     drawingMode={drawingMode}
                     canvasFormat={canvasFormat}
+                    initialImageData={savedImageData}
                     onSave={handleSaveImage}
                     onUndoRedoChange={handleUndoRedoChange}
                     shouldUndo={shouldUndo}
@@ -299,10 +312,9 @@ export default function PaintPage() {
         )}
 
         {appState === 'minting-form' && (
-          <NFTMintingForm
+          <ThreeStepMinting
             imageData={savedImageData}
             onMintSuccess={handleMintSuccess}
-            onMintStart={handleMintStart}
             onBack={handleBackToDrawing}
           />
         )}

@@ -1,5 +1,6 @@
 import { useState } from 'react';
 import { useWallet, useConnection } from '@solana/wallet-adapter-react';
+import { WalletMultiButton } from '@solana/wallet-adapter-react-ui';
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Textarea } from "@/components/ui/textarea";
@@ -9,6 +10,7 @@ import { useToast } from "@/hooks/use-toast";
 import { uploadToIPFS } from "@/lib/ipfs";
 import { mintNFT } from "@/lib/solana";
 import { saveMintRecord } from "@/lib/firebase";
+import { ArrowLeft } from "lucide-react";
 
 interface NFTMintingFormProps {
   imageData: string;
@@ -178,57 +180,53 @@ export function NFTMintingForm({ imageData, onMintSuccess, onMintStart, onBack }
   };
 
   return (
-    <div className="fixed inset-0 bg-background/80 backdrop-blur-sm z-50 flex items-center justify-center p-4">
-      <Card className="bg-card/98 backdrop-blur-2xl border border-border/40 w-full max-w-2xl max-h-[90vh] overflow-y-auto shadow-2xl rounded-2xl" data-testid="form-nft-minting">
-        {/* Modern Header with Back Button */}
-        <div className="border-b border-border/20 px-6 py-4">
-          <div className="flex items-center justify-between">
-            <div className="flex items-center space-x-4">
-              {onBack && (
-                <button 
-                  onClick={onBack}
-                  className="p-2 hover:bg-muted/50 rounded-lg transition-colors"
-                  data-testid="button-back"
-                >
-                  <svg className="w-5 h-5 text-muted-foreground" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M10 19l-7-7m0 0l7-7m-7 7h18" />
-                  </svg>
-                </button>
-              )}
-              <div>
-                <h2 className="text-lg font-bold text-foreground">
-                  Mint Your Artwork
-                </h2>
-                <p className="text-sm text-muted-foreground">
-                  Create your NFT on Solana blockchain
-                </p>
-              </div>
+    <div className="fixed inset-0 bg-black/50 backdrop-blur-sm z-50 flex items-center justify-center p-4">
+      <Card className="bg-white dark:bg-gray-900 w-full max-w-4xl max-h-[90vh] overflow-y-auto shadow-2xl rounded-2xl border-0" data-testid="form-nft-minting">
+        {/* Professional Header with Back Button */}
+        <div className="border-b border-gray-200 dark:border-gray-700 px-6 py-4">
+          <div className="flex items-center space-x-4">
+            {onBack && (
+              <button 
+                onClick={onBack}
+                className="p-2 hover:bg-gray-100 dark:hover:bg-gray-800 rounded-lg transition-colors"
+                data-testid="button-back"
+              >
+                <ArrowLeft className="w-5 h-5 text-gray-600 dark:text-gray-400" />
+              </button>
+            )}
+            <div>
+              <h2 className="text-xl font-bold text-gray-900 dark:text-white">
+                Mint Your Artwork
+              </h2>
+              <p className="text-sm text-gray-600 dark:text-gray-400">
+                Create your NFT on Solana blockchain
+              </p>
             </div>
           </div>
         </div>
 
         <div className="p-6">
-          <div className="grid md:grid-cols-2 gap-6">
-            {/* Compact Artwork Preview */}
+          <div className="grid md:grid-cols-2 gap-8">
+            {/* Artwork Preview - Left Side */}
             <div className="space-y-3">
-              <h3 className="text-sm font-semibold text-foreground">Preview</h3>
-              <div className="relative bg-muted/30 border border-border/40 rounded-xl p-3">
+              <h3 className="text-sm font-medium text-gray-900 dark:text-white">Preview</h3>
+              <div className="relative bg-gray-50 dark:bg-gray-800 border border-gray-200 dark:border-gray-700 rounded-xl p-4">
                 <img 
                   src={imageData} 
                   alt="User artwork preview" 
-                  className="w-full rounded-lg"
+                  className="w-full aspect-square object-cover rounded-lg"
                   data-testid="img-artwork-preview"
                 />
               </div>
             </div>
             
-            {/* Compact NFT Details Form */}
-            <div className="space-y-4">
-              <div className="space-y-4">
+            {/* NFT Details Form - Right Side */}
+            <div className="space-y-6">
+              <div className="space-y-6">
                 <div className="space-y-2">
                   <div className="flex items-center justify-between">
-                    <label htmlFor="nft-name" className="text-sm font-semibold text-foreground">NFT Name *</label>
-                    <div className="text-xs text-muted-foreground">{nftName.length}/50</div>
+                    <label htmlFor="nft-name" className="text-sm font-medium text-gray-900 dark:text-white">NFT Name *</label>
+                    <div className="text-xs text-gray-500">{nftName.length}/50</div>
                   </div>
                   <Input
                     id="nft-name"
@@ -237,70 +235,77 @@ export function NFTMintingForm({ imageData, onMintSuccess, onMintStart, onBack }
                     value={nftName}
                     onChange={(e) => setNftName(e.target.value.slice(0, 50))}
                     disabled={isLoading}
-                    className="h-11"
+                    className="h-12 border-gray-300 dark:border-gray-600 focus:border-blue-500 focus:ring-blue-500"
                     data-testid="input-nft-name"
                   />
                 </div>
                 
                 <div className="space-y-2">
                   <div className="flex items-center justify-between">
-                    <label htmlFor="nft-description" className="text-sm font-semibold text-foreground">Description</label>
-                    <div className="text-xs text-muted-foreground">{nftDescription.length}/200</div>
+                    <label htmlFor="nft-description" className="text-sm font-medium text-gray-900 dark:text-white">Description</label>
+                    <div className="text-xs text-gray-500">{nftDescription.length}/200</div>
                   </div>
                   <Textarea
                     id="nft-description"
                     placeholder="Describe your artwork..." 
-                    rows={3} 
+                    rows={4} 
                     value={nftDescription}
                     onChange={(e) => setNftDescription(e.target.value.slice(0, 200))}
                     disabled={isLoading}
-                    className="resize-none"
+                    className="resize-none border-gray-300 dark:border-gray-600 focus:border-blue-500 focus:ring-blue-500"
                     data-testid="textarea-nft-description"
                   />
                 </div>
                 
-                {/* Compact Cost Info */}
-                <div className="p-3 bg-muted/30 rounded-lg border border-border/40">
+                {/* Professional Cost Info */}
+                <div className="p-4 bg-blue-50 dark:bg-blue-900/20 rounded-xl border border-blue-200 dark:border-blue-800">
                   <div className="flex items-center justify-between">
-                    <div className="flex items-center space-x-2">
-                      <div className="w-4 h-4 bg-blue-500 rounded-full flex items-center justify-center">
-                        <svg className="w-2.5 h-2.5 text-white" fill="currentColor" viewBox="0 0 24 24">
+                    <div className="flex items-center space-x-3">
+                      <div className="w-6 h-6 bg-blue-500 rounded-full flex items-center justify-center">
+                        <svg className="w-3 h-3 text-white" fill="currentColor" viewBox="0 0 24 24">
                           <path d="M12 2C13.1 2 14 2.9 14 4C14 5.1 13.1 6 12 6C10.9 6 10 5.1 10 4C10 2.9 10.9 2 12 2Z"/>
                         </svg>
                       </div>
-                      <span className="text-sm font-semibold text-foreground">Minting Fee</span>
+                      <span className="font-medium text-gray-900 dark:text-white">Minting Fee</span>
                     </div>
-                    <span className="text-sm font-mono text-muted-foreground">~0.02 SOL</span>
+                    <span className="font-mono font-semibold text-gray-700 dark:text-gray-300">~0.02 SOL</span>
                   </div>
                 </div>
               </div>
             </div>
           </div>
-          
-          {/* Compact Action Section */}
-          <div className="border-t border-border/20 px-6 py-4 mt-6">
-            <div className="flex items-center justify-between">
-              <div className="text-xs text-muted-foreground">
-                Secure & permanent on Solana blockchain
-              </div>
-              
+        </div>
+        
+        {/* Professional Footer */}
+        <div className="border-t border-gray-200 dark:border-gray-700 px-6 py-4">
+          <div className="flex items-center justify-between">
+            <div className="text-sm text-gray-600 dark:text-gray-400">
+              Secure & permanent on Solana blockchain
+            </div>
+            
+            {!connected ? (
+              <WalletMultiButton 
+                className="!bg-gray-600 hover:!bg-gray-700 !text-white !px-6 !py-3 !rounded-lg !font-medium !text-sm !transition-all !duration-200 !border-0"
+                data-testid="button-connect-wallet"
+              />
+            ) : (
               <Button
-                size="default"
-                className={`px-6 py-2 font-semibold ${
-                  isLoading || !connected ? 'opacity-50 cursor-not-allowed' : ''
-                }`}
+                size="lg"
+                className="bg-gray-800 hover:bg-gray-900 text-white px-8 py-3 font-medium text-sm disabled:opacity-50 disabled:cursor-not-allowed"
                 onClick={handleMintNFT}
-                disabled={isLoading || !connected || !nftName.trim()}
+                disabled={isLoading || !nftName.trim()}
                 data-testid="button-mint-nft"
               >
-                <div className="flex items-center space-x-2">
-                  <svg className="w-4 h-4" fill="currentColor" viewBox="0 0 24 24">
-                    <path d="M12 2L2 7V17L12 22L22 17V7L12 2Z"/>
-                  </svg>
-                  <span>{isLoading ? 'Minting...' : 'Mint NFT'}</span>
-                </div>
+                {isLoading ? (
+                  <div className="flex items-center space-x-2">
+                    <div className="w-4 h-4 border-2 border-white border-t-transparent rounded-full animate-spin"></div>
+                    <span>Minting...</span>
+                  </div>
+                ) : (
+                  'Mint NFT'
+                )}
               </Button>
-            </div>
+            )}
           </div>
         </div>
       </Card>

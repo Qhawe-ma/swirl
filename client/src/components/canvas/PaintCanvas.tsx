@@ -7,6 +7,7 @@ interface PaintCanvasProps {
   brushSize: number;
   drawingMode: 'brush' | 'eraser' | 'rectangle' | 'circle' | 'triangle';
   canvasFormat: 'square' | 'rectangle';
+  initialImageData?: string;
   onSave: (imageData: string) => void;
   onUndoRedoChange: (canUndo: boolean, canRedo: boolean) => void;
   shouldUndo: boolean;
@@ -21,6 +22,7 @@ export function PaintCanvas({
   brushSize,
   drawingMode,
   canvasFormat,
+  initialImageData,
   onSave,
   onUndoRedoChange,
   shouldUndo,
@@ -87,14 +89,22 @@ export function PaintCanvas({
       ctx.fillStyle = '#ffffff';
       ctx.fillRect(0, 0, canvasWidth, canvasHeight);
       
-      // Restore previous content if it exists
-      if (previousContent && previousContent !== 'data:,') {
+      // Restore previous content if it exists, or load initial image data
+      const imageToLoad = previousContent && previousContent !== 'data:,' ? previousContent : initialImageData;
+      if (imageToLoad) {
         const img = new Image();
         img.onload = () => {
           // Scale the image to fit the new canvas size
           ctx.drawImage(img, 0, 0, canvasWidth, canvasHeight);
+          // Add to history if this is initial image data
+          if (imageToLoad === initialImageData) {
+            const newState = canvasElement.toDataURL();
+            setHistory([newState]);
+            setHistoryIndex(0);
+            onUndoRedoChange(false, false);
+          }
         };
-        img.src = previousContent;
+        img.src = imageToLoad;
       }
       
       // Enable smooth drawing
