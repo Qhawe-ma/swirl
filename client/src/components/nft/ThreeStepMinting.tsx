@@ -461,6 +461,7 @@ export function ThreeStepMinting({ imageData, onMintSuccess, onBack }: ThreeStep
                   size="lg"
                   onClick={handleStartMinting}
                   disabled={isLoading || !nftName.trim()}
+                  className="bg-black hover:bg-gray-800 text-white border-0"
                   data-testid="button-start-minting"
                 >
                   {connected ? 'Mint NFT' : 'Select Wallet'}
