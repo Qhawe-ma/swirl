@@ -282,7 +282,7 @@ export function PaintCanvas({
     };
   };
 
-  // Flood fill algorithm for paint bucket tool
+  // Improved flood fill algorithm for paint bucket tool
   const floodFill = (startX: number, startY: number, fillColor: string) => {
     if (!context || !canvas) return;
     
@@ -304,7 +304,7 @@ export function PaintCanvas({
     const fillR = tempData[0];
     const fillG = tempData[1];
     const fillB = tempData[2];
-    const fillA = tempData[3];
+    const fillA = 255; // Always use full opacity
     
     // Get the target color at the clicked point
     const targetIndex = (y * canvas.width + x) * 4;
@@ -318,15 +318,24 @@ export function PaintCanvas({
       return;
     }
     
-    // Flood fill using stack-based approach
-    const stack = [[x, y]];
-    const visited = new Set<string>();
+    // Use a more robust color matching with tolerance for anti-aliased edges
+    const colorTolerance = 5; // Small tolerance for similar colors
+    
+    const colorsMatch = (r1: number, g1: number, b1: number, a1: number, r2: number, g2: number, b2: number, a2: number) => {
+      return Math.abs(r1 - r2) <= colorTolerance && 
+             Math.abs(g1 - g2) <= colorTolerance && 
+             Math.abs(b1 - b2) <= colorTolerance && 
+             Math.abs(a1 - a2) <= colorTolerance;
+    };
+    
+    // Scanline flood fill algorithm for better performance and completeness
+    const stack: number[] = [];
+    stack.push(x, y);
     
     while (stack.length > 0) {
-      const [currentX, currentY] = stack.pop()!;
-      const key = `${currentX},${currentY}`;
+      const currentY = stack.pop()!;
+      const currentX = stack.pop()!;
       
-      if (visited.has(key)) continue;
       if (currentX < 0 || currentX >= canvas.width || currentY < 0 || currentY >= canvas.height) continue;
       
       const currentIndex = (currentY * canvas.width + currentX) * 4;
@@ -335,24 +344,76 @@ export function PaintCanvas({
       const currentB = data[currentIndex + 2];
       const currentA = data[currentIndex + 3];
       
-      // Check if current pixel matches target color
-      if (currentR !== targetR || currentG !== targetG || currentB !== targetB || currentA !== targetA) {
+      // Skip if this pixel doesn't match the target color
+      if (!colorsMatch(currentR, currentG, currentB, currentA, targetR, targetG, targetB, targetA)) {
         continue;
       }
       
-      visited.add(key);
+      // Find the leftmost and rightmost bounds of this scanline
+      let leftX = currentX;
+      let rightX = currentX;
       
-      // Fill the pixel
-      data[currentIndex] = fillR;
-      data[currentIndex + 1] = fillG;
-      data[currentIndex + 2] = fillB;
-      data[currentIndex + 3] = fillA;
+      // Expand left
+      while (leftX > 0) {
+        const leftIndex = (currentY * canvas.width + (leftX - 1)) * 4;
+        const leftR = data[leftIndex];
+        const leftG = data[leftIndex + 1];
+        const leftB = data[leftIndex + 2];
+        const leftA = data[leftIndex + 3];
+        
+        if (!colorsMatch(leftR, leftG, leftB, leftA, targetR, targetG, targetB, targetA)) break;
+        leftX--;
+      }
       
-      // Add neighboring pixels to stack
-      stack.push([currentX + 1, currentY]);
-      stack.push([currentX - 1, currentY]);
-      stack.push([currentX, currentY + 1]);
-      stack.push([currentX, currentY - 1]);
+      // Expand right
+      while (rightX < canvas.width - 1) {
+        const rightIndex = (currentY * canvas.width + (rightX + 1)) * 4;
+        const rightR = data[rightIndex];
+        const rightG = data[rightIndex + 1];
+        const rightB = data[rightIndex + 2];
+        const rightA = data[rightIndex + 3];
+        
+        if (!colorsMatch(rightR, rightG, rightB, rightA, targetR, targetG, targetB, targetA)) break;
+        rightX++;
+      }
+      
+      // Fill the entire scanline
+      for (let fillX = leftX; fillX <= rightX; fillX++) {
+        const fillIndex = (currentY * canvas.width + fillX) * 4;
+        data[fillIndex] = fillR;
+        data[fillIndex + 1] = fillG;
+        data[fillIndex + 2] = fillB;
+        data[fillIndex + 3] = fillA;
+      }
+      
+      // Add scanlines above and below to the stack
+      for (let fillX = leftX; fillX <= rightX; fillX++) {
+        // Check above
+        if (currentY > 0) {
+          const aboveIndex = ((currentY - 1) * canvas.width + fillX) * 4;
+          const aboveR = data[aboveIndex];
+          const aboveG = data[aboveIndex + 1];
+          const aboveB = data[aboveIndex + 2];
+          const aboveA = data[aboveIndex + 3];
+          
+          if (colorsMatch(aboveR, aboveG, aboveB, aboveA, targetR, targetG, targetB, targetA)) {
+            stack.push(fillX, currentY - 1);
+          }
+        }
+        
+        // Check below
+        if (currentY < canvas.height - 1) {
+          const belowIndex = ((currentY + 1) * canvas.width + fillX) * 4;
+          const belowR = data[belowIndex];
+          const belowG = data[belowIndex + 1];
+          const belowB = data[belowIndex + 2];
+          const belowA = data[belowIndex + 3];
+          
+          if (colorsMatch(belowR, belowG, belowB, belowA, targetR, targetG, targetB, targetA)) {
+            stack.push(fillX, currentY + 1);
+          }
+        }
+      }
     }
     
     // Apply the changes
