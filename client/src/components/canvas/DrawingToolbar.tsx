@@ -4,15 +4,15 @@ import { Slider } from "@/components/ui/slider";
 import { ColorPicker } from "@/components/ui/color-picker";
 import { ToggleGroup, ToggleGroupItem } from "@/components/ui/toggle-group";
 import { AlertDialog, AlertDialogAction, AlertDialogCancel, AlertDialogContent, AlertDialogDescription, AlertDialogFooter, AlertDialogHeader, AlertDialogTitle, AlertDialogTrigger } from "@/components/ui/alert-dialog";
-import { Brush, Eraser, Undo2, Redo2, Trash2, Palette } from "lucide-react";
+import { Brush, Eraser, Undo2, Redo2, Trash2, Palette, PaintBucket } from "lucide-react";
 
 interface DrawingToolbarProps {
   selectedColor: string;
   onColorChange: (color: string) => void;
   brushSize: number;
   onBrushSizeChange: (size: number) => void;
-  drawingMode: 'brush' | 'eraser' | 'rectangle' | 'circle' | 'triangle';
-  onModeChange: (mode: 'brush' | 'eraser' | 'rectangle' | 'circle' | 'triangle') => void;
+  drawingMode: 'brush' | 'eraser' | 'rectangle' | 'circle' | 'triangle' | 'fill';
+  onModeChange: (mode: 'brush' | 'eraser' | 'rectangle' | 'circle' | 'triangle' | 'fill') => void;
   onUndo: () => void;
   onRedo: () => void;
   onClear: () => void;
@@ -68,6 +68,15 @@ export function DrawingToolbar({
               data-testid="button-mobile-eraser"
             >
               <Eraser className="h-4 w-4" />
+            </Button>
+            <Button
+              variant={drawingMode === 'fill' ? 'default' : 'outline'}
+              size="sm"
+              onClick={() => onModeChange('fill')}
+              className="h-8 w-8 p-0"
+              data-testid="button-mobile-fill"
+            >
+              <PaintBucket className="h-4 w-4" />
             </Button>
           </div>
 
@@ -167,8 +176,8 @@ export function DrawingToolbar({
           <ToggleGroup
             type="single"
             value={drawingMode}
-            onValueChange={(value) => value && onModeChange(value as 'brush' | 'eraser' | 'rectangle' | 'circle' | 'triangle')}
-            className="grid grid-cols-2 gap-3"
+            onValueChange={(value) => value && onModeChange(value as 'brush' | 'eraser' | 'rectangle' | 'circle' | 'triangle' | 'fill')}
+            className="grid grid-cols-3 gap-3"
             aria-label="Drawing mode selection"
             data-testid="toggle-group-drawing-mode"
           >
@@ -189,6 +198,15 @@ export function DrawingToolbar({
             >
               <Eraser className="h-4 w-4" aria-hidden="true" />
               <span>Eraser</span>
+            </ToggleGroupItem>
+            <ToggleGroupItem
+              value="fill"
+              className="flex items-center justify-center space-x-2 px-4 py-3 text-sm font-semibold transition-all duration-200 data-[state=on]:bg-primary data-[state=on]:text-primary-foreground hover:bg-slate-100 dark:hover:bg-slate-800 rounded-lg border-2 border-slate-200/80 dark:border-slate-700/80 data-[state=on]:border-primary"
+              aria-label="Select fill tool"
+              data-testid="button-select-fill"
+            >
+              <PaintBucket className="h-4 w-4" aria-hidden="true" />
+              <span>Fill</span>
             </ToggleGroupItem>
           </ToggleGroup>
         </div>

@@ -1,11 +1,11 @@
 import { useEffect, useRef, useState } from 'react';
 import { Button } from "@/components/ui/button";
-import { Square, Circle, Triangle, RectangleHorizontal } from 'lucide-react';
+import { Square, Circle, Triangle, RectangleHorizontal, PaintBucket } from 'lucide-react';
 
 interface PaintCanvasProps {
   selectedColor: string;
   brushSize: number;
-  drawingMode: 'brush' | 'eraser' | 'rectangle' | 'circle' | 'triangle';
+  drawingMode: 'brush' | 'eraser' | 'rectangle' | 'circle' | 'triangle' | 'fill';
   canvasFormat: 'square' | 'rectangle';
   initialImageData?: string;
   onSave: (imageData: string) => void;
@@ -14,7 +14,7 @@ interface PaintCanvasProps {
   shouldRedo: boolean;
   shouldClear: boolean;
   onActionComplete: () => void;
-  onModeChange: (mode: 'brush' | 'eraser' | 'rectangle' | 'circle' | 'triangle') => void;
+  onModeChange: (mode: 'brush' | 'eraser' | 'rectangle' | 'circle' | 'triangle' | 'fill') => void;
 }
 
 export function PaintCanvas({
@@ -124,6 +124,32 @@ export function PaintCanvas({
     }, 0);
   }, [canvasFormat, initialImageData]);
 
+  // Add keyboard event listeners for Ctrl+Z undo
+  useEffect(() => {
+    const handleKeyDown = (e: KeyboardEvent) => {
+      if ((e.ctrlKey || e.metaKey) && e.key === 'z' && !e.shiftKey) {
+        e.preventDefault();
+        // Trigger undo by calling the undo function
+        if (canvas && context && historyIndex > 0) {
+          const newIndex = historyIndex - 1;
+          const imageData = history[newIndex];
+          
+          const img = new Image();
+          img.onload = () => {
+            context.clearRect(0, 0, canvas.width, canvas.height);
+            context.drawImage(img, 0, 0);
+            setHistoryIndex(newIndex);
+            onUndoRedoChange(newIndex > 0, newIndex < history.length - 1);
+          };
+          img.src = imageData;
+        }
+      }
+    };
+
+    window.addEventListener('keydown', handleKeyDown);
+    return () => window.removeEventListener('keydown', handleKeyDown);
+  }, [canvas, context, history, historyIndex, onUndoRedoChange]);
+
   // Update brush properties for smooth drawing
   useEffect(() => {
     if (!context) return;
@@ -147,6 +173,12 @@ export function PaintCanvas({
       context.lineWidth = Math.max(brushSize / 3, 2);
       context.lineCap = 'round';
       context.lineJoin = 'round';
+    }
+    
+    // Settings for fill tool
+    if (drawingMode === 'fill') {
+      context.globalCompositeOperation = 'source-over';
+      context.fillStyle = selectedColor;
     }
   }, [context, selectedColor, brushSize, drawingMode]);
 
@@ -250,6 +282,83 @@ export function PaintCanvas({
     };
   };
 
+  // Flood fill algorithm for paint bucket tool
+  const floodFill = (startX: number, startY: number, fillColor: string) => {
+    if (!context || !canvas) return;
+    
+    const x = Math.floor(startX);
+    const y = Math.floor(startY);
+    
+    if (x < 0 || x >= canvas.width || y < 0 || y >= canvas.height) return;
+    
+    const imageData = context.getImageData(0, 0, canvas.width, canvas.height);
+    const data = imageData.data;
+    
+    // Convert fill color to RGB
+    const tempCanvas = document.createElement('canvas');
+    tempCanvas.width = tempCanvas.height = 1;
+    const tempCtx = tempCanvas.getContext('2d')!;
+    tempCtx.fillStyle = fillColor;
+    tempCtx.fillRect(0, 0, 1, 1);
+    const tempData = tempCtx.getImageData(0, 0, 1, 1).data;
+    const fillR = tempData[0];
+    const fillG = tempData[1];
+    const fillB = tempData[2];
+    const fillA = tempData[3];
+    
+    // Get the target color at the clicked point
+    const targetIndex = (y * canvas.width + x) * 4;
+    const targetR = data[targetIndex];
+    const targetG = data[targetIndex + 1];
+    const targetB = data[targetIndex + 2];
+    const targetA = data[targetIndex + 3];
+    
+    // If the target color is the same as fill color, don't fill
+    if (targetR === fillR && targetG === fillG && targetB === fillB && targetA === fillA) {
+      return;
+    }
+    
+    // Flood fill using stack-based approach
+    const stack = [[x, y]];
+    const visited = new Set<string>();
+    
+    while (stack.length > 0) {
+      const [currentX, currentY] = stack.pop()!;
+      const key = `${currentX},${currentY}`;
+      
+      if (visited.has(key)) continue;
+      if (currentX < 0 || currentX >= canvas.width || currentY < 0 || currentY >= canvas.height) continue;
+      
+      const currentIndex = (currentY * canvas.width + currentX) * 4;
+      const currentR = data[currentIndex];
+      const currentG = data[currentIndex + 1];
+      const currentB = data[currentIndex + 2];
+      const currentA = data[currentIndex + 3];
+      
+      // Check if current pixel matches target color
+      if (currentR !== targetR || currentG !== targetG || currentB !== targetB || currentA !== targetA) {
+        continue;
+      }
+      
+      visited.add(key);
+      
+      // Fill the pixel
+      data[currentIndex] = fillR;
+      data[currentIndex + 1] = fillG;
+      data[currentIndex + 2] = fillB;
+      data[currentIndex + 3] = fillA;
+      
+      // Add neighboring pixels to stack
+      stack.push([currentX + 1, currentY]);
+      stack.push([currentX - 1, currentY]);
+      stack.push([currentX, currentY + 1]);
+      stack.push([currentX, currentY - 1]);
+    }
+    
+    // Apply the changes
+    context.putImageData(imageData, 0, 0);
+  };
+
   const drawShape = (startX: number, startY: number, endX: number, endY: number) => {
     if (!context) return;
     
@@ -302,6 +411,10 @@ export function PaintCanvas({
       // For shapes, save the starting point and current canvas state
       setStartPoint({ x, y });
       setCurrentImageData(canvas.toDataURL());
+    } else if (drawingMode === 'fill') {
+      // For fill tool, perform flood fill immediately
+      floodFill(x, y, selectedColor);
+      saveState();
     } else {
       // For brush/eraser, start drawing immediately with precise positioning
       setLastPoint({ x, y });
@@ -485,6 +598,18 @@ export function PaintCanvas({
             title="Triangle"
           >
             <Triangle className="w-3 h-3 sm:w-4 sm:h-4" />
+          </button>
+          <button
+            onClick={() => onModeChange('fill')}
+            className={`p-1.5 sm:p-2 rounded-lg transition-all duration-200 flex items-center justify-center touch-manipulation ${
+              drawingMode === 'fill'
+                ? 'bg-primary text-primary-foreground shadow-sm'
+                : 'text-muted-foreground hover:text-foreground hover:bg-accent'
+            }`}
+            data-testid="button-tool-fill"
+            title="Fill (Paint Bucket)"
+          >
+            <PaintBucket className="w-3 h-3 sm:w-4 sm:h-4" />
           </button>
         </div>
         
