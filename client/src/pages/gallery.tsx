@@ -286,9 +286,9 @@ export default function GalleryPage() {
 
   // Set page title for SEO
   useEffect(() => {
-    document.title = "NFT Gallery | PaintNFT Studio";
+    document.title = "NFT Gallery | Swirl";
     return () => {
-      document.title = "PaintNFT Studio"; // Reset on unmount
+      document.title = "Swirl"; // Reset on unmount
     };
   }, []);
 
