@@ -122,7 +122,7 @@ export function PaintCanvas({
     setTimeout(() => {
       onUndoRedoChange(false, false);
     }, 0);
-  }, [canvasFormat]);
+  }, [canvasFormat, initialImageData]);
 
   // Update brush properties for smooth drawing
   useEffect(() => {
