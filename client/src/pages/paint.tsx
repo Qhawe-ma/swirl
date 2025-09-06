@@ -5,7 +5,6 @@ import { DrawingToolbar } from '@/components/canvas/DrawingToolbar';
 import { ThreeStepMinting } from '@/components/nft/ThreeStepMinting';
 import { MintSuccess } from '@/components/nft/MintSuccess';
 import { MintsHistory } from '@/components/wallet/MintsHistory';
-import { CaveArtGallery } from '@/components/gallery/CaveArtGallery';
 import { Card } from '@/components/ui/card';
 import { Button } from '@/components/ui/button';
 import { useWallet } from '@solana/wallet-adapter-react';
@@ -71,10 +70,6 @@ export default function PaintPage() {
     setAppState('drawing');
   };
 
-  const handleSelectCaveArt = (imageData: string) => {
-    setSavedImageData(imageData);
-    // The canvas will automatically load this image via the initialImageData prop
-  };
 
   return (
     <div className="h-screen bg-background font-sans flex flex-col">
@@ -129,12 +124,9 @@ export default function PaintPage() {
             
             {/* Right: Actions */}
             <div className="flex items-center space-x-4">
-              {/* Cave Art Gallery and Canvas Format Selection */}
+              {/* Canvas Format Selection */}
               {appState === 'drawing' && (
                 <div className="flex items-center space-x-3">
-                  {/* Cave Art Gallery */}
-                  <CaveArtGallery onSelectArt={handleSelectCaveArt} />
-                  
                   {/* Canvas Format Selection */}
                   <div className="hidden sm:flex items-center space-x-1 px-2 py-1.5 bg-muted/50 border border-border/40 rounded-lg">
                     <span className="text-xs font-medium text-muted-foreground mr-2">Format:</span>
