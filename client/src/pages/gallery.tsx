@@ -127,15 +127,6 @@ function NFTDetailModal({ mint }: { mint: MintRecord }) {
               </a>
             </Button>
             
-            <Button 
-              variant="outline"
-              className="w-full"
-              onClick={() => copyToClipboard(mint.metadataUri)}
-              data-testid={`modal-copy-metadata-${mint.id}`}
-            >
-              <Copy className="h-4 w-4 mr-2" />
-              Copy Metadata URI
-            </Button>
           </div>
         </div>
       </div>
