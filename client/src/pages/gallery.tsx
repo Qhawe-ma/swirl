@@ -36,7 +36,7 @@ function NFTDetailModal({ mint }: { mint: MintRecord }) {
   };
 
   return (
-    <DialogContent className="max-w-4xl max-h-[90vh] overflow-y-auto bg-background/95 backdrop-blur-md border-2">
+    <DialogContent className="max-w-4xl max-h-[90vh] overflow-y-auto bg-white dark:bg-gray-900 border-2 shadow-2xl">
       <DialogHeader>
         <DialogTitle className="text-xl font-bold">{mint.name}</DialogTitle>
       </DialogHeader>
