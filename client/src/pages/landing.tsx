@@ -10,9 +10,9 @@ export default function LandingPage() {
       {/* Clean Header with Just Logo */}
       <header className="bg-background flex-shrink-0 relative">
         <div className="relative max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-          <div className="flex flex-col justify-center items-center py-8 sm:py-12 lg:py-16">
+          <div className="flex justify-center items-center py-8 sm:py-12 lg:py-16">
             {/* Centered Brand Section */}
-            <div className="flex items-center gap-4 sm:gap-6 mb-6">
+            <div className="flex items-center gap-4 sm:gap-6">
               <img 
                 src="https://res.cloudinary.com/dl8f1ztsy/image/upload/v1757143508/Swirl_Logo_wbpo9t.png" 
                 alt="Logo" 
@@ -22,12 +22,6 @@ export default function LandingPage() {
               <span className="text-4xl sm:text-5xl lg:text-6xl xl:text-7xl font-bold text-foreground" data-testid="text-app-title">
                 Swirl
               </span>
-            </div>
-            
-            {/* ART TO NFT Badge */}
-            <div className="inline-flex items-center space-x-2 px-4 py-2 bg-primary/10 text-primary text-sm font-semibold rounded-full border border-primary/20" data-testid="art-to-nft-badge">
-              <Sparkles className="w-4 h-4" />
-              <span>ART TO NFT</span>
             </div>
           </div>
         </div>
