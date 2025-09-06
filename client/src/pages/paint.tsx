@@ -84,7 +84,7 @@ export default function PaintPage() {
             <div className="flex items-center space-x-6">
               {/* Professional Logo */}
               <div className="relative group cursor-pointer" data-testid="app-logo">
-                <div className="flex items-center space-x-3">
+                <div className="flex items-center space-x-1">
                   <div className="relative">
                     <img 
                       src="https://res.cloudinary.com/dl8f1ztsy/image/upload/v1757143508/Swirl_Logo_wbpo9t.png" 
@@ -95,14 +95,12 @@ export default function PaintPage() {
                   </div>
                   
                   {/* Brand Name */}
-                  <div className="hidden sm:block">
-                    <img 
-                      src="https://res.cloudinary.com/dl8f1ztsy/image/upload/v1757143508/Swirl_Name_ofmngp.png" 
-                      alt="App Logo" 
-                      className="h-16 w-auto"
-                      data-testid="img-app-logo"
-                    />
-                  </div>
+                  <img 
+                    src="https://res.cloudinary.com/dl8f1ztsy/image/upload/v1757143508/Swirl_Name_ofmngp.png" 
+                    alt="App Logo" 
+                    className="h-16 w-auto hidden sm:block"
+                    data-testid="img-app-logo"
+                  />
                 </div>
               </div>
               
