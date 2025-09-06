@@ -7,58 +7,21 @@ import { Palette, Sparkles, Zap, Users, ArrowRight, Play, Check } from 'lucide-r
 export default function LandingPage() {
   return (
     <div className="min-h-screen bg-background font-sans">
-      {/* Professional Header */}
-      <header className="bg-background/95 backdrop-blur-2xl border-b border-border/30 flex-shrink-0 relative shadow-sm">
-        <div className="absolute inset-0 bg-gradient-to-r from-primary/3 via-transparent to-primary/3 pointer-events-none"></div>
-        
+      {/* Clean Header with Just Logo */}
+      <header className="bg-background flex-shrink-0 relative">
         <div className="relative max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-          <div className="flex justify-between items-center h-16 lg:h-18">
-            {/* Left: Brand Section */}
-            <div className="flex items-center space-x-2 sm:space-x-6">
-              <div className="relative group cursor-pointer" data-testid="app-logo">
-                <div className="flex items-center gap-2">
-                  <img 
-                    src="https://res.cloudinary.com/dl8f1ztsy/image/upload/v1757143508/Swirl_Logo_wbpo9t.png" 
-                    alt="Logo" 
-                    className="w-8 h-8 sm:w-12 sm:h-12"
-                    data-testid="img-app-icon"
-                  />
-                  <span className="text-xl sm:text-3xl font-bold text-foreground -ml-1" data-testid="text-app-title">
-                    Swirl
-                  </span>
-                </div>
-              </div>
-              
-              {/* Navigation Items - Desktop */}
-              <nav className="hidden lg:flex items-center space-x-1">
-                <Link href="/create" className="px-3 py-2 text-sm font-medium text-muted-foreground hover:text-foreground hover:bg-accent rounded-lg transition-colors cursor-pointer" data-testid="link-create">
-                  Create
-                </Link>
-                <Link href="/gallery" className="px-3 py-2 text-sm font-medium text-muted-foreground hover:text-foreground hover:bg-accent rounded-lg transition-colors cursor-pointer" data-testid="link-gallery">
-                  Gallery
-                </Link>
-                <div className="relative group">
-                  <div className="px-3 py-2 text-sm font-medium text-muted-foreground hover:text-foreground hover:bg-accent rounded-lg transition-colors cursor-pointer" data-testid="link-create-with-friends">
-                    <span className="group-hover:hidden">Create With Friends</span>
-                    <span className="hidden group-hover:inline">Coming Soon</span>
-                  </div>
-                </div>
-              </nav>
-
-              {/* Mobile Navigation */}
-              <nav className="flex lg:hidden items-center space-x-1 ml-2">
-                <Link href="/create" className="px-2 py-1 text-xs font-medium text-muted-foreground hover:text-foreground hover:bg-accent rounded-md transition-colors cursor-pointer" data-testid="link-create-mobile">
-                  Create
-                </Link>
-                <Link href="/gallery" className="px-2 py-1 text-xs font-medium text-muted-foreground hover:text-foreground hover:bg-accent rounded-md transition-colors cursor-pointer" data-testid="link-gallery-mobile">
-                  Gallery
-                </Link>
-              </nav>
-            </div>
-            
-            {/* Right: Wallet Connection */}
-            <div className="flex items-center space-x-2 sm:space-x-4">
-              <WalletConnection />
+          <div className="flex justify-center items-center py-8 sm:py-12 lg:py-16">
+            {/* Centered Brand Section */}
+            <div className="flex items-center gap-4 sm:gap-6">
+              <img 
+                src="https://res.cloudinary.com/dl8f1ztsy/image/upload/v1757143508/Swirl_Logo_wbpo9t.png" 
+                alt="Logo" 
+                className="w-16 h-16 sm:w-20 sm:h-20 lg:w-24 lg:h-24"
+                data-testid="img-app-icon"
+              />
+              <span className="text-4xl sm:text-5xl lg:text-6xl xl:text-7xl font-bold text-foreground" data-testid="text-app-title">
+                Swirl
+              </span>
             </div>
           </div>
         </div>
