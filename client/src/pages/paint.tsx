@@ -98,7 +98,7 @@ export default function PaintPage() {
                       <img 
                         src="https://res.cloudinary.com/dl8f1ztsy/image/upload/v1757143508/Swirl_Name_ofmngp.png" 
                         alt="App Logo" 
-                        className="h-6 w-auto"
+                        className="h-10 w-auto"
                         data-testid="img-app-logo"
                       />
                       <span className="px-2 py-0.5 text-xs font-medium bg-primary/10 text-primary rounded-full tracking-wide">
