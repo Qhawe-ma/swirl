@@ -36,7 +36,7 @@ function NFTDetailModal({ mint }: { mint: MintRecord }) {
   };
 
   return (
-    <DialogContent className="max-w-4xl max-h-[90vh] overflow-y-auto">
+    <DialogContent className="max-w-4xl max-h-[90vh] overflow-y-auto bg-background/95 backdrop-blur-md border-2">
       <DialogHeader>
         <DialogTitle className="text-xl font-bold">{mint.name}</DialogTitle>
       </DialogHeader>
@@ -164,17 +164,8 @@ function MintGrid({ mints, loading }: { mints: MintRecord[], loading: boolean })
 
   if (loading) {
     return (
-      <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-6 xl:grid-cols-8 gap-3">
-        {Array.from({ length: 16 }).map((_, i) => (
-          <div key={i} className="bg-card rounded-lg border animate-pulse">
-            <div className="aspect-square bg-muted rounded-t-lg"></div>
-            <div className="p-2 space-y-1">
-              <div className="h-3 bg-muted rounded"></div>
-              <div className="h-2 bg-muted rounded w-3/4"></div>
-              <div className="h-2 bg-muted rounded w-1/2"></div>
-            </div>
-          </div>
-        ))}
+      <div className="text-center py-8">
+        <div className="text-muted-foreground">Loading NFTs...</div>
       </div>
     );
   }
