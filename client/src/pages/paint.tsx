@@ -107,9 +107,6 @@ export default function PaintPage() {
                 <Link href="/gallery" className="px-3 py-2 text-sm font-medium text-muted-foreground hover:text-foreground hover:bg-accent rounded-lg transition-colors cursor-pointer" data-testid="link-gallery">
                   Gallery
                 </Link>
-                <div className="px-3 py-2 text-sm font-medium text-muted-foreground hover:text-foreground hover:bg-accent rounded-lg transition-colors cursor-not-allowed opacity-60">
-                  Analytics
-                </div>
               </nav>
             </div>
             
