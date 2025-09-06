@@ -84,21 +84,18 @@ export default function PaintPage() {
             <div className="flex items-center space-x-6">
               {/* Professional Logo */}
               <div className="relative group cursor-pointer" data-testid="app-logo">
-                <div className="flex items-center space-x-1">
+                <div className="flex items-center gap-2">
                   <img 
                     src="https://res.cloudinary.com/dl8f1ztsy/image/upload/v1757143508/Swirl_Logo_wbpo9t.png" 
                     alt="Logo" 
-                    className="w-16 h-16"
+                    className="w-8 h-8"
                     data-testid="img-app-icon"
                   />
                   
                   {/* Brand Name */}
-                  <img 
-                    src="https://res.cloudinary.com/dl8f1ztsy/image/upload/v1757143508/Swirl_Name_ofmngp.png" 
-                    alt="App Logo" 
-                    className="h-16 w-auto hidden sm:block"
-                    data-testid="img-app-logo"
-                  />
+                  <span className="text-xl font-bold text-foreground hidden sm:block" data-testid="text-app-title">
+                    Swirl
+                  </span>
                 </div>
               </div>
               
