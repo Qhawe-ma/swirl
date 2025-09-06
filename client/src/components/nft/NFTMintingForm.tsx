@@ -4,7 +4,6 @@ import { WalletMultiButton } from '@solana/wallet-adapter-react-ui';
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Textarea } from "@/components/ui/textarea";
-import { Card } from "@/components/ui/card";
 import { Alert, AlertDescription } from "@/components/ui/alert";
 import { useToast } from "@/hooks/use-toast";
 import { uploadToIPFS } from "@/lib/ipfs";
@@ -180,10 +179,10 @@ export function NFTMintingForm({ imageData, onMintSuccess, onMintStart, onBack }
   };
 
   return (
-    <div className="fixed inset-0 bg-black/50 backdrop-blur-sm z-50 flex items-center justify-center p-4">
-      <Card className="bg-white dark:bg-gray-900 w-full max-w-4xl h-auto max-h-[95vh] overflow-hidden shadow-xl rounded-2xl border-0" data-testid="form-nft-minting">
+    <div className="fixed inset-0 bg-black/80 z-50 flex items-center justify-center p-4">
+      <div className="bg-white/98 dark:bg-slate-900/98 backdrop-blur-2xl border border-slate-200/60 dark:border-slate-700/60 w-full max-w-4xl h-auto max-h-[95vh] overflow-hidden rounded-2xl shadow-2xl ring-1 ring-slate-900/5 dark:ring-white/10" data-testid="form-nft-minting">
         {/* Header with Back Button */}
-        <div className="border-b border-gray-200 dark:border-gray-700 px-6 py-4">
+        <div className="bg-gradient-to-r from-slate-50/95 via-white/98 to-slate-50/95 dark:from-slate-800/95 dark:via-slate-900/98 dark:to-slate-800/95 border-b border-slate-200/50 dark:border-slate-700/50 px-6 py-4 backdrop-blur-xl">
           <div className="flex items-center space-x-4">
             {onBack && (
               <button 
@@ -195,10 +194,10 @@ export function NFTMintingForm({ imageData, onMintSuccess, onMintStart, onBack }
               </button>
             )}
             <div>
-              <h2 className="text-xl font-semibold text-gray-900 dark:text-white">
+              <h2 className="text-xl font-bold text-slate-900 dark:text-slate-100 tracking-tight">
                 Mint Your Artwork
               </h2>
-              <p className="text-sm text-gray-500 dark:text-gray-400">
+              <p className="text-sm text-slate-600 dark:text-slate-400">
                 Create your NFT on Solana blockchain
               </p>
             </div>
@@ -209,8 +208,8 @@ export function NFTMintingForm({ imageData, onMintSuccess, onMintStart, onBack }
           <div className="grid md:grid-cols-2 gap-8">
             {/* Artwork Preview - Left Side */}
             <div className="space-y-3">
-              <h3 className="text-sm font-medium text-gray-900 dark:text-white">Preview</h3>
-              <div className="relative bg-gray-50 dark:bg-gray-800 border border-gray-200 dark:border-gray-700 rounded-xl p-4">
+              <h3 className="text-sm font-bold text-slate-900 dark:text-slate-100">Preview</h3>
+              <div className="relative bg-slate-50 dark:bg-slate-800 border border-slate-200 dark:border-slate-700 rounded-xl p-4">
                 <img 
                   src={imageData} 
                   alt="User artwork preview" 
@@ -225,8 +224,8 @@ export function NFTMintingForm({ imageData, onMintSuccess, onMintStart, onBack }
               <div className="space-y-6">
                 <div className="space-y-2">
                   <div className="flex items-center justify-between">
-                    <label htmlFor="nft-name" className="text-sm font-medium text-gray-900 dark:text-white">NFT Name *</label>
-                    <div className="text-xs text-gray-500">{nftName.length}/50</div>
+                    <label htmlFor="nft-name" className="text-sm font-bold text-slate-900 dark:text-slate-100">NFT Name *</label>
+                    <div className="text-xs text-slate-500">{nftName.length}/50</div>
                   </div>
                   <Input
                     id="nft-name"
@@ -242,8 +241,8 @@ export function NFTMintingForm({ imageData, onMintSuccess, onMintStart, onBack }
                 
                 <div className="space-y-2">
                   <div className="flex items-center justify-between">
-                    <label htmlFor="nft-description" className="text-sm font-medium text-gray-900 dark:text-white">Description</label>
-                    <div className="text-xs text-gray-500">{nftDescription.length}/200</div>
+                    <label htmlFor="nft-description" className="text-sm font-bold text-slate-900 dark:text-slate-100">Description</label>
+                    <div className="text-xs text-slate-500">{nftDescription.length}/200</div>
                   </div>
                   <Textarea
                     id="nft-description"
@@ -277,9 +276,9 @@ export function NFTMintingForm({ imageData, onMintSuccess, onMintStart, onBack }
         </div>
         
         {/* Footer */}
-        <div className="border-t border-gray-200 dark:border-gray-700 px-6 py-4">
+        <div className="border-t border-slate-200/50 dark:border-slate-700/50 px-6 py-4 bg-gradient-to-r from-slate-50/30 via-white/50 to-slate-50/30 dark:from-slate-800/30 dark:via-slate-900/50 dark:to-slate-800/30 backdrop-blur-sm">
           <div className="flex items-center justify-between">
-            <div className="text-sm text-gray-600 dark:text-gray-400">
+            <div className="text-sm text-slate-600 dark:text-slate-400">
               Secure & permanent on Solana blockchain
             </div>
             
@@ -290,8 +289,8 @@ export function NFTMintingForm({ imageData, onMintSuccess, onMintStart, onBack }
               />
             ) : (
               <Button
+                variant="default"
                 size="lg"
-                className="bg-blue-600 hover:bg-blue-700 text-white px-8 py-3 font-medium text-sm disabled:opacity-50 disabled:cursor-not-allowed rounded-lg transition-colors"
                 onClick={handleMintNFT}
                 disabled={isLoading || !nftName.trim()}
                 data-testid="button-mint-nft"
@@ -308,7 +307,7 @@ export function NFTMintingForm({ imageData, onMintSuccess, onMintStart, onBack }
             )}
           </div>
         </div>
-      </Card>
+      </div>
     </div>
   );
 }
