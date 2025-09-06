@@ -10,7 +10,7 @@ export default function LandingPage() {
       {/* Clean Header with Just Logo */}
       <header className="bg-background flex-shrink-0 relative">
         <div className="relative max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-          <div className="flex justify-center items-center py-8 sm:py-12 lg:py-16">
+          <div className="flex justify-center items-center py-4 sm:py-6 lg:py-8">
             {/* Centered Brand Section */}
             <div className="flex items-center gap-4 sm:gap-6">
               <img 
