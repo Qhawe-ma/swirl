@@ -56,17 +56,22 @@ export default function LandingPage() {
               </p>
               
               {/* CTA Buttons */}
-              <div className="flex flex-col sm:flex-row items-center justify-center gap-4 mb-12">
+              <div className="flex flex-col sm:flex-row items-center justify-center gap-6 mb-12">
                 <Link href="/create">
                   <Button 
                     size="lg" 
-                    className="group w-full sm:w-auto px-10 py-5 text-lg font-bold bg-gradient-to-r from-primary via-primary to-primary/90 hover:from-primary/90 hover:via-primary hover:to-primary text-primary-foreground shadow-2xl hover:shadow-3xl transition-all duration-500 ease-out motion-safe:hover:scale-[1.02] motion-safe:hover:-translate-y-1 rounded-2xl border-0 relative overflow-hidden"
+                    className="group w-full sm:w-auto px-12 py-6 text-lg font-bold bg-gradient-to-r from-primary via-primary to-primary/90 hover:from-primary/95 hover:via-primary/95 hover:to-primary text-primary-foreground shadow-2xl hover:shadow-3xl transition-all duration-500 ease-out motion-safe:hover:scale-[1.03] motion-safe:hover:-translate-y-2 rounded-2xl border-0 relative overflow-hidden active:scale-[0.98] active:translate-y-0"
                     data-testid="button-create-now"
                   >
-                    <div className="absolute inset-0 bg-gradient-to-r from-white/0 via-white/20 to-white/0 translate-x-[-100%] group-hover:translate-x-[100%] transition-transform duration-700 ease-out"></div>
-                    <span className="relative z-10 flex items-center">
+                    {/* Shimmer effect */}
+                    <div className="absolute inset-0 bg-gradient-to-r from-transparent via-white/30 to-transparent translate-x-[-100%] group-hover:translate-x-[100%] transition-transform duration-700 ease-out"></div>
+                    
+                    {/* Click ripple effect */}
+                    <div className="absolute inset-0 bg-black/20 rounded-full scale-0 group-active:scale-100 transition-transform duration-300 ease-out origin-center"></div>
+                    
+                    <span className="relative z-10 flex items-center font-black tracking-wide">
                       CREATE NOW
-                      <ArrowRight className="w-5 h-5 ml-3 transition-transform duration-300 group-hover:translate-x-1" />
+                      <ArrowRight className="w-6 h-6 ml-4 transition-all duration-300 group-hover:translate-x-2 group-hover:scale-110" />
                     </span>
                   </Button>
                 </Link>
@@ -74,10 +79,18 @@ export default function LandingPage() {
                   <Button 
                     variant="outline" 
                     size="lg" 
-                    className="w-full sm:w-auto px-8 py-4 text-lg font-semibold border-2 border-border hover:bg-accent hover:border-primary/30 transition-all duration-300 rounded-xl"
+                    className="group w-full sm:w-auto px-10 py-6 text-lg font-bold border-2 border-foreground/20 hover:border-primary/50 bg-background/80 backdrop-blur-sm hover:bg-primary/5 shadow-lg hover:shadow-xl transition-all duration-400 ease-out motion-safe:hover:scale-[1.02] motion-safe:hover:-translate-y-1 rounded-2xl relative overflow-hidden active:scale-[0.98] active:translate-y-0"
                     data-testid="button-view-gallery"
                   >
-                    View Gallery
+                    {/* Subtle shimmer */}
+                    <div className="absolute inset-0 bg-gradient-to-r from-transparent via-primary/10 to-transparent translate-x-[-100%] group-hover:translate-x-[100%] transition-transform duration-600 ease-out"></div>
+                    
+                    {/* Click effect */}
+                    <div className="absolute inset-0 bg-foreground/10 rounded-full scale-0 group-active:scale-100 transition-transform duration-200 ease-out origin-center"></div>
+                    
+                    <span className="relative z-10 font-black tracking-wide text-foreground group-hover:text-primary transition-colors duration-300">
+                      View Gallery
+                    </span>
                   </Button>
                 </Link>
               </div>
