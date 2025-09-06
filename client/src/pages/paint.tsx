@@ -88,12 +88,12 @@ export default function PaintPage() {
                   <img 
                     src="https://res.cloudinary.com/dl8f1ztsy/image/upload/v1757143508/Swirl_Logo_wbpo9t.png" 
                     alt="Logo" 
-                    className="w-8 h-8"
+                    className="w-12 h-12"
                     data-testid="img-app-icon"
                   />
                   
                   {/* Brand Name */}
-                  <span className="text-xl font-bold text-foreground hidden sm:block" data-testid="text-app-title">
+                  <span className="text-2xl font-bold text-foreground hidden sm:block" data-testid="text-app-title">
                     Swirl
                   </span>
                 </div>
