@@ -44,7 +44,7 @@ export function DrawingToolbar({
   const [showColorPicker, setShowColorPicker] = useState(false);
 
   return (
-    <div className="bg-white/98 dark:bg-slate-900/98 backdrop-blur-2xl border border-slate-200/60 dark:border-slate-700/60 h-auto max-h-[calc(100vh-10rem)] overflow-hidden rounded-2xl shadow-2xl ring-1 ring-slate-900/5 dark:ring-white/10" data-testid="toolbar-drawing-tools">
+    <div className="bg-white/98 dark:bg-slate-900/98 backdrop-blur-2xl border border-slate-200/60 dark:border-slate-700/60 h-auto max-h-[calc(100vh-6rem)] rounded-2xl shadow-2xl ring-1 ring-slate-900/5 dark:ring-white/10" data-testid="toolbar-drawing-tools">
       {/* Compact Header */}
       <div className="bg-gradient-to-r from-slate-50/95 via-white/98 to-slate-50/95 dark:from-slate-800/95 dark:via-slate-900/98 dark:to-slate-800/95 border-b border-slate-200/50 dark:border-slate-700/50 px-4 py-3 backdrop-blur-xl">
         <div className="flex items-center justify-between">
