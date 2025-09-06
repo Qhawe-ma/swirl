@@ -85,14 +85,12 @@ export default function PaintPage() {
               {/* Professional Logo */}
               <div className="relative group cursor-pointer" data-testid="app-logo">
                 <div className="flex items-center space-x-1">
-                  <div className="relative">
-                    <img 
-                      src="https://res.cloudinary.com/dl8f1ztsy/image/upload/v1757143508/Swirl_Logo_wbpo9t.png" 
-                      alt="Logo" 
-                      className="w-14 h-14 rounded-xl shadow-lg group-hover:shadow-primary/25 transition-all duration-300 motion-safe:group-hover:scale-105"
-                      data-testid="img-app-icon"
-                    />
-                  </div>
+                  <img 
+                    src="https://res.cloudinary.com/dl8f1ztsy/image/upload/v1757143508/Swirl_Logo_wbpo9t.png" 
+                    alt="Logo" 
+                    className="w-16 h-16"
+                    data-testid="img-app-icon"
+                  />
                   
                   {/* Brand Name */}
                   <img 
