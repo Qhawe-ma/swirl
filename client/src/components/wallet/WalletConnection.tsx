@@ -2,7 +2,6 @@ import { useWallet, useConnection } from '@solana/wallet-adapter-react';
 import { WalletMultiButton } from '@solana/wallet-adapter-react-ui';
 import { LAMPORTS_PER_SOL } from '@solana/web3.js';
 import { useEffect, useState } from 'react';
-import { MintsHistoryModal } from './MintsHistoryModal';
 
 export function WalletConnection() {
   const { publicKey, connected } = useWallet();
@@ -28,11 +27,6 @@ export function WalletConnection() {
 
   return (
     <div className="flex items-center space-x-3">
-      {/* View Mints Button - Professional Style */}
-      {connected && (
-        <MintsHistoryModal />
-      )}
-      
       {!connected ? (
         <WalletMultiButton 
           className="!bg-gradient-to-r !from-primary !to-primary/90 hover:!from-primary/90 hover:!to-primary/80 !text-primary-foreground !px-4 !py-2.5 !rounded-lg !flex !items-center !space-x-2 motion-safe:!transition-all motion-safe:!duration-200 motion-reduce:!transition-none !font-semibold !text-sm !shadow-md hover:!shadow-lg motion-safe:hover:!scale-[1.02] motion-reduce:hover:!scale-100 !border-0 focus-visible:!ring-2 focus-visible:!ring-ring focus-visible:!ring-offset-2 !tracking-wide"
