@@ -109,10 +109,8 @@ export default function PaintPage() {
                 </Link>
                 <div className="relative group">
                   <div className="px-3 py-2 text-sm font-medium text-muted-foreground hover:text-foreground hover:bg-accent rounded-lg transition-colors cursor-pointer" data-testid="link-create-with-friends">
-                    Create With Friends
-                  </div>
-                  <div className="absolute bottom-full left-1/2 transform -translate-x-1/2 mb-2 px-3 py-1 bg-gray-900 dark:bg-gray-800 text-white text-xs rounded-lg shadow-lg opacity-0 group-hover:opacity-100 transition-opacity duration-200 pointer-events-none whitespace-nowrap z-[9999]">
-                    Coming Soon
+                    <span className="group-hover:hidden">Create With Friends</span>
+                    <span className="hidden group-hover:inline">Coming Soon</span>
                   </div>
                 </div>
               </nav>
