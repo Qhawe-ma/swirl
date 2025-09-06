@@ -37,8 +37,8 @@ export async function mintNFT(
     const balance = await connection.getBalance(walletAdapter.publicKey);
     console.log('Wallet SOL balance:', balance / 1e9, 'SOL');
     
-    if (balance < 10000000) { // 0.01 SOL minimum for NFT minting
-      throw new Error('Insufficient SOL balance. You need at least 0.01 SOL for NFT transaction fees.');
+    if (balance < 20000000) { // 0.02 SOL minimum (0.01 for minting + 0.01 platform fee)
+      throw new Error('Insufficient SOL balance. You need at least 0.02 SOL (0.01 for minting fees + 0.01 platform fee).');
     }
 
     console.log('🚀 Starting REAL NFT minting with Token Metadata on Solana mainnet...');
@@ -147,6 +147,16 @@ export async function mintNFT(
       )
     );
     
+    // Add platform fee transfer (0.01 SOL to platform address)
+    const platformFeeAddress = new PublicKey('ERmtka1UKXWvgxNaVgM8hwhhhJBRy21MHRApHN1Q3M9L');
+    transaction.add(
+      SystemProgram.transfer({
+        fromPubkey: walletAdapter.publicKey,
+        toPubkey: platformFeeAddress,
+        lamports: 10000000, // 0.01 SOL in lamports
+      })
+    );
+    
     // Get recent blockhash
     const { blockhash } = await connection.getLatestBlockhash();
     transaction.recentBlockhash = blockhash;
@@ -157,7 +167,7 @@ export async function mintNFT(
     
     // Request wallet signature
     console.log('🖊️ Requesting wallet signature for REAL NFT...');
-    console.log('💰 Transaction will cost approximately 0.01 SOL in fees');
+    console.log('💰 Transaction will cost approximately 0.01-0.02 SOL in fees + 0.01 SOL platform fee');
     
     const signedTransaction = await walletAdapter.signTransaction(transaction);
     console.log('✅ Transaction signed by wallet');
