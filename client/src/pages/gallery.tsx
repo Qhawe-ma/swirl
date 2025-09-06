@@ -4,7 +4,8 @@ import { getAllMints, getUserMints, MintRecord } from '@/lib/firebase';
 import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
 import { Badge } from '@/components/ui/badge';
 import { Button } from '@/components/ui/button';
-import { ArrowLeft, ExternalLink, Copy } from 'lucide-react';
+import { Input } from '@/components/ui/input';
+import { ArrowLeft, ExternalLink, Copy, Search } from 'lucide-react';
 import { Link } from 'wouter';
 import { useToast } from '@/hooks/use-toast';
 
@@ -29,14 +30,14 @@ function MintGrid({ mints, loading }: { mints: MintRecord[], loading: boolean })
 
   if (loading) {
     return (
-      <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 xl:grid-cols-5 gap-4">
-        {Array.from({ length: 10 }).map((_, i) => (
+      <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-6 xl:grid-cols-8 gap-3">
+        {Array.from({ length: 16 }).map((_, i) => (
           <div key={i} className="bg-card rounded-lg border animate-pulse">
             <div className="aspect-square bg-muted rounded-t-lg"></div>
-            <div className="p-3 space-y-2">
-              <div className="h-4 bg-muted rounded"></div>
-              <div className="h-3 bg-muted rounded w-3/4"></div>
-              <div className="h-3 bg-muted rounded w-1/2"></div>
+            <div className="p-2 space-y-1">
+              <div className="h-3 bg-muted rounded"></div>
+              <div className="h-2 bg-muted rounded w-3/4"></div>
+              <div className="h-2 bg-muted rounded w-1/2"></div>
             </div>
           </div>
         ))}
@@ -56,7 +57,7 @@ function MintGrid({ mints, loading }: { mints: MintRecord[], loading: boolean })
   }
 
   return (
-    <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 xl:grid-cols-5 gap-4">
+    <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-6 xl:grid-cols-8 gap-3">
       {mints.map((mint) => (
         <div 
           key={mint.id} 
@@ -76,38 +77,38 @@ function MintGrid({ mints, loading }: { mints: MintRecord[], loading: boolean })
           </div>
           
           {/* Mint Info */}
-          <div className="p-3">
-            <div className="flex items-start justify-between mb-2">
-              <h3 className="font-semibold text-sm truncate flex-1" data-testid={`text-mint-name-${mint.id}`}>
+          <div className="p-2">
+            <div className="flex items-start justify-between mb-1">
+              <h3 className="font-semibold text-xs truncate flex-1" data-testid={`text-mint-name-${mint.id}`}>
                 {mint.name}
               </h3>
-              <Badge variant="outline" className="ml-2 text-xs">
+              <Badge variant="outline" className="ml-1 text-[10px] px-1 py-0">
                 NFT
               </Badge>
             </div>
             
             {/* Creator Address */}
-            <div className="flex items-center justify-between mb-2">
-              <span className="text-xs text-muted-foreground">Creator:</span>
+            <div className="flex items-center justify-between mb-1">
+              <span className="text-[10px] text-muted-foreground">Creator:</span>
               <div className="flex items-center space-x-1">
-                <span className="text-xs font-mono" data-testid={`text-creator-${mint.id}`}>
+                <span className="text-[10px] font-mono" data-testid={`text-creator-${mint.id}`}>
                   {formatAddress(mint.walletAddress)}
                 </span>
                 <Button 
                   variant="ghost" 
                   size="sm" 
-                  className="h-5 w-5 p-0 hover:bg-muted"
+                  className="h-4 w-4 p-0 hover:bg-muted"
                   onClick={() => copyToClipboard(mint.walletAddress)}
                   aria-label="Copy creator address"
                   data-testid={`button-copy-creator-${mint.id}`}
                 >
-                  <Copy className="h-3 w-3" />
+                  <Copy className="h-2.5 w-2.5" />
                 </Button>
               </div>
             </div>
             
             {/* Date */}
-            <div className="text-xs text-muted-foreground mb-3" data-testid={`text-mint-date-${mint.id}`}>
+            <div className="text-[10px] text-muted-foreground mb-2" data-testid={`text-mint-date-${mint.id}`}>
               {formatDate(mint.timestamp)}
             </div>
             
@@ -116,12 +117,12 @@ function MintGrid({ mints, loading }: { mints: MintRecord[], loading: boolean })
               <Button 
                 variant="ghost" 
                 size="sm" 
-                className="h-7 px-2 text-xs"
+                className="h-6 px-2 text-[10px]"
                 onClick={() => copyToClipboard(mint.mintAddress)}
                 aria-label="Copy mint address"
                 data-testid={`button-copy-address-${mint.id}`}
               >
-                <Copy className="h-3 w-3 mr-1" />
+                <Copy className="h-2.5 w-2.5 mr-1" />
                 Copy
               </Button>
               
@@ -129,11 +130,11 @@ function MintGrid({ mints, loading }: { mints: MintRecord[], loading: boolean })
                 href={`https://solscan.io/tx/${mint.transactionSignature}`}
                 target="_blank"
                 rel="noopener noreferrer"
-                className="inline-flex items-center text-xs text-primary hover:text-primary/80 transition-colors"
+                className="inline-flex items-center text-[10px] text-primary hover:text-primary/80 transition-colors"
                 aria-label="View transaction on Solscan"
                 data-testid={`link-transaction-${mint.id}`}
               >
-                <ExternalLink className="h-3 w-3 mr-1" />
+                <ExternalLink className="h-2.5 w-2.5 mr-1" />
                 View
               </a>
             </div>
@@ -150,6 +151,9 @@ export default function GalleryPage() {
   const [userMints, setUserMints] = useState<MintRecord[]>([]);
   const [loadingAll, setLoadingAll] = useState(true);
   const [loadingUser, setLoadingUser] = useState(true);
+  const [searchQuery, setSearchQuery] = useState('');
+  const [filteredAllMints, setFilteredAllMints] = useState<MintRecord[]>([]);
+  const [filteredUserMints, setFilteredUserMints] = useState<MintRecord[]>([]);
 
   // Set page title for SEO
   useEffect(() => {
@@ -192,6 +196,21 @@ export default function GalleryPage() {
     };
   }, [publicKey]);
 
+  // Filter mints based on search query
+  useEffect(() => {
+    const filterMints = (mints: MintRecord[]) => {
+      if (!searchQuery.trim()) return mints;
+      const query = searchQuery.toLowerCase();
+      return mints.filter(mint => 
+        mint.name.toLowerCase().includes(query) ||
+        mint.walletAddress.toLowerCase().includes(query)
+      );
+    };
+
+    setFilteredAllMints(filterMints(allMints));
+    setFilteredUserMints(filterMints(userMints));
+  }, [searchQuery, allMints, userMints]);
+
   return (
     <div className="min-h-screen bg-background">
       {/* Header */}
@@ -220,13 +239,27 @@ export default function GalleryPage() {
 
       {/* Content */}
       <div className="container mx-auto px-4 py-8">
+        {/* Search Bar */}
+        <div className="max-w-md mx-auto mb-8">
+          <div className="relative">
+            <Search className="absolute left-3 top-1/2 transform -translate-y-1/2 text-muted-foreground h-4 w-4" />
+            <Input
+              placeholder="Search by name or creator..."
+              value={searchQuery}
+              onChange={(e) => setSearchQuery(e.target.value)}
+              className="pl-10"
+              data-testid="input-search"
+            />
+          </div>
+        </div>
+
         <Tabs defaultValue="all" className="w-full">
-          <TabsList className="grid w-full max-w-md grid-cols-2 mb-8">
+          <TabsList className="grid w-full max-w-md mx-auto grid-cols-2 mb-8">
             <TabsTrigger value="all" data-testid="tab-all-mints">
-              All Mints ({allMints.length})
+              All Mints ({filteredAllMints.length})
             </TabsTrigger>
             <TabsTrigger value="my" data-testid="tab-my-mints">
-              My Mints ({userMints.length})
+              My Mints ({filteredUserMints.length})
             </TabsTrigger>
           </TabsList>
           
@@ -235,7 +268,7 @@ export default function GalleryPage() {
               <h2 className="text-lg font-semibold mb-4" data-testid="text-all-mints-title">
                 All Community Creations
               </h2>
-              <MintGrid mints={allMints} loading={loadingAll} />
+              <MintGrid mints={filteredAllMints} loading={loadingAll} />
             </div>
           </TabsContent>
           
@@ -252,7 +285,7 @@ export default function GalleryPage() {
                   </p>
                 </div>
               ) : (
-                <MintGrid mints={userMints} loading={loadingUser} />
+                <MintGrid mints={filteredUserMints} loading={loadingUser} />
               )}
             </div>
           </TabsContent>
