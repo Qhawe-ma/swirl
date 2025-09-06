@@ -93,7 +93,7 @@ export default function PaintPage() {
                   />
                   
                   {/* Brand Name */}
-                  <span className="text-2xl font-bold text-foreground hidden sm:block" data-testid="text-app-title">
+                  <span className="text-3xl font-bold text-foreground hidden sm:block -ml-1" data-testid="text-app-title">
                     Swirl
                   </span>
                 </div>
