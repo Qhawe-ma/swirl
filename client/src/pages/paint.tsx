@@ -94,20 +94,12 @@ export default function PaintPage() {
                   
                   {/* Brand Name */}
                   <div className="hidden sm:block">
-                    <div className="flex items-baseline space-x-2">
-                      <img 
-                        src="https://res.cloudinary.com/dl8f1ztsy/image/upload/v1757143508/Swirl_Name_ofmngp.png" 
-                        alt="App Logo" 
-                        className="h-10 w-auto"
-                        data-testid="img-app-logo"
-                      />
-                      <span className="px-2 py-0.5 text-xs font-medium bg-primary/10 text-primary rounded-full tracking-wide">
-                        Studio
-                      </span>
-                    </div>
-                    <p className="text-xs text-muted-foreground font-medium tracking-wider mt-0.5" data-testid="text-app-subtitle">
-                      Professional NFT Creation
-                    </p>
+                    <img 
+                      src="https://res.cloudinary.com/dl8f1ztsy/image/upload/v1757143508/Swirl_Name_ofmngp.png" 
+                      alt="App Logo" 
+                      className="h-12 w-auto"
+                      data-testid="img-app-logo"
+                    />
                   </div>
                 </div>
               </div>
