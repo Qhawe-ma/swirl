@@ -164,8 +164,10 @@ export default function PaintPage() {
                   </div>
                 </div>
               )}
-              
-              
+            </div>
+
+            {/* Wallet Connection - Positioned absolutely in top right corner */}
+            <div className="absolute top-4 right-4 z-10">
               <WalletConnection />
             </div>
           </div>
