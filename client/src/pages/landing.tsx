@@ -40,7 +40,7 @@ export default function LandingPage() {
               </h1>
               
               {/* Screenshot Image */}
-              <div className="mb-8 flex justify-center">
+              <div className="mb-8 mt-4 flex justify-center">
                 <img 
                   src="https://res.cloudinary.com/dl8f1ztsy/image/upload/v1757186526/Screenshot_2025-09-06_212107_wrnzxk.png" 
                   alt="Swirl NFT Creation Interface" 
