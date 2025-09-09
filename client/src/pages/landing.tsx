@@ -54,7 +54,7 @@ function CommunityGallery() {
             {[1, 2, 3, 4, 5].map((index) => (
               <div
                 key={index}
-                className="flex-shrink-0 w-32 h-32 rounded-lg overflow-hidden border border-border/20 bg-muted/20 animate-pulse"
+                className="flex-shrink-0 w-24 h-24 rounded-lg overflow-hidden border border-border/20 bg-muted/20 animate-pulse"
               />
             ))}
           </div>
@@ -72,13 +72,13 @@ function CommunityGallery() {
   const duplicatedMints = [...mints, ...mints, ...mints];
 
   return (
-    <div className="w-full overflow-hidden bg-gradient-to-r from-muted/10 via-background to-muted/10 py-4 border-b border-border/20">
+    <div className="w-full overflow-hidden bg-gradient-to-r from-muted/10 via-background to-muted/10 py-4">
       <div className="relative">
         <div className="flex gap-3 community-gallery-scroll">
           {duplicatedMints.map((mint, index) => (
             <div
               key={`${mint.id}-${index}`}
-              className="flex-shrink-0 w-32 h-32 rounded-lg overflow-hidden border border-border/20 shadow-md hover:shadow-lg transition-shadow duration-300 bg-white"
+              className="flex-shrink-0 w-24 h-24 rounded-lg overflow-hidden border border-border/20 shadow-md hover:shadow-lg transition-shadow duration-300 bg-white"
             >
               <img
                 src={mint.imageData}
