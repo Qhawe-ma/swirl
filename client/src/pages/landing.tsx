@@ -339,10 +339,8 @@ export default function LandingPage() {
               <h3 className="font-semibold text-foreground mb-4" data-testid="text-products-title">Products</h3>
               <ul className="space-y-3">
                 <li>
-                  <Link href="/create">
-                    <a className="text-muted-foreground hover:text-foreground transition-colors duration-200" data-testid="link-nft-paint">
-                      NFT Paint
-                    </a>
+                  <Link href="/create" className="text-muted-foreground hover:text-foreground transition-colors duration-200" data-testid="link-nft-paint">
+                    NFT Paint
                   </Link>
                 </li>
                 <li>
