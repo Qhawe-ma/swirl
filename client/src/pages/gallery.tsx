@@ -298,10 +298,17 @@ export default function GalleryPage() {
   useEffect(() => {
     console.log('🎯 Gallery useEffect: Setting up getAllMints subscription');
     
-    // Subscribe to all mints
-    const unsubscribeAll = getAllMints((mints) => {
+    let unsubscribeAll: (() => void) | null = null;
+    
+    // Subscribe to all mints (async)
+    getAllMints((mints) => {
       console.log('📨 Gallery: Received mints callback with', mints.length, 'mints');
       setAllMints(mints);
+      setLoadingAll(false);
+    }).then(unsubscribe => {
+      unsubscribeAll = unsubscribe;
+    }).catch(error => {
+      console.error('❌ Failed to setup getAllMints subscription:', error);
       setLoadingAll(false);
     });
 
@@ -314,7 +321,9 @@ export default function GalleryPage() {
     return () => {
       console.log('🧹 Gallery: Cleaning up getAllMints subscription');
       clearTimeout(timeout);
-      unsubscribeAll();
+      if (unsubscribeAll) {
+        unsubscribeAll();
+      }
     };
   }, []);
 
@@ -328,14 +337,23 @@ export default function GalleryPage() {
     setLoadingUser(true);
     const walletAddress = publicKey.toBase58();
     
-    // Subscribe to user mints
-    const unsubscribeUser = getUserMints(walletAddress, (mints) => {
+    let unsubscribeUser: (() => void) | null = null;
+    
+    // Subscribe to user mints (async)
+    getUserMints(walletAddress, (mints) => {
       setUserMints(mints);
+      setLoadingUser(false);
+    }).then(unsubscribe => {
+      unsubscribeUser = unsubscribe;
+    }).catch(error => {
+      console.error('❌ Failed to setup getUserMints subscription:', error);
       setLoadingUser(false);
     });
 
     return () => {
-      unsubscribeUser();
+      if (unsubscribeUser) {
+        unsubscribeUser();
+      }
     };
   }, [publicKey]);
 

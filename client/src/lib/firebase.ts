@@ -1,36 +1,69 @@
-import { initializeApp } from "firebase/app";
-import { getDatabase, ref, set, push, onValue, off } from "firebase/database";
+import { initializeApp, type FirebaseApp } from "firebase/app";
+import { getDatabase, ref, set, push, onValue, off, type Database } from "firebase/database";
 
-const firebaseConfig = {
-  apiKey: import.meta.env.VITE_FIREBASE_API_KEY,
-  authDomain: `${import.meta.env.VITE_FIREBASE_PROJECT_ID}.firebaseapp.com`,
-  databaseURL: `https://${import.meta.env.VITE_FIREBASE_PROJECT_ID}-default-rtdb.firebaseio.com/`,
-  projectId: import.meta.env.VITE_FIREBASE_PROJECT_ID,
-  storageBucket: `${import.meta.env.VITE_FIREBASE_PROJECT_ID}.firebasestorage.app`,
-  messagingSenderId: import.meta.env.VITE_FIREBASE_MESSAGING_SENDER_ID,
-  appId: import.meta.env.VITE_FIREBASE_APP_ID,
-  measurementId: import.meta.env.VITE_FIREBASE_MEASUREMENT_ID
-};
+// Firebase instances - will be initialized asynchronously
+let app: FirebaseApp | null = null;
+let database: Database | null = null;
+let initializationPromise: Promise<void> | null = null;
 
-// Debug environment variables
-console.log('🔍 Environment variables debug:', {
-  VITE_FIREBASE_PROJECT_ID: import.meta.env.VITE_FIREBASE_PROJECT_ID,
-  VITE_FIREBASE_API_KEY: import.meta.env.VITE_FIREBASE_API_KEY ? '[EXISTS]' : '[MISSING]',
-  NODE_ENV: import.meta.env.NODE_ENV,
-  MODE: import.meta.env.MODE
-});
+// Firebase configuration fetched from backend
+interface FirebaseConfig {
+  apiKey: string;
+  authDomain: string;
+  databaseURL: string;
+  projectId: string;
+  storageBucket: string;
+  messagingSenderId: string;
+  appId: string;
+  measurementId?: string;
+}
 
-// Initialize Firebase
-console.log('🚀 Initializing Firebase with config:', {
-  projectId: firebaseConfig.projectId,
-  databaseURL: firebaseConfig.databaseURL,
-  hasApiKey: !!firebaseConfig.apiKey
-});
+// Fetch Firebase config from backend and initialize
+async function initializeFirebase(): Promise<void> {
+  if (app && database) {
+    return; // Already initialized
+  }
 
-const app = initializeApp(firebaseConfig);
-const database = getDatabase(app);
+  try {
+    console.log('🔍 Fetching Firebase configuration from backend...');
+    
+    const response = await fetch('/api/firebase-config');
+    if (!response.ok) {
+      throw new Error(`Failed to fetch Firebase config: ${response.status} ${response.statusText}`);
+    }
 
-console.log('✅ Firebase initialized successfully');
+    const firebaseConfig: FirebaseConfig = await response.json();
+    
+    console.log('🚀 Initializing Firebase with config:', {
+      projectId: firebaseConfig.projectId,
+      databaseURL: firebaseConfig.databaseURL,
+      hasApiKey: !!firebaseConfig.apiKey
+    });
+
+    app = initializeApp(firebaseConfig);
+    database = getDatabase(app);
+
+    console.log('✅ Firebase initialized successfully');
+  } catch (error) {
+    console.error('❌ Failed to initialize Firebase:', error);
+    throw error;
+  }
+}
+
+// Ensure Firebase is initialized before using it
+async function ensureFirebaseInitialized(): Promise<Database> {
+  if (!initializationPromise) {
+    initializationPromise = initializeFirebase();
+  }
+  
+  await initializationPromise;
+  
+  if (!database) {
+    throw new Error('Firebase database not initialized');
+  }
+  
+  return database;
+}
 
 export interface MintRecord {
   id: string;
@@ -46,7 +79,8 @@ export interface MintRecord {
 // Save a new mint record
 export async function saveMintRecord(mintData: Omit<MintRecord, 'id' | 'timestamp'>): Promise<string> {
   try {
-    const mintsRef = ref(database, `mints/${mintData.walletAddress}`);
+    const db = await ensureFirebaseInitialized();
+    const mintsRef = ref(db, `mints/${mintData.walletAddress}`);
     const newMintRef = push(mintsRef);
     
     const mintRecord: MintRecord = {
@@ -65,66 +99,80 @@ export async function saveMintRecord(mintData: Omit<MintRecord, 'id' | 'timestam
 }
 
 // Get all mints for a wallet address
-export function getUserMints(walletAddress: string, callback: (mints: MintRecord[]) => void): () => void {
-  const mintsRef = ref(database, `mints/${walletAddress}`);
-  
-  const unsubscribe = onValue(mintsRef, (snapshot) => {
-    const data = snapshot.val();
-    if (data) {
-      const mints = Object.values(data) as MintRecord[];
-      // Sort by timestamp, newest first
-      mints.sort((a, b) => b.timestamp - a.timestamp);
-      callback(mints);
-    } else {
+export async function getUserMints(walletAddress: string, callback: (mints: MintRecord[]) => void): Promise<() => void> {
+  try {
+    const db = await ensureFirebaseInitialized();
+    const mintsRef = ref(db, `mints/${walletAddress}`);
+    
+    const unsubscribe = onValue(mintsRef, (snapshot) => {
+      const data = snapshot.val();
+      if (data) {
+        const mints = Object.values(data) as MintRecord[];
+        // Sort by timestamp, newest first
+        mints.sort((a, b) => b.timestamp - a.timestamp);
+        callback(mints);
+      } else {
+        callback([]);
+      }
+    }, (error) => {
+      console.error('❌ Firebase error for getUserMints:', error);
       callback([]);
-    }
-  }, (error) => {
-    console.error('❌ Firebase error for getUserMints:', error);
+    });
+    
+    // Return unsubscribe function
+    return unsubscribe;
+  } catch (error) {
+    console.error('❌ Failed to initialize Firebase for getUserMints:', error);
     callback([]);
-  });
-  
-  // Return unsubscribe function
-  return unsubscribe;
+    return () => {}; // Return empty unsubscribe function
+  }
 }
 
 // Get all mints from all users for the gallery
-export function getAllMints(callback: (mints: MintRecord[]) => void): () => void {
-  console.log('🔍 Setting up getAllMints Firebase listener...');
-  const mintsRef = ref(database, 'mints');
-  
-  const unsubscribe = onValue(mintsRef, (snapshot) => {
-    console.log('🔄 Firebase getAllMints callback triggered');
-    const data = snapshot.val();
-    console.log('📊 Firebase data received:', data);
+export async function getAllMints(callback: (mints: MintRecord[]) => void): Promise<() => void> {
+  try {
+    console.log('🔍 Setting up getAllMints Firebase listener...');
+    const db = await ensureFirebaseInitialized();
+    const mintsRef = ref(db, 'mints');
     
-    if (data) {
-      const allMints: MintRecord[] = [];
+    const unsubscribe = onValue(mintsRef, (snapshot) => {
+      console.log('🔄 Firebase getAllMints callback triggered');
+      const data = snapshot.val();
+      console.log('📊 Firebase data received:', data);
       
-      // Iterate through all wallet addresses
-      Object.values(data).forEach((walletMints: any) => {
-        if (walletMints && typeof walletMints === 'object') {
-          // Add all mints from this wallet
-          Object.values(walletMints).forEach((mint: any) => {
-            allMints.push(mint as MintRecord);
-          });
-        }
-      });
-      
-      // Sort by timestamp, newest first
-      allMints.sort((a, b) => b.timestamp - a.timestamp);
-      console.log(`✅ Found ${allMints.length} total mints in Firebase`);
-      callback(allMints);
-    } else {
-      console.log('📭 No data found in Firebase - calling callback with empty array');
+      if (data) {
+        const allMints: MintRecord[] = [];
+        
+        // Iterate through all wallet addresses
+        Object.values(data).forEach((walletMints: any) => {
+          if (walletMints && typeof walletMints === 'object') {
+            // Add all mints from this wallet
+            Object.values(walletMints).forEach((mint: any) => {
+              allMints.push(mint as MintRecord);
+            });
+          }
+        });
+        
+        // Sort by timestamp, newest first
+        allMints.sort((a, b) => b.timestamp - a.timestamp);
+        console.log(`✅ Found ${allMints.length} total mints in Firebase`);
+        callback(allMints);
+      } else {
+        console.log('📭 No data found in Firebase - calling callback with empty array');
+        callback([]);
+      }
+    }, (error) => {
+      console.error('❌ Firebase error for getAllMints:', error);
       callback([]);
-    }
-  }, (error) => {
-    console.error('❌ Firebase error for getAllMints:', error);
+    });
+    
+    // Return unsubscribe function
+    return unsubscribe;
+  } catch (error) {
+    console.error('❌ Failed to initialize Firebase for getAllMints:', error);
     callback([]);
-  });
-  
-  // Return unsubscribe function
-  return unsubscribe;
+    return () => {}; // Return empty unsubscribe function
+  }
 }
 
 export { database };
