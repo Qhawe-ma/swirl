@@ -209,36 +209,36 @@ export default function LandingPage() {
       </main>
 
       {/* Footer */}
-      <footer className="bg-muted/5 border-t border-border/20 py-12">
-        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-5 gap-8 lg:gap-12">
+      <footer className="bg-background/95 backdrop-blur-sm border-t border-border/10 py-16">
+        <div className="max-w-7xl mx-auto px-6 lg:px-8">
+          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-5 gap-12 lg:gap-16">
             
             {/* Company Info & Description */}
-            <div className="lg:col-span-2">
-              <div className="flex items-center gap-3 mb-4">
+            <div className="lg:col-span-2 space-y-6">
+              <div className="flex items-center gap-4">
                 <img 
                   src="https://res.cloudinary.com/dl8f1ztsy/image/upload/v1757143508/Swirl_Logo_wbpo9t.png" 
                   alt="Swirl Logo" 
-                  className="w-8 h-8"
+                  className="w-10 h-10"
                   data-testid="img-footer-logo"
                 />
-                <span className="text-xl font-bold text-foreground" data-testid="text-footer-brand">Swirl</span>
+                <span className="text-2xl font-bold text-foreground tracking-tight" data-testid="text-footer-brand">Swirl</span>
               </div>
-              <p className="text-muted-foreground leading-relaxed mb-6 max-w-md" data-testid="text-footer-description">
+              <p className="text-muted-foreground/90 leading-relaxed text-base max-w-sm" data-testid="text-footer-description">
                 The most accessible way to bring your art onto the blockchain. Draw, mint and sell your artwork globally across Solana.
               </p>
             </div>
 
             {/* Follow */}
-            <div>
-              <h3 className="font-semibold text-foreground mb-4" data-testid="text-follow-title">Follow</h3>
-              <ul className="space-y-3">
+            <div className="space-y-5">
+              <h3 className="text-sm font-semibold text-foreground uppercase tracking-wide" data-testid="text-follow-title">Follow</h3>
+              <ul className="space-y-4">
                 <li>
                   <a 
                     href="https://twitter.com/swirlnft" 
                     target="_blank" 
                     rel="noopener noreferrer"
-                    className="text-muted-foreground hover:text-foreground transition-colors duration-200"
+                    className="text-muted-foreground/80 hover:text-foreground transition-colors duration-300 text-sm"
                     data-testid="link-twitter"
                   >
                     Twitter
@@ -249,7 +249,7 @@ export default function LandingPage() {
                     href="https://t.me/swirlnft" 
                     target="_blank" 
                     rel="noopener noreferrer"
-                    className="text-muted-foreground hover:text-foreground transition-colors duration-200"
+                    className="text-muted-foreground/80 hover:text-foreground transition-colors duration-300 text-sm"
                     data-testid="link-telegram"
                   >
                     Telegram
@@ -260,7 +260,7 @@ export default function LandingPage() {
                     href="https://instagram.com/swirlnft" 
                     target="_blank" 
                     rel="noopener noreferrer"
-                    className="text-muted-foreground hover:text-foreground transition-colors duration-200"
+                    className="text-muted-foreground/80 hover:text-foreground transition-colors duration-300 text-sm"
                     data-testid="link-instagram"
                   >
                     Instagram
@@ -270,13 +270,13 @@ export default function LandingPage() {
             </div>
 
             {/* Resources */}
-            <div>
-              <h3 className="font-semibold text-foreground mb-4" data-testid="text-resources-title">Resources</h3>
-              <ul className="space-y-3">
+            <div className="space-y-5">
+              <h3 className="text-sm font-semibold text-foreground uppercase tracking-wide" data-testid="text-resources-title">Resources</h3>
+              <ul className="space-y-4">
                 <li>
                   <a 
                     href="/support" 
-                    className="text-muted-foreground hover:text-foreground transition-colors duration-200"
+                    className="text-muted-foreground/80 hover:text-foreground transition-colors duration-300 text-sm"
                     data-testid="link-support"
                   >
                     Support
@@ -285,7 +285,7 @@ export default function LandingPage() {
                 <li>
                   <a 
                     href="/feature-requests" 
-                    className="text-muted-foreground hover:text-foreground transition-colors duration-200"
+                    className="text-muted-foreground/80 hover:text-foreground transition-colors duration-300 text-sm"
                     data-testid="link-feature-requests"
                   >
                     Feature Requests
@@ -294,7 +294,7 @@ export default function LandingPage() {
                 <li>
                   <a 
                     href="/trust-safety" 
-                    className="text-muted-foreground hover:text-foreground transition-colors duration-200"
+                    className="text-muted-foreground/80 hover:text-foreground transition-colors duration-300 text-sm"
                     data-testid="link-trust-safety"
                   >
                     Trust & Safety
@@ -304,68 +304,72 @@ export default function LandingPage() {
             </div>
 
             {/* NFT Marketplace & Products */}
-            <div>
-              <h3 className="font-semibold text-foreground mb-4" data-testid="text-marketplace-title">NFT Marketplace</h3>
-              <ul className="space-y-3 mb-6">
-                <li>
-                  <a 
-                    href="https://tensor.trade" 
-                    target="_blank" 
-                    rel="noopener noreferrer"
-                    className="text-muted-foreground hover:text-foreground transition-colors duration-200"
-                    data-testid="link-tensor"
-                  >
-                    Tensor
-                  </a>
-                </li>
-                <li>
-                  <a 
-                    href="https://magiceden.io" 
-                    target="_blank" 
-                    rel="noopener noreferrer"
-                    className="text-muted-foreground hover:text-foreground transition-colors duration-200"
-                    data-testid="link-magic-eden"
-                  >
-                    Magic Eden
-                  </a>
-                </li>
-              </ul>
+            <div className="space-y-8">
+              <div className="space-y-5">
+                <h3 className="text-sm font-semibold text-foreground uppercase tracking-wide" data-testid="text-marketplace-title">NFT Marketplace</h3>
+                <ul className="space-y-4">
+                  <li>
+                    <a 
+                      href="https://tensor.trade" 
+                      target="_blank" 
+                      rel="noopener noreferrer"
+                      className="text-muted-foreground/80 hover:text-foreground transition-colors duration-300 text-sm"
+                      data-testid="link-tensor"
+                    >
+                      Tensor
+                    </a>
+                  </li>
+                  <li>
+                    <a 
+                      href="https://magiceden.io" 
+                      target="_blank" 
+                      rel="noopener noreferrer"
+                      className="text-muted-foreground/80 hover:text-foreground transition-colors duration-300 text-sm"
+                      data-testid="link-magic-eden"
+                    >
+                      Magic Eden
+                    </a>
+                  </li>
+                </ul>
+              </div>
 
-              <h3 className="font-semibold text-foreground mb-4" data-testid="text-products-title">Products</h3>
-              <ul className="space-y-3">
-                <li>
-                  <Link href="/create" className="text-muted-foreground hover:text-foreground transition-colors duration-200" data-testid="link-nft-paint">
-                    NFT Paint
-                  </Link>
-                </li>
-                <li>
-                  <span className="text-muted-foreground" data-testid="text-ios-android">
-                    Swirl iOS & Android App
-                  </span>
-                </li>
-                <li>
-                  <span className="text-muted-foreground" data-testid="text-creator-museum">
-                    Creator Museum
-                  </span>
-                </li>
-                <li>
-                  <span className="text-muted-foreground" data-testid="text-auction-house">
-                    Live Auction House
-                  </span>
-                </li>
-                <li>
-                  <span className="text-muted-foreground" data-testid="text-art-streamies">
-                    Art Streamies
-                  </span>
-                </li>
-              </ul>
+              <div className="space-y-5">
+                <h3 className="text-sm font-semibold text-foreground uppercase tracking-wide" data-testid="text-products-title">Products</h3>
+                <ul className="space-y-4">
+                  <li>
+                    <Link href="/create" className="text-muted-foreground/80 hover:text-foreground transition-colors duration-300 text-sm" data-testid="link-nft-paint">
+                      NFT Paint
+                    </Link>
+                  </li>
+                  <li>
+                    <span className="text-muted-foreground/60 text-sm" data-testid="text-ios-android">
+                      Swirl iOS & Android App
+                    </span>
+                  </li>
+                  <li>
+                    <span className="text-muted-foreground/60 text-sm" data-testid="text-creator-museum">
+                      Creator Museum
+                    </span>
+                  </li>
+                  <li>
+                    <span className="text-muted-foreground/60 text-sm" data-testid="text-auction-house">
+                      Live Auction House
+                    </span>
+                  </li>
+                  <li>
+                    <span className="text-muted-foreground/60 text-sm" data-testid="text-art-streamies">
+                      Art Streamies
+                    </span>
+                  </li>
+                </ul>
+              </div>
             </div>
           </div>
 
           {/* Copyright */}
-          <div className="border-t border-border/20 mt-12 pt-8">
+          <div className="border-t border-border/10 mt-16 pt-8">
             <div className="text-center">
-              <p className="text-sm text-muted-foreground" data-testid="text-copyright">
+              <p className="text-xs text-muted-foreground/70 font-medium tracking-wide" data-testid="text-copyright">
                 ©2025 Swirl Labs. All Rights Reserved.
               </p>
             </div>
