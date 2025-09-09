@@ -29,13 +29,13 @@ export default function LandingPage() {
 
       {/* Hero Section */}
       <main className="flex-1">
-        <section className="relative overflow-hidden bg-gradient-to-br from-background via-muted/10 to-muted/20 py-12 sm:py-16 lg:py-20">
+        <section className="relative overflow-hidden bg-gradient-to-br from-background via-muted/10 to-muted/20 py-8 sm:py-10 lg:py-12">
           <div className="absolute inset-0 bg-gradient-to-br from-primary/5 via-transparent to-primary/5 pointer-events-none"></div>
           
           <div className="relative max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
             <div className="text-center max-w-4xl mx-auto">
               {/* Hero Title */}
-              <h1 className="text-4xl sm:text-5xl lg:text-6xl font-bold text-foreground leading-tight tracking-tight mb-12" data-testid="hero-title">
+              <h1 className="text-4xl sm:text-5xl lg:text-6xl font-bold text-foreground leading-tight tracking-tight mb-8 sm:mb-10 lg:mb-12" data-testid="hero-title">
                 Turn Your Art Into NFT
               </h1>
               
