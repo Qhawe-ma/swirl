@@ -208,7 +208,7 @@ export default function LandingPage() {
         </section>
       </main>
 
-      {/* Professional Footer */}
+      {/* Footer */}
       <footer className="bg-muted/5 border-t border-border/20 py-12">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
           <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-5 gap-8 lg:gap-12">
@@ -229,7 +229,7 @@ export default function LandingPage() {
               </p>
             </div>
 
-            {/* Follow Links */}
+            {/* Follow */}
             <div>
               <h3 className="font-semibold text-foreground mb-4" data-testid="text-follow-title">Follow</h3>
               <ul className="space-y-3">
@@ -238,10 +238,9 @@ export default function LandingPage() {
                     href="https://twitter.com/swirlnft" 
                     target="_blank" 
                     rel="noopener noreferrer"
-                    className="inline-flex items-center text-muted-foreground hover:text-foreground transition-colors duration-200"
+                    className="text-muted-foreground hover:text-foreground transition-colors duration-200"
                     data-testid="link-twitter"
                   >
-                    <Twitter className="w-4 h-4 mr-2" />
                     Twitter
                   </a>
                 </li>
@@ -250,10 +249,9 @@ export default function LandingPage() {
                     href="https://t.me/swirlnft" 
                     target="_blank" 
                     rel="noopener noreferrer"
-                    className="inline-flex items-center text-muted-foreground hover:text-foreground transition-colors duration-200"
+                    className="text-muted-foreground hover:text-foreground transition-colors duration-200"
                     data-testid="link-telegram"
                   >
-                    <MessageCircle className="w-4 h-4 mr-2" />
                     Telegram
                   </a>
                 </li>
@@ -262,10 +260,9 @@ export default function LandingPage() {
                     href="https://instagram.com/swirlnft" 
                     target="_blank" 
                     rel="noopener noreferrer"
-                    className="inline-flex items-center text-muted-foreground hover:text-foreground transition-colors duration-200"
+                    className="text-muted-foreground hover:text-foreground transition-colors duration-200"
                     data-testid="link-instagram"
                   >
-                    <Instagram className="w-4 h-4 mr-2" />
                     Instagram
                   </a>
                 </li>
@@ -315,11 +312,10 @@ export default function LandingPage() {
                     href="https://tensor.trade" 
                     target="_blank" 
                     rel="noopener noreferrer"
-                    className="inline-flex items-center text-muted-foreground hover:text-foreground transition-colors duration-200"
+                    className="text-muted-foreground hover:text-foreground transition-colors duration-200"
                     data-testid="link-tensor"
                   >
                     Tensor
-                    <ExternalLink className="w-3 h-3 ml-1" />
                   </a>
                 </li>
                 <li>
@@ -327,11 +323,10 @@ export default function LandingPage() {
                     href="https://magiceden.io" 
                     target="_blank" 
                     rel="noopener noreferrer"
-                    className="inline-flex items-center text-muted-foreground hover:text-foreground transition-colors duration-200"
+                    className="text-muted-foreground hover:text-foreground transition-colors duration-200"
                     data-testid="link-magic-eden"
                   >
                     Magic Eden
-                    <ExternalLink className="w-3 h-3 ml-1" />
                   </a>
                 </li>
               </ul>
@@ -344,34 +339,30 @@ export default function LandingPage() {
                   </Link>
                 </li>
                 <li>
-                  <span className="text-muted-foreground/60" data-testid="text-ios-android">
+                  <span className="text-muted-foreground" data-testid="text-ios-android">
                     Swirl iOS & Android App
                   </span>
-                  <span className="text-xs text-muted-foreground/80 ml-2">(Coming Soon)</span>
                 </li>
                 <li>
-                  <span className="text-muted-foreground/60" data-testid="text-creator-museum">
+                  <span className="text-muted-foreground" data-testid="text-creator-museum">
                     Creator Museum
                   </span>
-                  <span className="text-xs text-muted-foreground/80 ml-2">(Coming Soon)</span>
                 </li>
                 <li>
-                  <span className="text-muted-foreground/60" data-testid="text-auction-house">
+                  <span className="text-muted-foreground" data-testid="text-auction-house">
                     Live Auction House
                   </span>
-                  <span className="text-xs text-muted-foreground/80 ml-2">(Coming Soon)</span>
                 </li>
                 <li>
-                  <span className="text-muted-foreground/60" data-testid="text-art-streamies">
+                  <span className="text-muted-foreground" data-testid="text-art-streamies">
                     Art Streamies
                   </span>
-                  <span className="text-xs text-muted-foreground/80 ml-2">(Coming Soon)</span>
                 </li>
               </ul>
             </div>
           </div>
 
-          {/* Bottom Copyright */}
+          {/* Copyright */}
           <div className="border-t border-border/20 mt-12 pt-8">
             <div className="text-center">
               <p className="text-sm text-muted-foreground" data-testid="text-copyright">
