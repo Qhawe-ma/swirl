@@ -2,7 +2,7 @@ import { Link } from 'wouter';
 import { Button } from '@/components/ui/button';
 import { Card } from '@/components/ui/card';
 import { WalletConnection } from '@/components/wallet/WalletConnection';
-import { Palette, Sparkles, Zap, Users, ArrowRight, Play, Check } from 'lucide-react';
+import { Palette, Sparkles, Zap, Users, ArrowRight, Play, Check, Twitter, Instagram, MessageCircle, ExternalLink } from 'lucide-react';
 
 export default function LandingPage() {
   return (
@@ -208,20 +208,177 @@ export default function LandingPage() {
         </section>
       </main>
 
-      {/* Footer */}
-      <footer className="bg-background border-t border-border/30 py-8">
+      {/* Professional Footer */}
+      <footer className="bg-muted/5 border-t border-border/20 py-12">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-          <div className="flex flex-col sm:flex-row items-center justify-between">
-            <div className="flex items-center gap-2 mb-4 sm:mb-0">
-              <img 
-                src="https://res.cloudinary.com/dl8f1ztsy/image/upload/v1757143508/Swirl_Logo_wbpo9t.png" 
-                alt="Logo" 
-                className="w-6 h-6"
-              />
-              <span className="text-lg font-bold text-foreground">Swirl</span>
+          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-5 gap-8 lg:gap-12">
+            
+            {/* Company Info & Description */}
+            <div className="lg:col-span-2">
+              <div className="flex items-center gap-3 mb-4">
+                <img 
+                  src="https://res.cloudinary.com/dl8f1ztsy/image/upload/v1757143508/Swirl_Logo_wbpo9t.png" 
+                  alt="Swirl Logo" 
+                  className="w-8 h-8"
+                  data-testid="img-footer-logo"
+                />
+                <span className="text-xl font-bold text-foreground" data-testid="text-footer-brand">Swirl</span>
+              </div>
+              <p className="text-muted-foreground leading-relaxed mb-6 max-w-md" data-testid="text-footer-description">
+                The most accessible way to bring your art onto the blockchain. Draw, mint and sell your artwork globally across Solana.
+              </p>
             </div>
-            <div className="text-sm text-muted-foreground">
-              Create • Mint • Own Forever
+
+            {/* Follow Links */}
+            <div>
+              <h3 className="font-semibold text-foreground mb-4" data-testid="text-follow-title">Follow</h3>
+              <ul className="space-y-3">
+                <li>
+                  <a 
+                    href="https://twitter.com/swirlnft" 
+                    target="_blank" 
+                    rel="noopener noreferrer"
+                    className="inline-flex items-center text-muted-foreground hover:text-foreground transition-colors duration-200"
+                    data-testid="link-twitter"
+                  >
+                    <Twitter className="w-4 h-4 mr-2" />
+                    Twitter
+                  </a>
+                </li>
+                <li>
+                  <a 
+                    href="https://t.me/swirlnft" 
+                    target="_blank" 
+                    rel="noopener noreferrer"
+                    className="inline-flex items-center text-muted-foreground hover:text-foreground transition-colors duration-200"
+                    data-testid="link-telegram"
+                  >
+                    <MessageCircle className="w-4 h-4 mr-2" />
+                    Telegram
+                  </a>
+                </li>
+                <li>
+                  <a 
+                    href="https://instagram.com/swirlnft" 
+                    target="_blank" 
+                    rel="noopener noreferrer"
+                    className="inline-flex items-center text-muted-foreground hover:text-foreground transition-colors duration-200"
+                    data-testid="link-instagram"
+                  >
+                    <Instagram className="w-4 h-4 mr-2" />
+                    Instagram
+                  </a>
+                </li>
+              </ul>
+            </div>
+
+            {/* Resources */}
+            <div>
+              <h3 className="font-semibold text-foreground mb-4" data-testid="text-resources-title">Resources</h3>
+              <ul className="space-y-3">
+                <li>
+                  <a 
+                    href="/support" 
+                    className="text-muted-foreground hover:text-foreground transition-colors duration-200"
+                    data-testid="link-support"
+                  >
+                    Support
+                  </a>
+                </li>
+                <li>
+                  <a 
+                    href="/feature-requests" 
+                    className="text-muted-foreground hover:text-foreground transition-colors duration-200"
+                    data-testid="link-feature-requests"
+                  >
+                    Feature Requests
+                  </a>
+                </li>
+                <li>
+                  <a 
+                    href="/trust-safety" 
+                    className="text-muted-foreground hover:text-foreground transition-colors duration-200"
+                    data-testid="link-trust-safety"
+                  >
+                    Trust & Safety
+                  </a>
+                </li>
+              </ul>
+            </div>
+
+            {/* NFT Marketplace & Products */}
+            <div>
+              <h3 className="font-semibold text-foreground mb-4" data-testid="text-marketplace-title">NFT Marketplace</h3>
+              <ul className="space-y-3 mb-6">
+                <li>
+                  <a 
+                    href="https://tensor.trade" 
+                    target="_blank" 
+                    rel="noopener noreferrer"
+                    className="inline-flex items-center text-muted-foreground hover:text-foreground transition-colors duration-200"
+                    data-testid="link-tensor"
+                  >
+                    Tensor
+                    <ExternalLink className="w-3 h-3 ml-1" />
+                  </a>
+                </li>
+                <li>
+                  <a 
+                    href="https://magiceden.io" 
+                    target="_blank" 
+                    rel="noopener noreferrer"
+                    className="inline-flex items-center text-muted-foreground hover:text-foreground transition-colors duration-200"
+                    data-testid="link-magic-eden"
+                  >
+                    Magic Eden
+                    <ExternalLink className="w-3 h-3 ml-1" />
+                  </a>
+                </li>
+              </ul>
+
+              <h3 className="font-semibold text-foreground mb-4" data-testid="text-products-title">Products</h3>
+              <ul className="space-y-3">
+                <li>
+                  <Link href="/create">
+                    <a className="text-muted-foreground hover:text-foreground transition-colors duration-200" data-testid="link-nft-paint">
+                      NFT Paint
+                    </a>
+                  </Link>
+                </li>
+                <li>
+                  <span className="text-muted-foreground/60" data-testid="text-ios-android">
+                    Swirl iOS & Android App
+                  </span>
+                  <span className="text-xs text-muted-foreground/80 ml-2">(Coming Soon)</span>
+                </li>
+                <li>
+                  <span className="text-muted-foreground/60" data-testid="text-creator-museum">
+                    Creator Museum
+                  </span>
+                  <span className="text-xs text-muted-foreground/80 ml-2">(Coming Soon)</span>
+                </li>
+                <li>
+                  <span className="text-muted-foreground/60" data-testid="text-auction-house">
+                    Live Auction House
+                  </span>
+                  <span className="text-xs text-muted-foreground/80 ml-2">(Coming Soon)</span>
+                </li>
+                <li>
+                  <span className="text-muted-foreground/60" data-testid="text-art-streamies">
+                    Art Streamies
+                  </span>
+                  <span className="text-xs text-muted-foreground/80 ml-2">(Coming Soon)</span>
+                </li>
+              </ul>
+            </div>
+          </div>
+
+          {/* Bottom Copyright */}
+          <div className="border-t border-border/20 mt-12 pt-8">
+            <div className="text-center">
+              <p className="text-sm text-muted-foreground" data-testid="text-copyright">
+                ©2025 Swirl Labs. All Rights Reserved.
+              </p>
             </div>
           </div>
         </div>
