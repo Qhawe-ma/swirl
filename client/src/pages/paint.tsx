@@ -154,9 +154,9 @@ export default function PaintPage() {
               data-testid="button-toggle-sidebar"
             >
               {sidebarCollapsed ? (
-                <ChevronRight className="h-6 w-6" strokeWidth={3} />
+                <ChevronRight className="h-8 w-8" strokeWidth={4} />
               ) : (
-                <ChevronLeft className="h-6 w-6" strokeWidth={3} />
+                <ChevronLeft className="h-8 w-8" strokeWidth={4} />
               )}
             </Button>
 
