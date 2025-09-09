@@ -29,7 +29,7 @@ export default function LandingPage() {
 
       {/* Hero Section */}
       <main className="flex-1">
-        <section className="relative overflow-hidden bg-gradient-to-br from-background via-muted/10 to-muted/20 py-4 sm:py-6 lg:py-8">
+        <section className="relative overflow-hidden bg-gradient-to-br from-background via-muted/10 to-muted/20 py-2 sm:py-3 lg:py-4">
           <div className="absolute inset-0 bg-gradient-to-br from-primary/5 via-transparent to-primary/5 pointer-events-none"></div>
           
           <div className="relative max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
