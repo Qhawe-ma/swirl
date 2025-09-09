@@ -14,29 +14,88 @@ function CommunityGallery() {
   useEffect(() => {
     let unsubscribe: (() => void) | null = null;
 
-    const setupFirebaseListener = () => {
+    const setupFirebaseListener = async () => {
       console.log('🎯 Community Gallery: Setting up getAllMints subscription');
       
-      unsubscribe = getAllMints((mintsList) => {
-        console.log('📨 Community Gallery: Received mints callback with', mintsList.length, 'mints');
-        setMints(mintsList);
+      try {
+        unsubscribe = await getAllMints((mintsList) => {
+          console.log('📨 Community Gallery: Received mints callback with', mintsList.length, 'mints');
+          setMints(mintsList);
+          setLoading(false);
+        });
+      } catch (error) {
+        console.error('❌ Failed to setup Firebase listener:', error);
         setLoading(false);
-      });
+      }
     };
 
     setupFirebaseListener();
 
     // Cleanup subscription on unmount
     return () => {
-      if (unsubscribe) {
+      if (unsubscribe && typeof unsubscribe === 'function') {
         console.log('🧹 Community Gallery: Cleaning up getAllMints subscription');
-        unsubscribe();
+        try {
+          unsubscribe();
+        } catch (error) {
+          console.error('❌ Error during unsubscribe:', error);
+        }
       }
     };
   }, []);
 
-  if (loading || mints.length === 0) {
-    return null; // Don't show anything while loading or if no mints
+  // Show loading state
+  if (loading) {
+    return (
+      <div className="w-full overflow-hidden bg-gradient-to-r from-muted/10 via-background to-muted/10 py-8 border-b border-border/20">
+        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 mb-6">
+          <div className="text-center">
+            <h2 className="text-lg font-semibold text-muted-foreground mb-2">Community Creations</h2>
+            <p className="text-sm text-muted-foreground/80">Loading amazing NFT art from our community...</p>
+          </div>
+        </div>
+        
+        <div className="relative">
+          <div className="flex gap-4 px-4">
+            {/* Loading placeholder cards */}
+            {[1, 2, 3, 4, 5].map((index) => (
+              <div
+                key={index}
+                className="flex-shrink-0 w-56 h-56 rounded-xl overflow-hidden border border-border/20 bg-muted/20 animate-pulse"
+              />
+            ))}
+          </div>
+        </div>
+      </div>
+    );
+  }
+
+  // Show empty state if no mints
+  if (mints.length === 0) {
+    return (
+      <div className="w-full overflow-hidden bg-gradient-to-r from-muted/10 via-background to-muted/10 py-8 border-b border-border/20">
+        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 mb-6">
+          <div className="text-center">
+            <h2 className="text-lg font-semibold text-muted-foreground mb-2">Community Creations</h2>
+            <p className="text-sm text-muted-foreground/80">Be the first to create and share your NFT artwork!</p>
+          </div>
+        </div>
+        
+        <div className="relative">
+          <div className="flex justify-center py-12">
+            <div className="text-center">
+              <Palette className="w-16 h-16 text-muted-foreground/50 mx-auto mb-4" />
+              <p className="text-muted-foreground">No community artwork yet</p>
+              <Link href="/create">
+                <Button variant="outline" className="mt-4">
+                  Create the First NFT
+                </Button>
+              </Link>
+            </div>
+          </div>
+        </div>
+      </div>
+    );
   }
 
   // Duplicate the mints array to create seamless loop
