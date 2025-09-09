@@ -145,7 +145,7 @@ export default function PaintPage() {
             {/* Sidebar Toggle Button - Positioned between sidebar and canvas */}
             <Button
               onClick={() => setSidebarCollapsed(!sidebarCollapsed)}
-              className={`hidden lg:block absolute top-4 z-20 w-12 h-12 p-0 bg-[#5EBAFF] hover:bg-[#4A9CE5] text-white shadow-xl hover:shadow-2xl transition-all duration-300 motion-safe:hover:scale-105 rounded-xl border-2 border-white/30 flex items-center justify-center ${
+              className={`hidden lg:block absolute top-4 z-20 w-12 h-12 p-0 m-0 bg-[#5EBAFF] hover:bg-[#4A9CE5] text-white shadow-xl hover:shadow-2xl transition-all duration-300 motion-safe:hover:scale-105 rounded-xl border-2 border-white/30 ${
                 sidebarCollapsed 
                   ? 'left-[4.5rem]' // Positioned right of collapsed sidebar
                   : 'left-[21rem]' // Positioned right of expanded sidebar
@@ -153,11 +153,13 @@ export default function PaintPage() {
               aria-label={sidebarCollapsed ? 'Expand sidebar' : 'Collapse sidebar'}
               data-testid="button-toggle-sidebar"
             >
-              {sidebarCollapsed ? (
-                <ChevronRight className="h-8 w-8" strokeWidth={4} />
-              ) : (
-                <ChevronLeft className="h-8 w-8" strokeWidth={4} />
-              )}
+              <div className="w-full h-full flex items-center justify-center">
+                {sidebarCollapsed ? (
+                  <ChevronRight className="h-8 w-8" strokeWidth={4} />
+                ) : (
+                  <ChevronLeft className="h-8 w-8" strokeWidth={4} />
+                )}
+              </div>
             </Button>
 
             {/* Mobile Toolbar - Top on mobile, sidebar on desktop */}
