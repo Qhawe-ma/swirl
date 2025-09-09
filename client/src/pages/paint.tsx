@@ -131,39 +131,6 @@ export default function PaintPage() {
             
             {/* Right: Actions */}
             <div className="flex items-center space-x-2 sm:space-x-4">
-              {/* Canvas Format Selection */}
-              {appState === 'drawing' && (
-                <div className="flex items-center space-x-2 sm:space-x-3">
-                  {/* Canvas Format Selection - Always visible, responsive sizing */}
-                  <div className="flex items-center space-x-1 px-1.5 sm:px-2 py-1 sm:py-1.5 bg-muted/50 border border-border/40 rounded-lg">
-                    <span className="text-xs font-medium text-muted-foreground mr-1 sm:mr-2 hidden sm:inline">Format:</span>
-                    <button
-                      onClick={() => setCanvasFormat('square')}
-                      className={`px-1.5 sm:px-2 py-1 text-xs font-medium rounded-md transition-all duration-200 flex items-center space-x-1 ${
-                        canvasFormat === 'square'
-                          ? 'bg-primary text-primary-foreground shadow-sm'
-                          : 'text-muted-foreground hover:text-foreground hover:bg-accent'
-                      }`}
-                      data-testid="button-format-square"
-                    >
-                      <Square className="w-3 h-3" />
-                      <span className="hidden sm:inline">Square</span>
-                    </button>
-                    <button
-                      onClick={() => setCanvasFormat('rectangle')}
-                      className={`px-1.5 sm:px-2 py-1 text-xs font-medium rounded-md transition-all duration-200 flex items-center space-x-1 ${
-                        canvasFormat === 'rectangle'
-                          ? 'bg-primary text-primary-foreground shadow-sm'
-                          : 'text-muted-foreground hover:text-foreground hover:bg-accent'
-                      }`}
-                      data-testid="button-format-rectangle"
-                    >
-                      <RectangleHorizontal className="w-3 h-3" />
-                      <span className="hidden sm:inline">Rectangle</span>
-                    </button>
-                  </div>
-                </div>
-              )}
             </div>
 
             {/* Wallet Connection - Positioned absolutely in top right corner */}
@@ -308,6 +275,7 @@ export default function PaintPage() {
                     brushSize={brushSize}
                     drawingMode={drawingMode}
                     canvasFormat={canvasFormat}
+                    setCanvasFormat={setCanvasFormat}
                     initialImageData={savedImageData}
                     onSave={handleSaveImage}
                     onUndoRedoChange={handleUndoRedoChange}
