@@ -145,7 +145,7 @@ export default function PaintPage() {
             {/* Sidebar Toggle Button - Positioned between sidebar and canvas */}
             <Button
               onClick={() => setSidebarCollapsed(!sidebarCollapsed)}
-              className={`hidden lg:block absolute top-1/2 -translate-y-1/2 z-20 w-10 h-10 p-0 bg-primary hover:bg-primary/90 text-primary-foreground shadow-lg hover:shadow-xl transition-all duration-300 motion-safe:hover:scale-105 rounded-xl border-2 border-white/20 ${
+              className={`hidden lg:block absolute top-8 z-20 w-10 h-10 p-0 bg-slate-900 dark:bg-slate-100 hover:bg-slate-800 dark:hover:bg-slate-200 text-white dark:text-slate-900 shadow-xl hover:shadow-2xl transition-all duration-300 motion-safe:hover:scale-105 rounded-xl border-2 border-slate-300 dark:border-slate-600 ${
                 sidebarCollapsed 
                   ? 'left-[4.5rem]' // Positioned right of collapsed sidebar
                   : 'left-[20.5rem]' // Positioned right of expanded sidebar
