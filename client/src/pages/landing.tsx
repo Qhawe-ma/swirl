@@ -148,11 +148,9 @@ export default function LandingPage() {
               {/* Step 1 */}
               <div className="text-center" data-testid="step-draw">
                 <div className="mx-auto mb-6">
-                  <div className="w-20 h-20 bg-background border-2 border-foreground/20 rounded-2xl flex items-center justify-center mx-auto shadow-lg">
-                    <span className="text-2xl font-black text-foreground">1</span>
-                  </div>
+                  <div className="w-32 h-32 bg-muted/40 rounded-2xl mx-auto"></div>
                 </div>
-                <h3 className="text-xl font-bold text-foreground mb-4">Draw & Create</h3>
+                <h3 className="text-lg text-muted-foreground mb-4">Draw & Create</h3>
                 <p className="text-muted-foreground leading-relaxed">
                   Use our professional drawing tools to create your masterpiece. 
                   Choose colors, brush sizes, and let your creativity flow.
@@ -162,11 +160,9 @@ export default function LandingPage() {
               {/* Step 2 */}
               <div className="text-center" data-testid="step-customize">
                 <div className="mx-auto mb-6">
-                  <div className="w-20 h-20 bg-background border-2 border-foreground/20 rounded-2xl flex items-center justify-center mx-auto shadow-lg">
-                    <span className="text-2xl font-black text-foreground">2</span>
-                  </div>
+                  <div className="w-32 h-32 bg-muted/40 rounded-2xl mx-auto"></div>
                 </div>
-                <h3 className="text-xl font-bold text-foreground mb-4">Add Details</h3>
+                <h3 className="text-lg text-muted-foreground mb-4">Add Details</h3>
                 <p className="text-muted-foreground leading-relaxed">
                   Give your artwork a name and description. These details will be 
                   permanently stored with your NFT on the blockchain.
@@ -176,11 +172,9 @@ export default function LandingPage() {
               {/* Step 3 */}
               <div className="text-center" data-testid="step-mint">
                 <div className="mx-auto mb-6">
-                  <div className="w-20 h-20 bg-background border-2 border-foreground/20 rounded-2xl flex items-center justify-center mx-auto shadow-lg">
-                    <span className="text-2xl font-black text-foreground">3</span>
-                  </div>
+                  <div className="w-32 h-32 bg-muted/40 rounded-2xl mx-auto"></div>
                 </div>
-                <h3 className="text-xl font-bold text-foreground mb-4">Mint as NFT</h3>
+                <h3 className="text-lg text-muted-foreground mb-4">Mint as NFT</h3>
                 <p className="text-muted-foreground leading-relaxed">
                   Connect your Solana wallet and mint your artwork to the blockchain. 
                   Your digital art becomes a permanent, tradeable NFT.
