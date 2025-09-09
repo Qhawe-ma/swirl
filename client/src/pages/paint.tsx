@@ -168,7 +168,7 @@ export default function PaintPage() {
                 ? 'lg:w-16 h-auto' 
                 : 'lg:w-80 h-auto'
             }`}>
-              <div className="h-full lg:h-full relative border border-slate-200/30 dark:border-slate-700/30 rounded-lg">
+              <div className="h-full lg:h-full relative border border-border/40 rounded-lg">
                 
                 {/* Mobile Toolbar - Always visible on mobile */}
                 <div className="lg:hidden w-full">
