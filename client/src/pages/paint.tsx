@@ -153,7 +153,7 @@ export default function PaintPage() {
                 <Button
                   onClick={() => setSidebarCollapsed(!sidebarCollapsed)}
                   className={`hidden lg:block absolute top-4 z-20 w-10 h-10 p-0 bg-primary hover:bg-primary/90 text-primary-foreground shadow-lg hover:shadow-xl transition-all duration-300 motion-safe:hover:scale-105 rounded-xl border-2 border-white/20 ${
-                    sidebarCollapsed ? 'right-2' : '-right-5'
+                    sidebarCollapsed ? 'left-2' : 'right-4'
                   }`}
                   aria-label={sidebarCollapsed ? 'Expand sidebar' : 'Collapse sidebar'}
                   data-testid="button-toggle-sidebar"
