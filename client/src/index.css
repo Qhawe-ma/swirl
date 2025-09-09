@@ -268,11 +268,13 @@
     transform: translateX(0);
   }
   100% {
-    transform: translateX(-50%);
+    transform: translateX(-33.33%);
   }
 }
 
 .community-gallery-scroll {
-  animation: community-scroll 60s linear infinite;
+  animation: community-scroll 30s linear infinite;
+  display: flex;
+  width: max-content;
 }
 
