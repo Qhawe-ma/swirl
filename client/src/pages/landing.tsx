@@ -1,8 +1,76 @@
 import { Link } from 'wouter';
+import { useState, useEffect } from 'react';
+import { getAllMints, MintRecord } from '@/lib/firebase';
 import { Button } from '@/components/ui/button';
 import { Card } from '@/components/ui/card';
 import { WalletConnection } from '@/components/wallet/WalletConnection';
 import { Palette, Sparkles, Zap, Users, ArrowRight, Play, Check, Twitter, Instagram, MessageCircle, ExternalLink } from 'lucide-react';
+
+// Community Gallery Component
+function CommunityGallery() {
+  const [mints, setMints] = useState<MintRecord[]>([]);
+  const [loading, setLoading] = useState(true);
+
+  useEffect(() => {
+    let unsubscribe: (() => void) | null = null;
+
+    const setupFirebaseListener = () => {
+      console.log('🎯 Community Gallery: Setting up getAllMints subscription');
+      
+      unsubscribe = getAllMints((mintsList) => {
+        console.log('📨 Community Gallery: Received mints callback with', mintsList.length, 'mints');
+        setMints(mintsList);
+        setLoading(false);
+      });
+    };
+
+    setupFirebaseListener();
+
+    // Cleanup subscription on unmount
+    return () => {
+      if (unsubscribe) {
+        console.log('🧹 Community Gallery: Cleaning up getAllMints subscription');
+        unsubscribe();
+      }
+    };
+  }, []);
+
+  if (loading || mints.length === 0) {
+    return null; // Don't show anything while loading or if no mints
+  }
+
+  // Duplicate the mints array to create seamless loop
+  const duplicatedMints = [...mints, ...mints, ...mints];
+
+  return (
+    <div className="w-full overflow-hidden bg-gradient-to-r from-muted/10 via-background to-muted/10 py-8 border-b border-border/20">
+      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 mb-6">
+        <div className="text-center">
+          <h2 className="text-lg font-semibold text-muted-foreground mb-2">Community Creations</h2>
+          <p className="text-sm text-muted-foreground/80">Discover amazing NFT art created by our community</p>
+        </div>
+      </div>
+      
+      <div className="relative">
+        <div className="flex gap-4 community-gallery-scroll">
+          {duplicatedMints.map((mint, index) => (
+            <div
+              key={`${mint.id}-${index}`}
+              className="flex-shrink-0 w-56 h-56 rounded-xl overflow-hidden border border-border/20 shadow-lg hover:shadow-xl transition-shadow duration-300 bg-white"
+            >
+              <img
+                src={mint.imageData}
+                alt={mint.name}
+                className="w-full h-full object-cover"
+                loading="lazy"
+              />
+            </div>
+          ))}
+        </div>
+      </div>
+    </div>
+  );
+}
 
 export default function LandingPage() {
   return (
@@ -26,6 +94,9 @@ export default function LandingPage() {
           </div>
         </div>
       </header>
+
+      {/* Community Gallery */}
+      <CommunityGallery />
 
       {/* Hero Section */}
       <main className="flex-1">

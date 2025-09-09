@@ -262,3 +262,17 @@
   -webkit-font-smoothing: antialiased;
 }
 
+/* Community Gallery Animation */
+@keyframes community-scroll {
+  0% {
+    transform: translateX(0);
+  }
+  100% {
+    transform: translateX(-50%);
+  }
+}
+
+.community-gallery-scroll {
+  animation: community-scroll 60s linear infinite;
+}
+
