@@ -148,7 +148,7 @@ export default function LandingPage() {
               {/* Step 1 */}
               <div className="text-center" data-testid="step-draw">
                 <div className="mx-auto mb-6">
-                  <div className="w-32 h-32 bg-muted/40 rounded-2xl mx-auto"></div>
+                  <div className="w-32 h-32 bg-gray-400 rounded-2xl mx-auto"></div>
                 </div>
                 <h3 className="text-lg text-muted-foreground mb-4">Draw & Create</h3>
                 <p className="text-muted-foreground leading-relaxed">
@@ -160,7 +160,7 @@ export default function LandingPage() {
               {/* Step 2 */}
               <div className="text-center" data-testid="step-customize">
                 <div className="mx-auto mb-6">
-                  <div className="w-32 h-32 bg-muted/40 rounded-2xl mx-auto"></div>
+                  <div className="w-32 h-32 bg-gray-400 rounded-2xl mx-auto"></div>
                 </div>
                 <h3 className="text-lg text-muted-foreground mb-4">Add Details</h3>
                 <p className="text-muted-foreground leading-relaxed">
@@ -172,7 +172,7 @@ export default function LandingPage() {
               {/* Step 3 */}
               <div className="text-center" data-testid="step-mint">
                 <div className="mx-auto mb-6">
-                  <div className="w-32 h-32 bg-muted/40 rounded-2xl mx-auto"></div>
+                  <div className="w-32 h-32 bg-gray-400 rounded-2xl mx-auto"></div>
                 </div>
                 <h3 className="text-lg text-muted-foreground mb-4">Mint as NFT</h3>
                 <p className="text-muted-foreground leading-relaxed">
