@@ -79,22 +79,22 @@ export default function PaintPage() {
         <div className="absolute inset-0 bg-gradient-to-r from-primary/3 via-transparent to-primary/3 pointer-events-none"></div>
         
         <div className="relative max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-          <div className="flex justify-between items-center h-16 lg:h-18">
-            {/* Left: Navigation Section */}
-            <div className="flex items-center space-x-2 sm:space-x-6 ml-20">
+          <div className="flex items-center justify-center h-16 lg:h-18 relative">
+            {/* Centered Compact Navigation */}
+            <div className="flex items-center">
               {/* Navigation Items - Desktop */}
               <nav className="hidden lg:flex items-center space-x-1">
-                <Link href="/" className="px-3 py-2 text-sm font-medium text-muted-foreground hover:text-foreground hover:bg-accent rounded-lg transition-colors cursor-pointer" data-testid="link-home">
+                <Link href="/" className="px-2 py-1 text-sm font-medium text-muted-foreground hover:text-foreground hover:bg-accent rounded-md transition-colors cursor-pointer" data-testid="link-home">
                   Home
                 </Link>
-                <div className="px-3 py-2 text-sm font-medium text-primary bg-primary/5 rounded-lg border border-primary/20">
+                <div className="px-2 py-1 text-sm font-medium text-primary bg-primary/5 rounded-md border border-primary/20">
                   Create
                 </div>
-                <Link href="/gallery" className="px-3 py-2 text-sm font-medium text-muted-foreground hover:text-foreground hover:bg-accent rounded-lg transition-colors cursor-pointer" data-testid="link-gallery">
+                <Link href="/gallery" className="px-2 py-1 text-sm font-medium text-muted-foreground hover:text-foreground hover:bg-accent rounded-md transition-colors cursor-pointer" data-testid="link-gallery">
                   Gallery
                 </Link>
                 <div className="relative group">
-                  <div className="px-3 py-2 text-sm font-medium text-muted-foreground hover:text-foreground hover:bg-accent rounded-lg transition-colors cursor-pointer" data-testid="link-create-with-friends">
+                  <div className="px-2 py-1 text-sm font-medium text-muted-foreground hover:text-foreground hover:bg-accent rounded-md transition-colors cursor-pointer" data-testid="link-create-with-friends">
                     <span className="group-hover:hidden">Create With Friends</span>
                     <span className="hidden group-hover:inline">Coming Soon</span>
                   </div>
@@ -110,10 +110,6 @@ export default function PaintPage() {
                   Gallery
                 </Link>
               </nav>
-            </div>
-            
-            {/* Right: Actions */}
-            <div className="flex items-center space-x-2 sm:space-x-4">
             </div>
 
             {/* Swirl Logo - Positioned absolutely in top left corner */}
