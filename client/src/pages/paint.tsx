@@ -141,7 +141,7 @@ export default function PaintPage() {
 
       <main className="flex-1 bg-gradient-to-br from-background via-muted/10 to-muted/20 min-h-0">
         {appState === 'drawing' && (
-          <div className="h-full flex flex-col lg:flex-row gap-1 p-1 min-h-0 relative">
+          <div className="h-full flex flex-col lg:flex-row gap-4 p-1 min-h-0 relative">
             {/* Sidebar Toggle Button - Positioned between sidebar and canvas */}
             <Button
               onClick={() => setSidebarCollapsed(!sidebarCollapsed)}
