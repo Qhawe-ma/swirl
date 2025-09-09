@@ -47,21 +47,14 @@ function CommunityGallery() {
   // Show loading state
   if (loading) {
     return (
-      <div className="w-full overflow-hidden bg-gradient-to-r from-muted/10 via-background to-muted/10 py-8 border-b border-border/20">
-        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 mb-6">
-          <div className="text-center">
-            <h2 className="text-lg font-semibold text-muted-foreground mb-2">Community Creations</h2>
-            <p className="text-sm text-muted-foreground/80">Loading amazing NFT art from our community...</p>
-          </div>
-        </div>
-        
+      <div className="w-full overflow-hidden bg-gradient-to-r from-muted/10 via-background to-muted/10 py-4 border-b border-border/20">
         <div className="relative">
-          <div className="flex gap-4 px-4">
+          <div className="flex gap-3 px-4">
             {/* Loading placeholder cards */}
             {[1, 2, 3, 4, 5].map((index) => (
               <div
                 key={index}
-                className="flex-shrink-0 w-56 h-56 rounded-xl overflow-hidden border border-border/20 bg-muted/20 animate-pulse"
+                className="flex-shrink-0 w-32 h-32 rounded-lg overflow-hidden border border-border/20 bg-muted/20 animate-pulse"
               />
             ))}
           </div>
@@ -72,50 +65,20 @@ function CommunityGallery() {
 
   // Show empty state if no mints
   if (mints.length === 0) {
-    return (
-      <div className="w-full overflow-hidden bg-gradient-to-r from-muted/10 via-background to-muted/10 py-8 border-b border-border/20">
-        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 mb-6">
-          <div className="text-center">
-            <h2 className="text-lg font-semibold text-muted-foreground mb-2">Community Creations</h2>
-            <p className="text-sm text-muted-foreground/80">Be the first to create and share your NFT artwork!</p>
-          </div>
-        </div>
-        
-        <div className="relative">
-          <div className="flex justify-center py-12">
-            <div className="text-center">
-              <Palette className="w-16 h-16 text-muted-foreground/50 mx-auto mb-4" />
-              <p className="text-muted-foreground">No community artwork yet</p>
-              <Link href="/create">
-                <Button variant="outline" className="mt-4">
-                  Create the First NFT
-                </Button>
-              </Link>
-            </div>
-          </div>
-        </div>
-      </div>
-    );
+    return null; // Don't show anything if no mints
   }
 
   // Duplicate the mints array to create seamless loop
   const duplicatedMints = [...mints, ...mints, ...mints];
 
   return (
-    <div className="w-full overflow-hidden bg-gradient-to-r from-muted/10 via-background to-muted/10 py-8 border-b border-border/20">
-      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 mb-6">
-        <div className="text-center">
-          <h2 className="text-lg font-semibold text-muted-foreground mb-2">Community Creations</h2>
-          <p className="text-sm text-muted-foreground/80">Discover amazing NFT art created by our community</p>
-        </div>
-      </div>
-      
+    <div className="w-full overflow-hidden bg-gradient-to-r from-muted/10 via-background to-muted/10 py-4 border-b border-border/20">
       <div className="relative">
-        <div className="flex gap-4 community-gallery-scroll">
+        <div className="flex gap-3 community-gallery-scroll">
           {duplicatedMints.map((mint, index) => (
             <div
               key={`${mint.id}-${index}`}
-              className="flex-shrink-0 w-56 h-56 rounded-xl overflow-hidden border border-border/20 shadow-lg hover:shadow-xl transition-shadow duration-300 bg-white"
+              className="flex-shrink-0 w-32 h-32 rounded-lg overflow-hidden border border-border/20 shadow-md hover:shadow-lg transition-shadow duration-300 bg-white"
             >
               <img
                 src={mint.imageData}
