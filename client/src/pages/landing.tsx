@@ -35,7 +35,7 @@ export default function LandingPage() {
           <div className="relative max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
             <div className="text-center max-w-4xl mx-auto">
               {/* Hero Title */}
-              <h1 className="text-4xl sm:text-5xl lg:text-6xl font-bold text-foreground leading-tight tracking-tight mb-12" data-testid="hero-title">
+              <h1 className="text-3xl sm:text-4xl lg:text-5xl font-bold text-foreground leading-tight tracking-tight mb-12" data-testid="hero-title">
                 Turn Your Art Into NFT
               </h1>
               
