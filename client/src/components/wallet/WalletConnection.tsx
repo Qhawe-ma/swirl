@@ -29,7 +29,12 @@ export function WalletConnection() {
     <div className="flex items-center space-x-3">
       {!connected ? (
         <WalletMultiButton 
-          className="!bg-blue-600 hover:!bg-transparent hover:!border-blue-600 !border-2 !border-blue-600 !text-white hover:!text-blue-600 !px-4 !py-2.5 !rounded-lg !flex !items-center !space-x-2 motion-safe:!transition-all motion-safe:!duration-300 motion-reduce:!transition-none !font-semibold !text-sm !shadow-md hover:!shadow-lg !tracking-wide"
+          className="!bg-blue-600 hover:!bg-transparent !border-2 !border-blue-600 !text-white hover:!text-blue-600 !px-4 !py-2.5 !rounded-lg !font-semibold !text-sm !transition-all !duration-300 !shadow-lg hover:!shadow-xl"
+          style={{
+            backgroundColor: '#2563eb !important',
+            borderColor: '#2563eb !important',
+            color: 'white !important'
+          }}
           data-testid="button-connect-wallet"
         />
       ) : (
