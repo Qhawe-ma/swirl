@@ -145,18 +145,18 @@ export default function PaintPage() {
             {/* Sidebar Toggle Button - Positioned between sidebar and canvas */}
             <Button
               onClick={() => setSidebarCollapsed(!sidebarCollapsed)}
-              className={`hidden lg:block absolute top-8 z-20 w-10 h-10 p-0 bg-slate-900 dark:bg-slate-100 hover:bg-slate-800 dark:hover:bg-slate-200 text-white dark:text-slate-900 shadow-xl hover:shadow-2xl transition-all duration-300 motion-safe:hover:scale-105 rounded-xl border-2 border-slate-300 dark:border-slate-600 ${
+              className={`hidden lg:block absolute top-1/2 -translate-y-1/2 z-20 w-12 h-12 p-0 bg-[#5EBAFF] hover:bg-[#4A9CE5] text-white shadow-xl hover:shadow-2xl transition-all duration-300 motion-safe:hover:scale-105 rounded-xl border-2 border-white/30 ${
                 sidebarCollapsed 
                   ? 'left-[4.5rem]' // Positioned right of collapsed sidebar
-                  : 'left-[20.5rem]' // Positioned right of expanded sidebar
+                  : 'left-[21rem]' // Positioned right of expanded sidebar
               }`}
               aria-label={sidebarCollapsed ? 'Expand sidebar' : 'Collapse sidebar'}
               data-testid="button-toggle-sidebar"
             >
               {sidebarCollapsed ? (
-                <ChevronRight className="h-4 w-4" />
+                <ChevronRight className="h-6 w-6" strokeWidth={3} />
               ) : (
-                <ChevronLeft className="h-4 w-4" />
+                <ChevronLeft className="h-6 w-6" strokeWidth={3} />
               )}
             </Button>
 
