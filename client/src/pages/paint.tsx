@@ -141,7 +141,25 @@ export default function PaintPage() {
 
       <main className="flex-1 bg-gradient-to-br from-background via-muted/10 to-muted/20 min-h-0">
         {appState === 'drawing' && (
-          <div className="h-full flex flex-col lg:flex-row gap-1 p-1 min-h-0">
+          <div className="h-full flex flex-col lg:flex-row gap-1 p-1 min-h-0 relative">
+            {/* Sidebar Toggle Button - Positioned between sidebar and canvas */}
+            <Button
+              onClick={() => setSidebarCollapsed(!sidebarCollapsed)}
+              className={`hidden lg:block absolute top-1/2 -translate-y-1/2 z-20 w-10 h-10 p-0 bg-primary hover:bg-primary/90 text-primary-foreground shadow-lg hover:shadow-xl transition-all duration-300 motion-safe:hover:scale-105 rounded-xl border-2 border-white/20 ${
+                sidebarCollapsed 
+                  ? 'left-[4.5rem]' // Positioned right of collapsed sidebar
+                  : 'left-[20.5rem]' // Positioned right of expanded sidebar
+              }`}
+              aria-label={sidebarCollapsed ? 'Expand sidebar' : 'Collapse sidebar'}
+              data-testid="button-toggle-sidebar"
+            >
+              {sidebarCollapsed ? (
+                <ChevronRight className="h-4 w-4" />
+              ) : (
+                <ChevronLeft className="h-4 w-4" />
+              )}
+            </Button>
+
             {/* Mobile Toolbar - Top on mobile, sidebar on desktop */}
             <div className={`relative transition-all duration-500 ease-in-out flex-shrink-0 lg:h-auto ${
               sidebarCollapsed 
@@ -149,21 +167,6 @@ export default function PaintPage() {
                 : 'lg:w-80 h-auto'
             }`}>
               <div className="h-full lg:h-full relative">
-                {/* Sidebar Toggle Button - Hidden on mobile */}
-                <Button
-                  onClick={() => setSidebarCollapsed(!sidebarCollapsed)}
-                  className={`hidden lg:block absolute top-4 z-20 w-10 h-10 p-0 bg-primary hover:bg-primary/90 text-primary-foreground shadow-lg hover:shadow-xl transition-all duration-300 motion-safe:hover:scale-105 rounded-xl border-2 border-white/20 ${
-                    sidebarCollapsed ? 'left-2' : 'right-4'
-                  }`}
-                  aria-label={sidebarCollapsed ? 'Expand sidebar' : 'Collapse sidebar'}
-                  data-testid="button-toggle-sidebar"
-                >
-                  {sidebarCollapsed ? (
-                    <ChevronRight className="h-4 w-4" />
-                  ) : (
-                    <ChevronLeft className="h-4 w-4" />
-                  )}
-                </Button>
                 
                 {/* Mobile Toolbar - Always visible on mobile */}
                 <div className="lg:hidden w-full">
