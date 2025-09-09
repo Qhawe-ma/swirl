@@ -17,10 +17,16 @@ export async function registerRoutes(app: Express): Promise<Server> {
         measurementId: process.env.VITE_FIREBASE_MEASUREMENT_ID
       };
 
+
       // Check if all required fields are present
       if (!firebaseConfig.apiKey || !firebaseConfig.projectId) {
+        const missingFields = [];
+        if (!firebaseConfig.apiKey) missingFields.push('VITE_FIREBASE_API_KEY');
+        if (!firebaseConfig.projectId) missingFields.push('VITE_FIREBASE_PROJECT_ID');
+        
+        console.error('❌ Missing Firebase environment variables:', missingFields);
         return res.status(500).json({ 
-          error: "Firebase configuration incomplete - missing required secrets" 
+          error: `Firebase configuration incomplete - missing required secrets: ${missingFields.join(', ')}` 
         });
       }
 
