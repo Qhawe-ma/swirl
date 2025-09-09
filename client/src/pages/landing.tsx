@@ -68,17 +68,18 @@ function CommunityGallery() {
     return null; // Don't show anything if no mints
   }
 
-  // Duplicate the mints array to create seamless loop
-  const duplicatedMints = [...mints, ...mints, ...mints];
+  // Duplicate the mints array multiple times to ensure seamless loop with no blank spaces
+  const duplicatedMints = [...mints, ...mints, ...mints, ...mints, ...mints, ...mints];
 
   return (
     <div className="w-full overflow-hidden bg-gradient-to-r from-muted/10 via-background to-muted/10 py-4">
       <div className="relative">
         <div className="flex gap-3 community-gallery-scroll">
           {duplicatedMints.map((mint, index) => (
-            <div
+            <Link 
+              href="/gallery" 
               key={`${mint.id}-${index}`}
-              className="flex-shrink-0 w-24 h-24 rounded-lg overflow-hidden border border-border/20 shadow-md hover:shadow-lg transition-shadow duration-300 bg-white"
+              className="flex-shrink-0 w-24 h-24 rounded-lg overflow-hidden border border-border/20 shadow-md hover:shadow-lg transition-all duration-300 bg-white cursor-pointer hover:scale-105"
             >
               <img
                 src={mint.imageData}
@@ -86,7 +87,7 @@ function CommunityGallery() {
                 className="w-full h-full object-cover"
                 loading="lazy"
               />
-            </div>
+            </Link>
           ))}
         </div>
       </div>
