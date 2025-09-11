@@ -197,7 +197,7 @@ export default function LandingPage() {
           <div className="max-w-3xl mx-auto px-4 sm:px-6 lg:px-8">
             <div className="text-center">
               <button 
-                className="group w-full max-w-xl mx-auto px-12 py-8 text-xl sm:text-2xl lg:text-3xl font-black bg-gradient-to-r from-muted/30 via-muted/40 to-muted/30 hover:from-muted/50 hover:via-muted/60 hover:to-muted/50 border-2 border-muted/40 hover:border-muted/60 shadow-2xl hover:shadow-3xl transition-all duration-500 ease-out motion-safe:hover:scale-[1.02] motion-safe:hover:-translate-y-2 rounded-3xl relative overflow-hidden active:scale-[0.98] active:translate-y-0"
+                className="group w-full max-w-lg mx-auto px-8 py-6 text-lg sm:text-xl lg:text-2xl font-black bg-gradient-to-r from-muted/30 via-muted/40 to-muted/30 hover:from-muted/50 hover:via-muted/60 hover:to-muted/50 border-2 border-muted/40 hover:border-muted/60 shadow-2xl hover:shadow-3xl transition-all duration-500 ease-out motion-safe:hover:scale-[1.02] motion-safe:hover:-translate-y-2 rounded-3xl relative overflow-hidden active:scale-[0.98] active:translate-y-0"
                 data-testid="button-create-with-friends"
                 disabled
               >
@@ -209,7 +209,7 @@ export default function LandingPage() {
                 
                 {/* Text that changes on hover */}
                 <span className="relative z-10 flex items-center justify-center tracking-wide">
-                  <Users className="w-6 h-6 sm:w-8 sm:h-8 lg:w-10 lg:h-10 mr-3 sm:mr-4 transition-all duration-300 group-hover:rotate-12 group-hover:scale-110" />
+                  <Users className="w-5 h-5 sm:w-6 sm:h-6 lg:w-8 lg:h-8 mr-2 sm:mr-3 transition-all duration-300 group-hover:rotate-12 group-hover:scale-110" />
                   <span className="transition-all duration-300 group-hover:opacity-0 group-hover:scale-95">
                     Create With Friends
                   </span>
