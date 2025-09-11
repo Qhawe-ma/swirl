@@ -168,7 +168,7 @@ export default function PaintPage() {
                 ? 'lg:w-16 h-auto' 
                 : 'lg:w-80 h-auto'
             }`}>
-              <div className="h-full lg:h-full relative border border-border/40 rounded-lg">
+              <div className="h-full lg:h-full relative rounded-lg">
                 
                 {/* Mobile Toolbar - Always visible on mobile */}
                 <div className="lg:hidden w-full">
@@ -271,7 +271,7 @@ export default function PaintPage() {
             
             {/* Main Canvas Area - Full canvas display */}
             <div className="flex-1 min-h-0 min-w-0 lg:min-w-0">
-              <div className="bg-card/60 backdrop-blur-xl border border-border/40 rounded-xl shadow-xl p-1 h-full">
+              <div className="bg-card/60 backdrop-blur-xl rounded-xl shadow-xl p-1 h-full">
                 <div className="h-full rounded-lg overflow-hidden">
                   <PaintCanvas
                     selectedColor={selectedColor}
