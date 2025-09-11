@@ -115,7 +115,7 @@ export default function PaintPage() {
             {/* Swirl Logo - Positioned absolutely in top left corner */}
             <div className="fixed top-2 left-2 z-50">
               <Link href="/" className="relative group cursor-pointer" data-testid="app-logo">
-                <div className="flex items-center gap-2">
+                <div className="flex items-center gap-0">
                   <img 
                     src="https://res.cloudinary.com/dl8f1ztsy/image/upload/v1757143508/Swirl_Logo_wbpo9t.png" 
                     alt="Logo" 
@@ -124,7 +124,7 @@ export default function PaintPage() {
                   />
                   
                   {/* Brand Name */}
-                  <span className="text-xl sm:text-3xl font-bold text-foreground -ml-1" data-testid="text-app-title">
+                  <span className="text-xl sm:text-3xl font-bold text-foreground -ml-2" data-testid="text-app-title">
                     Swirl
                   </span>
                 </div>
