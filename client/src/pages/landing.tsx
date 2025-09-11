@@ -144,7 +144,7 @@ export default function LandingPage() {
               </div>
               
               {/* Hero Description */}
-              <p className="text-lg sm:text-xl text-muted-foreground leading-relaxed mb-8 max-w-3xl mx-auto" data-testid="hero-description">
+              <p className="text-lg text-muted-foreground mb-8 max-w-2xl mx-auto" data-testid="hero-description">
                 Create stunning digital artwork with professional drawing tools and mint it as an NFT on Solana. 
                 Your creativity, permanently stored on the blockchain.
               </p>
