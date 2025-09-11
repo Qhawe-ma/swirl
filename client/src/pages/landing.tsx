@@ -242,7 +242,15 @@ export default function LandingPage() {
               {/* Step 1 */}
               <div className="text-center" data-testid="step-draw">
                 <div className="mx-auto mb-6">
-                  <div className="w-32 h-32 bg-gray-400 rounded-2xl mx-auto"></div>
+                  <video 
+                    className="w-32 h-32 rounded-2xl mx-auto object-cover"
+                    autoPlay
+                    loop
+                    muted
+                    playsInline
+                  >
+                    <source src="https://res.cloudinary.com/dl8f1ztsy/video/upload/v1757600469/giff_ngkp2g.mp4" type="video/mp4" />
+                  </video>
                 </div>
                 <h3 className="text-lg text-muted-foreground mb-4">Draw & Create</h3>
                 <p className="text-muted-foreground leading-relaxed">
