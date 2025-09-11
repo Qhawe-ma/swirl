@@ -243,7 +243,7 @@ export default function LandingPage() {
               <div className="text-center" data-testid="step-draw">
                 <div className="mx-auto mb-6">
                   <video 
-                    className="w-32 h-32 rounded-2xl mx-auto object-cover"
+                    className="w-32 h-32 rounded-2xl mx-auto object-cover border-2 border-black"
                     autoPlay
                     loop
                     muted
