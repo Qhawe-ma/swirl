@@ -154,7 +154,7 @@ export default function LandingPage() {
                 <Link href="/create">
                   <Button 
                     size="lg" 
-                    className="group w-full sm:w-auto px-12 py-6 text-lg font-bold bg-gradient-to-r from-primary via-primary to-primary/90 hover:from-primary/95 hover:via-primary/95 hover:to-primary text-primary-foreground shadow-2xl hover:shadow-3xl transition-all duration-500 ease-out motion-safe:hover:scale-[1.03] motion-safe:hover:-translate-y-2 rounded-2xl border-0 relative overflow-hidden active:scale-[0.98] active:translate-y-0"
+                    className="group w-full sm:w-auto px-12 py-6 text-lg font-bold bg-gradient-to-r from-primary via-primary to-primary/90 hover:from-primary/95 hover:via-primary/95 hover:to-primary text-primary-foreground shadow-2xl hover:shadow-3xl transition-all duration-500 ease-out motion-safe:hover:scale-[1.03] motion-safe:hover:-translate-y-2 rounded-2xl border-2 border-black relative overflow-hidden active:scale-[0.98] active:translate-y-0"
                     data-testid="button-create-now"
                   >
                     {/* Shimmer effect */}
