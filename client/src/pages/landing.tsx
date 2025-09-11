@@ -305,7 +305,7 @@ export default function LandingPage() {
               <Link href="/create">
                 <Button 
                   size="lg" 
-                  className="px-8 py-4 text-lg font-semibold bg-primary hover:bg-primary/90 text-primary-foreground shadow-lg hover:shadow-xl transition-all duration-300 motion-safe:hover:scale-105 rounded-xl border-2 border-white/20"
+                  className="px-8 py-4 text-lg font-semibold bg-primary hover:bg-primary/90 text-primary-foreground shadow-lg hover:shadow-xl transition-all duration-300 motion-safe:hover:scale-105 rounded-xl border-2 border-black"
                   data-testid="button-start-creating"
                 >
                   <Play className="w-5 h-5 mr-2" />
