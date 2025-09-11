@@ -262,7 +262,15 @@ export default function LandingPage() {
               {/* Step 2 */}
               <div className="text-center" data-testid="step-customize">
                 <div className="mx-auto mb-6">
-                  <div className="w-32 h-32 bg-gray-400 rounded-2xl mx-auto"></div>
+                  <video 
+                    className="w-32 h-32 rounded-2xl mx-auto object-cover border-2 border-black"
+                    autoPlay
+                    loop
+                    muted
+                    playsInline
+                  >
+                    <source src="https://res.cloudinary.com/dl8f1ztsy/video/upload/v1757600469/giff2_rfmwwm.mp4" type="video/mp4" />
+                  </video>
                 </div>
                 <h3 className="text-lg text-muted-foreground mb-4">Add Details</h3>
                 <p className="text-muted-foreground leading-relaxed">
