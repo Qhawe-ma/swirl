@@ -249,7 +249,7 @@ export default function LandingPage() {
                     muted
                     playsInline
                   >
-                    <source src="https://res.cloudinary.com/dl8f1ztsy/video/upload/v1757600469/giff_ngkp2g.mp4" type="video/mp4" />
+                    <source src="https://res.cloudinary.com/dl8f1ztsy/video/upload/v1757600840/giffff11_oqbuzo.mp4" type="video/mp4" />
                   </video>
                 </div>
                 <h3 className="text-lg text-muted-foreground mb-4">Draw & Create</h3>
