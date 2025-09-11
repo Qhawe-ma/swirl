@@ -103,14 +103,14 @@ export default function LandingPage() {
         <div className="relative max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
           <div className="flex justify-center items-center py-4 sm:py-6 lg:py-8">
             {/* Centered Brand Section */}
-            <div className="flex items-center gap-4 sm:gap-6">
+            <div className="flex items-center gap-3 sm:gap-4">
               <img 
                 src="https://res.cloudinary.com/dl8f1ztsy/image/upload/v1757143508/Swirl_Logo_wbpo9t.png" 
                 alt="Logo" 
-                className="w-16 h-16 sm:w-20 sm:h-20 lg:w-24 lg:h-24"
+                className="w-12 h-12 sm:w-14 sm:h-14 lg:w-16 lg:h-16"
                 data-testid="img-app-icon"
               />
-              <span className="text-4xl sm:text-5xl lg:text-6xl xl:text-7xl font-bold text-foreground" data-testid="text-app-title">
+              <span className="text-3xl sm:text-4xl lg:text-5xl font-bold text-foreground" data-testid="text-app-title">
                 Swirl
               </span>
             </div>
