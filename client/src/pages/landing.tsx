@@ -197,7 +197,7 @@ export default function LandingPage() {
           <div className="max-w-3xl mx-auto px-4 sm:px-6 lg:px-8">
             <div className="text-center">
               <button 
-                className="group w-full max-w-md mx-auto px-8 py-6 text-lg sm:text-xl lg:text-2xl font-black bg-gradient-to-r from-muted/30 via-muted/40 to-muted/30 hover:from-muted/50 hover:via-muted/60 hover:to-muted/50 border-2 border-muted/40 hover:border-muted/60 shadow-2xl hover:shadow-3xl transition-all duration-500 ease-out motion-safe:hover:scale-[1.02] motion-safe:hover:-translate-y-2 rounded-3xl relative overflow-hidden active:scale-[0.98] active:translate-y-0"
+                className="group w-full max-w-sm mx-auto px-8 py-6 text-lg sm:text-xl lg:text-2xl font-black bg-gradient-to-r from-muted/30 via-muted/40 to-muted/30 hover:from-muted/50 hover:via-muted/60 hover:to-muted/50 border-2 border-muted/40 hover:border-muted/60 shadow-2xl hover:shadow-3xl transition-all duration-500 ease-out motion-safe:hover:scale-[1.02] motion-safe:hover:-translate-y-2 rounded-3xl relative overflow-hidden active:scale-[0.98] active:translate-y-0"
                 data-testid="button-create-with-friends"
                 disabled
               >
