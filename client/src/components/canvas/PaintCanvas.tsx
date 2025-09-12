@@ -483,9 +483,18 @@ export function PaintCanvas({
       setLastPoint({ x, y });
       context.beginPath();
       
-      // For 1px brush, draw exact pixel
+      // For 1px brush, draw a small dot with anti-aliasing
       if (brushSize <= 1) {
-        context.fillRect(x, y, 1, 1);
+        context.save();
+        context.lineWidth = 1;
+        context.lineCap = 'round';
+        context.lineJoin = 'round';
+        context.imageSmoothingEnabled = true;
+        context.imageSmoothingQuality = 'high';
+        context.beginPath();
+        context.arc(x, y, 0.5, 0, 2 * Math.PI);
+        context.fill();
+        context.restore();
       } else if (brushSize <= 3) {
         context.arc(x, y, brushSize / 2, 0, 2 * Math.PI);
         context.fill();
@@ -538,35 +547,23 @@ export function PaintCanvas({
       context.globalCompositeOperation = 'source-over';
     }
     
-    // For 1px brush, draw individual pixels along the path
+    // For 1px brush, use smooth line drawing with anti-aliasing
     if (brushSize <= 1) {
-      const dx = Math.abs(x - lastPoint.x);
-      const dy = Math.abs(y - lastPoint.y);
-      const sx = lastPoint.x < x ? 1 : -1;
-      const sy = lastPoint.y < y ? 1 : -1;
-      let err = dx - dy;
+      // Use sub-pixel precision with anti-aliasing for smooth 1px lines
+      context.save();
+      context.lineWidth = 1;
+      context.lineCap = 'round';
+      context.lineJoin = 'round';
+      context.imageSmoothingEnabled = true;
+      context.imageSmoothingQuality = 'high';
       
-      let currentX = Math.floor(lastPoint.x);
-      let currentY = Math.floor(lastPoint.y);
-      const targetX = Math.floor(x);
-      const targetY = Math.floor(y);
+      // Draw a smooth line from last point to current point
+      context.beginPath();
+      context.moveTo(lastPoint.x, lastPoint.y);
+      context.lineTo(x, y);
+      context.stroke();
       
-      while (true) {
-        // Draw pixel without boundary restrictions
-        context.fillRect(currentX, currentY, 1, 1);
-        
-        if (currentX === targetX && currentY === targetY) break;
-        
-        const e2 = 2 * err;
-        if (e2 > -dy) {
-          err -= dy;
-          currentX += sx;
-        }
-        if (e2 < dx) {
-          err += dx;
-          currentY += sy;
-        }
-      }
+      context.restore();
     } else if (brushSize <= 3) {
       const midX = (lastPoint.x + x) / 2;
       const midY = (lastPoint.y + y) / 2;
