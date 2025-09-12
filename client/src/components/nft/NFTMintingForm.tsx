@@ -225,14 +225,14 @@ export function NFTMintingForm({ imageData, onMintSuccess, onMintStart, onBack }
                 <div className="space-y-2">
                   <div className="flex items-center justify-between">
                     <label htmlFor="nft-name" className="text-sm font-medium text-gray-900 dark:text-white">NFT Name *</label>
-                    <div className="text-xs text-gray-500">{nftName.length}/50</div>
+                    <div className="text-xs text-gray-500">{nftName.length}/32</div>
                   </div>
                   <Input
                     id="nft-name"
                     type="text" 
                     placeholder="Enter your NFT name..." 
                     value={nftName}
-                    onChange={(e) => setNftName(e.target.value.slice(0, 50))}
+                    onChange={(e) => setNftName(e.target.value.slice(0, 32))}
                     disabled={isLoading}
                     className="h-12 border-gray-300 dark:border-gray-600 focus:border-blue-500 focus:ring-blue-500"
                     data-testid="input-nft-name"
