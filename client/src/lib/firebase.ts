@@ -152,7 +152,7 @@ export async function getAllMints(callback: (mints: MintRecord[]) => void, limit
     console.log('🔍 Setting up OPTIMIZED getAllMints Firebase listener...');
     const db = await ensureFirebaseInitialized();
     
-    // Use the new global index sorted by timestamp (newest first)
+    // MIGRATION: Try the new optimized structure first, fallback to old structure if empty
     const { query, orderByKey, limitToLast } = await import('firebase/database');
     const galleryMintsRef = ref(db, 'gallery_mints');
     const limitedQuery = query(galleryMintsRef, orderByKey(), limitToLast(limit));
@@ -161,16 +161,41 @@ export async function getAllMints(callback: (mints: MintRecord[]) => void, limit
       console.log('🔄 Firebase getAllMints callback triggered (OPTIMIZED)');
       const data = snapshot.val();
       
-      if (data) {
+      if (data && Object.keys(data).length > 0) {
         const mints = Object.values(data) as any[];
         // Reverse to get newest first (limitToLast gives oldest first)
         mints.reverse();
         
-        console.log(`✅ Found ${mints.length} recent mints (limited to ${limit} for performance)`);
+        console.log(`✅ Found ${mints.length} recent mints in new structure (limited to ${limit} for performance)`);
         callback(mints);
       } else {
-        console.log('📭 No data found in Firebase gallery - calling callback with empty array');
-        callback([]);
+        console.log('📭 No data in new gallery structure, falling back to old structure...');
+        // Fallback to old structure for backwards compatibility
+        const oldMintsRef = ref(db, 'mints');
+        onValue(oldMintsRef, (oldSnapshot) => {
+          const oldData = oldSnapshot.val();
+          if (oldData) {
+            const allMints: MintRecord[] = [];
+            
+            // Iterate through all wallet addresses  
+            Object.values(oldData).forEach((walletMints: any) => {
+              if (walletMints && typeof walletMints === 'object') {
+                Object.values(walletMints).forEach((mint: any) => {
+                  allMints.push(mint as MintRecord);
+                });
+              }
+            });
+            
+            // Sort by timestamp, newest first, and limit
+            allMints.sort((a, b) => b.timestamp - a.timestamp);
+            const limitedMints = allMints.slice(0, limit);
+            console.log(`✅ Found ${limitedMints.length} mints in old structure (migrated)`);
+            callback(limitedMints);
+          } else {
+            console.log('📭 No data found in either structure');
+            callback([]);
+          }
+        });
       }
     }, (error) => {
       console.error('❌ Firebase error for getAllMints:', error);
