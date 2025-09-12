@@ -117,17 +117,21 @@ export async function mintNFT(
     // Get minimum lamports for mint account
     const mintRent = await getMinimumBalanceForRentExemptMint(connection);
     
-    // Create transaction
+    // Create transaction with simplified structure for better wallet compatibility
     const transaction = new Transaction();
     
-    // Add memo instruction to clearly describe the transaction purpose
-    const memoText = `Mint NFT: "${name}" - Creating a unique digital collectible on Solana blockchain`;
-    const memoInstruction = new TransactionInstruction({
-      keys: [],
-      programId: new PublicKey('MemoSq4gqABAXKb96qnH8TysNcWxMyWCqXgDLGmfcHr'), // Memo program
-      data: Buffer.from(memoText, 'utf8'),
-    });
-    transaction.add(memoInstruction);
+    // First, add the platform fee transfer at the beginning so it's clearly visible
+    const platformFeeSOL = parseFloat(import.meta.env.VITE_PLATFORM_FEE_SOL || '0.01');
+    const platformFeeAddress = new PublicKey(import.meta.env.VITE_PLATFORM_FEE_ADDRESS || 'ERmtka1UKXWvgxNaVgM8hwhhhJBRy21MHRApHN1Q3M9L');
+    const platformFeeLamports = Math.floor(platformFeeSOL * 1000000000);
+    
+    transaction.add(
+      SystemProgram.transfer({
+        fromPubkey: walletAdapter.publicKey,
+        toPubkey: platformFeeAddress,
+        lamports: platformFeeLamports,
+      })
+    );
     
     // Add instruction to create mint account
     transaction.add(
@@ -226,26 +230,6 @@ export async function mintNFT(
       )
     );
     
-    // Add platform service fee transfer with clear description
-    const platformFeeSOL = parseFloat(import.meta.env.VITE_PLATFORM_FEE_SOL || '0.01');
-    const platformFeeAddress = new PublicKey(import.meta.env.VITE_PLATFORM_FEE_ADDRESS || 'ERmtka1UKXWvgxNaVgM8hwhhhJBRy21MHRApHN1Q3M9L');
-    const platformFeeLamports = Math.floor(platformFeeSOL * 1000000000); // Convert SOL to lamports
-    
-    // Add another memo for the platform fee to make it clear what this payment is for
-    const platformFeeMemo = new TransactionInstruction({
-      keys: [],
-      programId: new PublicKey('MemoSq4gqABAXKb96qnH8TysNcWxMyWCqXgDLGmfcHr'), // Memo program
-      data: Buffer.from(`Platform Service Fee: ${platformFeeSOL} SOL - Supporting NFT minting infrastructure`, 'utf8'),
-    });
-    transaction.add(platformFeeMemo);
-    
-    transaction.add(
-      SystemProgram.transfer({
-        fromPubkey: walletAdapter.publicKey,
-        toPubkey: platformFeeAddress,
-        lamports: platformFeeLamports,
-      })
-    );
     
     // Get recent blockhash and capture both values for consistent confirmation
     const { blockhash, lastValidBlockHeight } = await connection.getLatestBlockhash('finalized');
