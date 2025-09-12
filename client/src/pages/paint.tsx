@@ -132,7 +132,7 @@ export default function PaintPage() {
             </div>
 
             {/* Wallet Connection - Positioned in header right corner */}
-            <div className="flex items-center z-50 ml-auto">
+            <div className="flex items-center z-50 ml-auto mr-2">
               <WalletConnection />
             </div>
           </div>
