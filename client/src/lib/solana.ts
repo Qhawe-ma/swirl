@@ -8,8 +8,6 @@ import {
   createAssociatedTokenAccountInstruction,
   createInitializeMintInstruction,
   createMintToInstruction,
-  createSetAuthorityInstruction,
-  AuthorityType,
   MINT_SIZE,
   getMinimumBalanceForRentExemptMint
 } from '@solana/spl-token';
