@@ -131,8 +131,8 @@ export default function PaintPage() {
               </Link>
             </div>
 
-            {/* Wallet Connection - Positioned absolutely in header area */}
-            <div className="absolute top-4 right-4 z-[9999] pointer-events-auto">
+            {/* Wallet Connection - Fixed in top right corner with safe spacing */}
+            <div className="fixed top-20 right-4 z-[9999] pointer-events-auto">
               <WalletConnection />
             </div>
           </div>
