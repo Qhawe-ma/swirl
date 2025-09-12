@@ -257,18 +257,36 @@ export function NFTMintingForm({ imageData, onMintSuccess, onMintStart, onBack }
                   />
                 </div>
                 
-                {/* Cost Info */}
+                {/* Transparent Fee Breakdown */}
                 <div className="p-4 bg-blue-50 dark:bg-blue-900/20 rounded-xl border border-blue-200 dark:border-blue-800">
-                  <div className="flex items-center justify-between">
+                  <div className="space-y-3">
                     <div className="flex items-center space-x-3">
                       <div className="w-6 h-6 bg-blue-500 rounded-full flex items-center justify-center">
                         <svg className="w-3 h-3 text-white" fill="currentColor" viewBox="0 0 24 24">
                           <path d="M12 2C13.1 2 14 2.9 14 4C14 5.1 13.1 6 12 6C10.9 6 10 5.1 10 4C10 2.9 10.9 2 12 2Z"/>
                         </svg>
                       </div>
-                      <span className="font-medium text-gray-900 dark:text-white">Minting Fee</span>
+                      <span className="font-medium text-gray-900 dark:text-white">Transaction Breakdown</span>
                     </div>
-                    <span className="font-mono font-semibold text-gray-700 dark:text-gray-300">~0.02 SOL</span>
+                    
+                    <div className="space-y-2 text-sm">
+                      <div className="flex justify-between">
+                        <span className="text-gray-600 dark:text-gray-400">Platform service fee</span>
+                        <span className="font-mono text-gray-900 dark:text-white" data-testid="text-fee-platform">{parseFloat(import.meta.env.VITE_PLATFORM_FEE_SOL || '0.01').toFixed(3)} SOL</span>
+                      </div>
+                      <div className="flex justify-between">
+                        <span className="text-gray-600 dark:text-gray-400">Blockchain fees (rent + gas)</span>
+                        <span className="font-mono text-gray-900 dark:text-white" data-testid="text-fee-blockchain">~0.01 SOL</span>
+                      </div>
+                      <div className="border-t border-blue-200 dark:border-blue-700 pt-2 flex justify-between font-medium">
+                        <span className="text-gray-900 dark:text-white">Total estimated cost</span>
+                        <span className="font-mono text-gray-900 dark:text-white" data-testid="text-fee-total">~{(parseFloat(import.meta.env.VITE_PLATFORM_FEE_SOL || '0.01') + 0.01).toFixed(3)} SOL</span>
+                      </div>
+                    </div>
+                    
+                    <div className="text-xs text-gray-500 dark:text-gray-400">
+                      ✓ Transparent fees with wallet confirmation
+                    </div>
                   </div>
                 </div>
               </div>
