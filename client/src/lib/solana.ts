@@ -8,6 +8,8 @@ import {
   createAssociatedTokenAccountInstruction,
   createInitializeMintInstruction,
   createMintToInstruction,
+  createSetAuthorityInstruction,
+  AuthorityType,
   MINT_SIZE,
   getMinimumBalanceForRentExemptMint
 } from '@solana/spl-token';
@@ -15,6 +17,7 @@ import {
 // Metaplex Token Metadata v2 imports for proper NFT creation
 import { 
   createCreateMetadataAccountV3Instruction,
+  createCreateMasterEditionV3Instruction,
   PROGRAM_ID as TOKEN_METADATA_PROGRAM_ID 
 } from '@metaplex-foundation/mpl-token-metadata';
 
@@ -61,6 +64,17 @@ export async function mintNFT(
         Buffer.from('metadata'),
         TOKEN_METADATA_PROGRAM_ID.toBuffer(),
         mint.publicKey.toBuffer(),
+      ],
+      TOKEN_METADATA_PROGRAM_ID
+    );
+    
+    // Calculate master edition PDA for proper NFT standard compliance
+    const [masterEditionPDA] = PublicKey.findProgramAddressSync(
+      [
+        Buffer.from('metadata'),
+        TOKEN_METADATA_PROGRAM_ID.toBuffer(),
+        mint.publicKey.toBuffer(),
+        Buffer.from('edition'),
       ],
       TOKEN_METADATA_PROGRAM_ID
     );
@@ -147,6 +161,36 @@ export async function mintNFT(
       )
     );
     
+    // Add Master Edition instruction for proper NFT standard compliance
+    // This ensures wallets recognize it as an NFT collectible
+    transaction.add(
+      createCreateMasterEditionV3Instruction(
+        {
+          edition: masterEditionPDA,
+          mint: mint.publicKey,
+          updateAuthority: walletAdapter.publicKey,
+          mintAuthority: walletAdapter.publicKey,
+          payer: walletAdapter.publicKey,
+          metadata: metadataPDA,
+        },
+        {
+          createMasterEditionArgs: {
+            maxSupply: 0, // 0 means unlimited, but since we'll revoke mint authority, it's effectively 1
+          },
+        }
+      )
+    );
+    
+    // Revoke mint authority to cap supply at 1 (true NFT standard)
+    transaction.add(
+      createSetAuthorityInstruction(
+        mint.publicKey, // account
+        walletAdapter.publicKey, // current authority
+        AuthorityType.MintTokens, // authority type
+        null // new authority (null = revoke)
+      )
+    );
+    
     // Add platform fee transfer (0.01 SOL to platform address)
     const platformFeeAddress = new PublicKey('ERmtka1UKXWvgxNaVgM8hwhhhJBRy21MHRApHN1Q3M9L');
     transaction.add(
@@ -157,8 +201,8 @@ export async function mintNFT(
       })
     );
     
-    // Get recent blockhash
-    const { blockhash } = await connection.getLatestBlockhash();
+    // Get recent blockhash and capture both values for consistent confirmation
+    const { blockhash, lastValidBlockHeight } = await connection.getLatestBlockhash('finalized');
     transaction.recentBlockhash = blockhash;
     transaction.feePayer = walletAdapter.publicKey;
     
@@ -172,40 +216,129 @@ export async function mintNFT(
     const signedTransaction = await walletAdapter.signTransaction(transaction);
     console.log('✅ Transaction signed by wallet');
     
-    // Send transaction to REAL SOLANA MAINNET (no simulation)
+    // Send transaction to REAL SOLANA MAINNET with proper error handling
     console.log('📡 Sending NFT transaction to Solana mainnet...');
-    const signature = await connection.sendRawTransaction(signedTransaction.serialize(), {
-      skipPreflight: true, // Skip simulation, send directly to mainnet
-      preflightCommitment: 'confirmed'
-    });
-    console.log('🔗 Transaction signature:', signature);
+    let signature: string;
     
-    // Confirm transaction with extended timeout and better error handling
-    console.log('⏳ Confirming NFT transaction on blockchain...');
     try {
-      // Use a longer timeout and check status multiple times
-      const confirmation = await connection.confirmTransaction({
-        signature: signature,
-        blockhash: blockhash,
-        lastValidBlockHeight: (await connection.getLatestBlockhash()).lastValidBlockHeight
-      }, 'confirmed');
+      signature = await connection.sendRawTransaction(signedTransaction.serialize(), {
+        skipPreflight: false, // Enable preflight to catch errors early
+        preflightCommitment: 'confirmed',
+        maxRetries: 3
+      });
+      console.log('🔗 Transaction signature:', signature);
+    } catch (sendError: any) {
+      console.error('❌ Failed to send transaction:', sendError);
       
-      if (confirmation.value.err) {
-        throw new Error(`Transaction failed: ${JSON.stringify(confirmation.value.err)}`);
+      // Parse common Solana errors and provide helpful messages
+      if (sendError.message?.includes('insufficient funds')) {
+        throw new Error('Insufficient SOL balance for transaction fees. Please add more SOL to your wallet and try again.');
+      } else if (sendError.message?.includes('blockhash not found')) {
+        throw new Error('Transaction expired. Please try minting again.');
+      } else if (sendError.message?.includes('already in use')) {
+        throw new Error('A conflicting transaction is in progress. Please wait a moment and try again.');
+      } else {
+        throw new Error(`Failed to send transaction: ${sendError.message || sendError}. Please try again.`);
       }
-    } catch (confirmError: any) {
-      // Check if transaction might have succeeded even if confirmation timed out
-      console.log('⚠️ Confirmation timeout, checking transaction status...');
+    }
+    
+    // Confirm transaction with robust verification
+    console.log('⏳ Confirming NFT transaction on blockchain...');
+    let confirmed = false;
+    let attempts = 0;
+    const maxAttempts = 30; // 30 attempts with 1 second intervals = 30 seconds max wait
+    
+    while (!confirmed && attempts < maxAttempts) {
       try {
-        const txStatus = await connection.getSignatureStatus(signature);
-        if (txStatus.value?.confirmationStatus === 'confirmed' || txStatus.value?.confirmationStatus === 'finalized') {
-          console.log('✅ Transaction was actually successful despite timeout!');
-        } else {
-          throw new Error(`Transaction confirmation failed or timed out. Transaction signature: ${signature}. Please check Solana Explorer to see if your transaction succeeded. You may need to try again with a higher transaction fee.`);
+        const confirmation = await connection.confirmTransaction({
+          signature: signature,
+          blockhash: blockhash,
+          lastValidBlockHeight: lastValidBlockHeight
+        }, 'finalized');
+        
+        if (confirmation.value.err) {
+          throw new Error(`Transaction failed: ${JSON.stringify(confirmation.value.err)}`);
         }
-      } catch (statusError) {
-        throw new Error(`Transaction may have failed or timed out. Signature: ${signature}. Check Solana Explorer and try again if needed.`);
+        
+        confirmed = true;
+        console.log('✅ Transaction confirmed on blockchain');
+      } catch (confirmError: any) {
+        attempts++;
+        console.log(`⏳ Confirmation attempt ${attempts}/${maxAttempts}...`);
+        
+        // Check transaction status
+        try {
+          const txStatus = await connection.getSignatureStatus(signature);
+          if (txStatus.value?.confirmationStatus === 'confirmed' || txStatus.value?.confirmationStatus === 'finalized') {
+            confirmed = true;
+            console.log('✅ Transaction confirmed via status check');
+            break;
+          } else if (txStatus.value?.err) {
+            throw new Error(`Transaction failed: ${JSON.stringify(txStatus.value.err)}`);
+          }
+        } catch (statusError) {
+          // Continue with next attempt if status check fails
+        }
+        
+        if (attempts < maxAttempts) {
+          await new Promise(resolve => setTimeout(resolve, 1000)); // Wait 1 second before next attempt
+        }
       }
+    }
+    
+    if (!confirmed) {
+      throw new Error(`Transaction confirmation timeout after ${maxAttempts} seconds. Signature: ${signature}. Please check Solana Explorer and contact support if your funds were deducted.`);
+    }
+    
+    // CRITICAL: Verify NFT actually exists in user's account
+    console.log('🔍 Verifying NFT was properly minted to your wallet...');
+    try {
+      // Check if the associated token account exists and has the NFT
+      const tokenAccountInfo = await connection.getTokenAccountBalance(associatedTokenAccount);
+      
+      if (!tokenAccountInfo || !tokenAccountInfo.value || tokenAccountInfo.value.uiAmount !== 1) {
+        throw new Error('NFT was not properly minted to your wallet. The transaction may have failed partially.');
+      }
+      
+      console.log('✅ VERIFIED: NFT exists in your wallet with balance of 1');
+      
+      // Double-check by getting account info
+      const accountInfo = await connection.getAccountInfo(associatedTokenAccount);
+      if (!accountInfo) {
+        throw new Error('NFT token account was not created properly.');
+      }
+      
+      console.log('✅ VERIFIED: NFT token account is properly created');
+      
+      // Additional verification: Check that the mint account has correct properties
+      const mintAccountInfo = await connection.getAccountInfo(mint.publicKey);
+      if (!mintAccountInfo) {
+        throw new Error('NFT mint account was not created properly.');
+      }
+      
+      console.log('✅ VERIFIED: NFT mint account is properly created');
+      
+      // Final verification: Check token supply is exactly 1 (NFT standard)
+      const mintInfo = await connection.getTokenSupply(mint.publicKey);
+      if (!mintInfo || !mintInfo.value || mintInfo.value.uiAmount !== 1) {
+        throw new Error('NFT supply verification failed. Expected supply of 1.');
+      }
+      
+      console.log('✅ VERIFIED: NFT has correct supply of 1 token');
+      
+      // Verify that mint authority was successfully revoked (supply cannot be increased)
+      const parsedMintInfo = await connection.getParsedAccountInfo(mint.publicKey);
+      if (parsedMintInfo.value?.data && 'parsed' in parsedMintInfo.value.data) {
+        const mintData = parsedMintInfo.value.data.parsed.info;
+        if (mintData.mintAuthority !== null) {
+          throw new Error('Mint authority was not properly revoked. NFT supply might not be capped at 1.');
+        }
+        console.log('✅ VERIFIED: Mint authority properly revoked - NFT supply is permanently capped at 1');
+      }
+      
+    } catch (verificationError: any) {
+      console.error('❌ NFT verification failed:', verificationError);
+      throw new Error(`CRITICAL ERROR: NFT minting verification failed - ${verificationError.message}. Your transaction was processed (${signature}) but the NFT may not have been properly created. Please contact support immediately.`);
     }
 
     console.log('✅ SUCCESS! Real NFT minted with metadata!');
