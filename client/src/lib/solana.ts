@@ -40,8 +40,20 @@ export async function mintNFT(
     const balance = await connection.getBalance(walletAdapter.publicKey);
     console.log('Wallet SOL balance:', balance / 1e9, 'SOL');
     
-    if (balance < 20000000) { // 0.02 SOL minimum (0.01 for minting + 0.01 platform fee)
-      throw new Error('Insufficient SOL balance. You need at least 0.02 SOL (0.01 for minting fees + 0.01 platform fee).');
+    // Calculate required amounts for all operations
+    const minMintRent = await getMinimumBalanceForRentExemptMint(connection);
+    const platformFeeSOL_check = parseFloat(import.meta.env.VITE_PLATFORM_FEE_SOL || '0.01');
+    const platformFeeLamports_check = Math.floor(platformFeeSOL_check * 1000000000);
+    
+    // Estimate total required: mint rent + ATA rent + metadata rent + master edition rent + platform fee + network fees
+    const estimatedTotalRequired = minMintRent + 2500000 + 5600000 + 2900000 + platformFeeLamports_check + 5000; // ~0.013 SOL accounts + platform fee + network
+    const requiredSOL = estimatedTotalRequired / 1e9;
+    
+    console.log('Required SOL for minting:', requiredSOL.toFixed(4), 'SOL');
+    console.log('Available SOL:', (balance / 1e9).toFixed(4), 'SOL');
+    
+    if (balance < estimatedTotalRequired) {
+      throw new Error(`Insufficient SOL balance. You need at least ${requiredSOL.toFixed(3)} SOL for minting (${platformFeeSOL_check} SOL platform fee + ~${(requiredSOL - platformFeeSOL_check).toFixed(3)} SOL for accounts and fees).`);
     }
 
     console.log('🚀 Starting REAL NFT minting with Token Metadata on Solana mainnet...');
