@@ -78,6 +78,11 @@ export default function PaintPage() {
       <header className="bg-background/95 backdrop-blur-2xl border-b border-border/30 flex-shrink-0 relative shadow-sm">
         <div className="absolute inset-0 bg-gradient-to-r from-primary/3 via-transparent to-primary/3 pointer-events-none"></div>
         
+        {/* Wallet Connection - Positioned in true right corner */}
+        <div className="absolute right-2 top-1/2 -translate-y-1/2 z-50" data-testid="wallet-corner">
+          <WalletConnection />
+        </div>
+        
         <div className="relative max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
           <div className="flex items-center justify-between h-16 lg:h-18 relative">
             {/* Logo on the left */}
@@ -131,10 +136,6 @@ export default function PaintPage() {
               </nav>
             </div>
 
-            {/* Wallet Connection - Positioned in header right corner */}
-            <div className="flex items-center z-50 ml-auto mr-2">
-              <WalletConnection />
-            </div>
           </div>
         </div>
       </header>
