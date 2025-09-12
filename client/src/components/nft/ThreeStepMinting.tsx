@@ -310,15 +310,32 @@ export function ThreeStepMinting({ imageData, onMintSuccess, onBack }: ThreeStep
                   </div>
                   
                   {/* Cost Info */}
-                  <div className="p-3 sm:p-4 bg-gray-50 dark:bg-gray-800/50 rounded-xl border border-gray-200 dark:border-gray-700">
+                  <div className="p-3 sm:p-4 bg-gray-50 dark:bg-gray-800/50 rounded-xl border border-gray-200 dark:border-gray-700 space-y-3">
                     <div className="flex items-center justify-between">
                       <div className="flex items-center space-x-2 sm:space-x-3">
-                        <div className="w-5 h-5 sm:w-6 sm:h-6 bg-gray-500 rounded-full flex items-center justify-center">
+                        <div className="w-5 h-5 sm:w-6 sm:h-6 bg-blue-500 rounded-full flex items-center justify-center">
                           <Zap className="w-3 h-3 text-white" />
                         </div>
-                        <span className="text-sm sm:text-base font-medium text-gray-900 dark:text-white">Minting Fee</span>
+                        <span className="text-sm sm:text-base font-medium text-gray-900 dark:text-white">Network Fees</span>
                       </div>
-                      <span className="font-mono font-semibold text-sm sm:text-base text-gray-700 dark:text-gray-300">~0.02 SOL</span>
+                      <span className="font-mono font-semibold text-sm sm:text-base text-gray-700 dark:text-gray-300">~0.01-0.02 SOL</span>
+                    </div>
+                    
+                    <div className="flex items-center justify-between">
+                      <div className="flex items-center space-x-2 sm:space-x-3">
+                        <div className="w-5 h-5 sm:w-6 sm:h-6 bg-green-500 rounded-full flex items-center justify-center">
+                          <Zap className="w-3 h-3 text-white" />
+                        </div>
+                        <span className="text-sm sm:text-base font-medium text-gray-900 dark:text-white">Platform Fee</span>
+                      </div>
+                      <span className="font-mono font-semibold text-sm sm:text-base text-gray-700 dark:text-gray-300">{(parseFloat(import.meta.env.VITE_PLATFORM_FEE_SOL || '0.01')).toFixed(2)} SOL</span>
+                    </div>
+                    
+                    <div className="border-t border-gray-200 dark:border-gray-600 pt-2">
+                      <div className="flex items-center justify-between">
+                        <span className="text-sm font-semibold text-gray-900 dark:text-white">Total Cost</span>
+                        <span className="font-mono font-bold text-sm sm:text-base text-gray-900 dark:text-white">~{(0.02 + parseFloat(import.meta.env.VITE_PLATFORM_FEE_SOL || '0.01')).toFixed(2)} SOL</span>
+                      </div>
                     </div>
                   </div>
                 </div>

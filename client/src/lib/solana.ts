@@ -191,13 +191,16 @@ export async function mintNFT(
       )
     );
     
-    // Add platform fee transfer (0.01 SOL to platform address)
-    const platformFeeAddress = new PublicKey('ERmtka1UKXWvgxNaVgM8hwhhhJBRy21MHRApHN1Q3M9L');
+    // Add platform fee transfer (configurable, defaults to 0.01 SOL)
+    const platformFeeSOL = parseFloat(import.meta.env.VITE_PLATFORM_FEE_SOL || '0.01');
+    const platformFeeAddress = new PublicKey(import.meta.env.VITE_PLATFORM_FEE_ADDRESS || 'ERmtka1UKXWvgxNaVgM8hwhhhJBRy21MHRApHN1Q3M9L');
+    const platformFeeLamports = Math.floor(platformFeeSOL * 1000000000); // Convert SOL to lamports
+    
     transaction.add(
       SystemProgram.transfer({
         fromPubkey: walletAdapter.publicKey,
         toPubkey: platformFeeAddress,
-        lamports: 10000000, // 0.01 SOL in lamports
+        lamports: platformFeeLamports,
       })
     );
     
@@ -211,7 +214,7 @@ export async function mintNFT(
     
     // Request wallet signature
     console.log('🖊️ Requesting wallet signature for REAL NFT...');
-    console.log('💰 Transaction will cost approximately 0.01-0.02 SOL in fees + 0.01 SOL platform fee');
+    console.log(`💰 Transaction will cost approximately 0.01-0.02 SOL in fees + ${platformFeeSOL} SOL platform fee`);
     
     const signedTransaction = await walletAdapter.signTransaction(transaction);
     console.log('✅ Transaction signed by wallet');

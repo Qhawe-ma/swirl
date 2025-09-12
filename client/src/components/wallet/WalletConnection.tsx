@@ -38,7 +38,7 @@ export function WalletConnection() {
           data-testid="button-connect-wallet"
         />
       ) : (
-        <div className="flex items-center px-4 py-2.5 bg-white dark:bg-gray-900 border border-gray-200 dark:border-gray-700 shadow-sm hover:shadow-md transition-all duration-200 focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2" tabIndex={0} data-testid="wallet-connected">
+        <div className="flex items-center px-4 py-2.5 bg-white dark:bg-gray-900 border border-gray-200 dark:border-gray-700 rounded-lg shadow-lg hover:shadow-xl transition-all duration-200 focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 backdrop-blur-sm" tabIndex={0} data-testid="wallet-connected">
           <div className="flex flex-col">
             <div className="font-semibold text-sm text-foreground tracking-wide" data-testid="text-wallet-address">
               {shortAddress}
