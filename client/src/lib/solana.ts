@@ -28,13 +28,22 @@ export async function mintNFT(
   name: string
 ): Promise<{ mintAddress: string; transactionSignature: string }> {
   try {
+    console.log('🚀 ==> STARTING MINT NFT FUNCTION <==');
+    console.log('📝 NFT Name:', name);
+    console.log('🔗 Metadata URI:', metadataUri);
+    console.log('🌐 Connection endpoint:', connection.rpcEndpoint);
+    
     console.log('🔍 Checking wallet connection...');
+    console.log('Wallet object:', walletAdapter);
     console.log('Wallet publicKey:', walletAdapter.publicKey?.toBase58());
     console.log('Wallet signTransaction available:', !!walletAdapter.signTransaction);
     
     if (!walletAdapter.publicKey || !walletAdapter.signTransaction) {
+      console.error('❌ Wallet connection failed - missing publicKey or signTransaction');
       throw new Error('Wallet not properly connected. Please connect your wallet first.');
     }
+    
+    console.log('✅ Wallet connection verified')
 
     // Check wallet balance first
     const balance = await connection.getBalance(walletAdapter.publicKey);
