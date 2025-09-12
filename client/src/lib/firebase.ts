@@ -70,28 +70,46 @@ export interface MintRecord {
   walletAddress: string;
   mintAddress: string;
   name: string;
-  imageData: string;
+  imageUrl: string; // IPFS URL instead of full base64 data
   metadataUri: string;
   timestamp: number;
   transactionSignature: string;
 }
 
-// Save a new mint record
+// Save a new mint record with dual indexing for scalability
 export async function saveMintRecord(mintData: Omit<MintRecord, 'id' | 'timestamp'>): Promise<string> {
   try {
     const db = await ensureFirebaseInitialized();
-    const mintsRef = ref(db, `mints/${mintData.walletAddress}`);
-    const newMintRef = push(mintsRef);
+    const timestamp = Date.now();
+    const id = push(ref(db, 'temp')).key!;
     
     const mintRecord: MintRecord = {
       ...mintData,
-      id: newMintRef.key!,
-      timestamp: Date.now()
+      id,
+      timestamp
     };
     
-    await set(newMintRef, mintRecord);
-    console.log('✅ Mint record saved to Firebase:', mintRecord.id);
-    return mintRecord.id;
+    // Save to user's personal mints
+    const userMintsRef = ref(db, `mints/${mintData.walletAddress}/${id}`);
+    
+    // Save to global mints index for gallery (sorted by timestamp)
+    const globalMintsRef = ref(db, `gallery_mints/${timestamp}_${id}`);
+    
+    // Atomic write to both locations
+    await Promise.all([
+      set(userMintsRef, mintRecord),
+      set(globalMintsRef, {
+        id,
+        walletAddress: mintData.walletAddress,
+        mintAddress: mintData.mintAddress,
+        name: mintData.name,
+        imageUrl: mintData.imageUrl,
+        timestamp
+      })
+    ]);
+    
+    console.log('✅ Mint record saved to Firebase with dual indexing:', id);
+    return id;
   } catch (error) {
     console.error('❌ Failed to save mint record:', error);
     throw error;
@@ -128,37 +146,30 @@ export async function getUserMints(walletAddress: string, callback: (mints: Mint
   }
 }
 
-// Get all mints from all users for the gallery
-export async function getAllMints(callback: (mints: MintRecord[]) => void): Promise<() => void> {
+// Get paginated mints from global index for the gallery (SCALABLE for high volume)
+export async function getAllMints(callback: (mints: MintRecord[]) => void, limit: number = 50): Promise<() => void> {
   try {
-    console.log('🔍 Setting up getAllMints Firebase listener...');
+    console.log('🔍 Setting up OPTIMIZED getAllMints Firebase listener...');
     const db = await ensureFirebaseInitialized();
-    const mintsRef = ref(db, 'mints');
     
-    const unsubscribe = onValue(mintsRef, (snapshot) => {
-      console.log('🔄 Firebase getAllMints callback triggered');
+    // Use the new global index sorted by timestamp (newest first)
+    const { query, orderByKey, limitToLast } = await import('firebase/database');
+    const galleryMintsRef = ref(db, 'gallery_mints');
+    const limitedQuery = query(galleryMintsRef, orderByKey(), limitToLast(limit));
+    
+    const unsubscribe = onValue(limitedQuery, (snapshot) => {
+      console.log('🔄 Firebase getAllMints callback triggered (OPTIMIZED)');
       const data = snapshot.val();
-      console.log('📊 Firebase data received:', data);
       
       if (data) {
-        const allMints: MintRecord[] = [];
+        const mints = Object.values(data) as any[];
+        // Reverse to get newest first (limitToLast gives oldest first)
+        mints.reverse();
         
-        // Iterate through all wallet addresses
-        Object.values(data).forEach((walletMints: any) => {
-          if (walletMints && typeof walletMints === 'object') {
-            // Add all mints from this wallet
-            Object.values(walletMints).forEach((mint: any) => {
-              allMints.push(mint as MintRecord);
-            });
-          }
-        });
-        
-        // Sort by timestamp, newest first
-        allMints.sort((a, b) => b.timestamp - a.timestamp);
-        console.log(`✅ Found ${allMints.length} total mints in Firebase`);
-        callback(allMints);
+        console.log(`✅ Found ${mints.length} recent mints (limited to ${limit} for performance)`);
+        callback(mints);
       } else {
-        console.log('📭 No data found in Firebase - calling callback with empty array');
+        console.log('📭 No data found in Firebase gallery - calling callback with empty array');
         callback([]);
       }
     }, (error) => {

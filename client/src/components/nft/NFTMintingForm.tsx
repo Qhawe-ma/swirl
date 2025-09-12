@@ -124,7 +124,7 @@ export function NFTMintingForm({ imageData, onMintSuccess, onMintStart, onBack }
             walletAddress: publicKey.toBase58(),
             mintAddress: mintResult.mintAddress,
             name: nftName.trim(),
-            imageData: imageData,
+            imageUrl: imageUri,
             metadataUri: metadataUri,
             transactionSignature: mintResult.transactionSignature
           });

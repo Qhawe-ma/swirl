@@ -248,12 +248,25 @@ export function PaintCanvas({
     setHistory(prev => {
       const newHistory = prev.slice(0, historyIndex + 1);
       newHistory.push(newState);
-      setHistoryIndex(newHistory.length - 1);
-      // Use setTimeout to avoid setState during render
-      setTimeout(() => {
-        onUndoRedoChange(newHistory.length > 1, false);
-      }, 0);
-      return newHistory;
+      
+      // MEMORY OPTIMIZATION: Limit history to prevent browser crashes under high load
+      const MAX_HISTORY_STATES = 20; // Limit to 20 undo states for memory efficiency
+      if (newHistory.length > MAX_HISTORY_STATES) {
+        // Remove oldest states, keeping the most recent ones
+        const trimmedHistory = newHistory.slice(-MAX_HISTORY_STATES);
+        setHistoryIndex(trimmedHistory.length - 1);
+        
+        setTimeout(() => {
+          onUndoRedoChange(trimmedHistory.length > 1, false);
+        }, 0);
+        return trimmedHistory;
+      } else {
+        setHistoryIndex(newHistory.length - 1);
+        setTimeout(() => {
+          onUndoRedoChange(newHistory.length > 1, false);
+        }, 0);
+        return newHistory;
+      }
     });
   };
 

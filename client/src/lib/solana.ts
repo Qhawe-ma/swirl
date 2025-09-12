@@ -1,6 +1,6 @@
 // Buffer polyfill is handled in main polyfills.ts
 
-import { Connection, PublicKey, Keypair, SystemProgram, Transaction } from '@solana/web3.js';
+import { Connection, PublicKey, Keypair, SystemProgram, Transaction, ComputeBudgetProgram } from '@solana/web3.js';
 import { 
   TOKEN_PROGRAM_ID, 
   ASSOCIATED_TOKEN_PROGRAM_ID,
@@ -119,6 +119,21 @@ export async function mintNFT(
     
     // Create transaction
     const transaction = new Transaction();
+    
+    // SCALABILITY: Add priority fees for faster confirmation under high load
+    const priorityFeeInMicroLamports = 1000; // 0.001 SOL priority fee
+    transaction.add(
+      ComputeBudgetProgram.setComputeUnitPrice({
+        microLamports: priorityFeeInMicroLamports,
+      })
+    );
+    
+    // Set compute unit limit to prevent over-allocation
+    transaction.add(
+      ComputeBudgetProgram.setComputeUnitLimit({
+        units: 200_000, // Sufficient for NFT minting
+      })
+    );
     
     // Add instruction to create mint account
     transaction.add(
