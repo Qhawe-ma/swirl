@@ -132,7 +132,7 @@ export default function PaintPage() {
             </div>
 
             {/* Wallet Connection - Fixed in top right corner with safe spacing */}
-            <div className="fixed top-20 right-4 z-[9999] pointer-events-auto">
+            <div className="fixed top-16 right-4 z-[9999] pointer-events-auto">
               <WalletConnection />
             </div>
           </div>
