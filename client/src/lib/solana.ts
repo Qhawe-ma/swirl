@@ -176,7 +176,7 @@ export async function mintNFT(
           createMetadataAccountArgsV3: {
             data: {
               name: name,
-              symbol: name.toUpperCase().replace(/\s+/g, ''),
+              symbol: name.toUpperCase().replace(/\s+/g, '').substring(0, 6),
               uri: metadataUri,
               creators: [
                 {
