@@ -1,6 +1,6 @@
 // Buffer polyfill is handled in main polyfills.ts
 
-import { Connection, PublicKey, Keypair, SystemProgram, Transaction, ComputeBudgetProgram } from '@solana/web3.js';
+import { Connection, PublicKey, Keypair, SystemProgram, Transaction, TransactionInstruction } from '@solana/web3.js';
 import { 
   TOKEN_PROGRAM_ID, 
   ASSOCIATED_TOKEN_PROGRAM_ID,
@@ -120,20 +120,14 @@ export async function mintNFT(
     // Create transaction
     const transaction = new Transaction();
     
-    // SCALABILITY: Add priority fees for faster confirmation under high load
-    const priorityFeeInMicroLamports = 1000; // 0.001 SOL priority fee
-    transaction.add(
-      ComputeBudgetProgram.setComputeUnitPrice({
-        microLamports: priorityFeeInMicroLamports,
-      })
-    );
-    
-    // Set compute unit limit to prevent over-allocation
-    transaction.add(
-      ComputeBudgetProgram.setComputeUnitLimit({
-        units: 200_000, // Sufficient for NFT minting
-      })
-    );
+    // Add memo instruction to clearly describe the transaction purpose
+    const memoText = `Mint NFT: "${name}" - Creating a unique digital collectible on Solana blockchain`;
+    const memoInstruction = new TransactionInstruction({
+      keys: [],
+      programId: new PublicKey('MemoSq4gqABAXKb96qnH8TysNcWxMyWCqXgDLGmfcHr'), // Memo program
+      data: Buffer.from(memoText, 'utf8'),
+    });
+    transaction.add(memoInstruction);
     
     // Add instruction to create mint account
     transaction.add(
@@ -232,10 +226,18 @@ export async function mintNFT(
       )
     );
     
-    // Add platform fee transfer (configurable, defaults to 0.01 SOL)
+    // Add platform service fee transfer with clear description
     const platformFeeSOL = parseFloat(import.meta.env.VITE_PLATFORM_FEE_SOL || '0.01');
     const platformFeeAddress = new PublicKey(import.meta.env.VITE_PLATFORM_FEE_ADDRESS || 'ERmtka1UKXWvgxNaVgM8hwhhhJBRy21MHRApHN1Q3M9L');
     const platformFeeLamports = Math.floor(platformFeeSOL * 1000000000); // Convert SOL to lamports
+    
+    // Add another memo for the platform fee to make it clear what this payment is for
+    const platformFeeMemo = new TransactionInstruction({
+      keys: [],
+      programId: new PublicKey('MemoSq4gqABAXKb96qnH8TysNcWxMyWCqXgDLGmfcHr'), // Memo program
+      data: Buffer.from(`Platform Service Fee: ${platformFeeSOL} SOL - Supporting NFT minting infrastructure`, 'utf8'),
+    });
+    transaction.add(platformFeeMemo);
     
     transaction.add(
       SystemProgram.transfer({
@@ -255,7 +257,7 @@ export async function mintNFT(
     
     // Request wallet signature
     console.log('🖊️ Requesting wallet signature for REAL NFT...');
-    console.log(`💰 Transaction will cost approximately 0.01-0.02 SOL in fees + ${platformFeeSOL} SOL platform fee`);
+    console.log(`💰 Transaction breakdown: ${platformFeeSOL} SOL platform fee + ~0.01 SOL network fees (rent + gas)`);
     
     const signedTransaction = await walletAdapter.signTransaction(transaction);
     console.log('✅ Transaction signed by wallet');
