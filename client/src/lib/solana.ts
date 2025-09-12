@@ -200,6 +200,7 @@ export async function mintNFT(
     
     // Add Master Edition instruction for proper NFT standard compliance
     // This ensures wallets recognize it as an NFT collectible
+    // Note: CreateMasterEditionV3 automatically revokes mint authority, so no separate SetAuthority needed
     transaction.add(
       createCreateMasterEditionV3Instruction(
         {
@@ -212,19 +213,9 @@ export async function mintNFT(
         },
         {
           createMasterEditionArgs: {
-            maxSupply: 0, // 0 means unlimited, but since we'll revoke mint authority, it's effectively 1
+            maxSupply: 0, // 0 means unlimited, but CreateMasterEditionV3 revokes mint authority automatically
           },
         }
-      )
-    );
-    
-    // Revoke mint authority to cap supply at 1 (true NFT standard)
-    transaction.add(
-      createSetAuthorityInstruction(
-        mint.publicKey, // account
-        walletAdapter.publicKey, // current authority
-        AuthorityType.MintTokens, // authority type
-        null // new authority (null = revoke)
       )
     );
     
