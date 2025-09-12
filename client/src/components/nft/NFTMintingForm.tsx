@@ -152,7 +152,11 @@ export function NFTMintingForm({ imageData, onMintSuccess, onMintStart, onBack }
       let errorTitle = "Minting Failed";
       let errorDescription = "Failed to mint NFT. Please try again.";
       
-      if (error.message?.includes('timeout') || error.message?.includes('timed out')) {
+      // Check for cancellation FIRST before other error types (including SOL-related ones)
+      if (error.message?.includes('rejected') || error.message?.includes('cancelled') || error.message?.includes('User rejected')) {
+        errorTitle = "Transaction Cancelled";
+        errorDescription = "Transaction was cancelled in your wallet. Please try again and approve the transaction.";
+      } else if (error.message?.includes('timeout') || error.message?.includes('timed out')) {
         errorTitle = "Transaction Timeout";
         errorDescription = "Transaction took too long to confirm. Check Solana Explorer with the transaction signature to see if it succeeded. If not, try again with more SOL for fees.";
       } else if (error.message?.includes('insufficient funds') || error.message?.includes('SOL')) {
@@ -161,9 +165,6 @@ export function NFTMintingForm({ imageData, onMintSuccess, onMintStart, onBack }
       } else if (error.message?.includes('signature')) {
         errorTitle = "Transaction Issue";
         errorDescription = `${error.message}`;
-      } else if (error.message?.includes('rejected') || error.message?.includes('cancelled')) {
-        errorTitle = "Transaction Cancelled";
-        errorDescription = "Transaction was cancelled in your wallet. Please try again and approve the transaction.";
       } else {
         errorDescription = error.message || "Unknown error occurred. Please try again.";
       }
