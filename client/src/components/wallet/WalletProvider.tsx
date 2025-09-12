@@ -9,12 +9,12 @@ interface WalletProviderProps {
   children: ReactNode;
 }
 
-// SCALABILITY: RPC endpoint pool for high-volume transaction distribution
+// SECURITY: Load RPC endpoints from environment variables instead of hardcoding sensitive URLs
 const RPC_ENDPOINTS = [
-  'https://mainnet.helius-rpc.com/?api-key=9dd10d7f-c54e-4893-af4f-72b966920d94',
-  'https://api.mainnet-beta.solana.com',
-  'https://solana-api.projectserum.com'
-];
+  import.meta.env.VITE_SOLANA_RPC_HELIUS,
+  import.meta.env.VITE_SOLANA_RPC_PRIMARY || 'https://api.mainnet-beta.solana.com',
+  import.meta.env.VITE_SOLANA_RPC_FALLBACK || 'https://solana-api.projectserum.com'
+].filter(Boolean); // Remove any undefined values
 
 // Round-robin endpoint selection for load distribution
 let currentEndpointIndex = 0;
