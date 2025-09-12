@@ -38,21 +38,37 @@ export async function mintNFT(
 
     // Check wallet balance first
     const balance = await connection.getBalance(walletAdapter.publicKey);
-    console.log('Wallet SOL balance:', balance / 1e9, 'SOL');
+    console.log('🔍 Wallet SOL balance:', balance / 1e9, 'SOL');
+    console.log('🔍 Wallet balance in lamports:', balance);
     
     // Calculate required amounts for all operations
     const minMintRent = await getMinimumBalanceForRentExemptMint(connection);
     const platformFeeSOL_check = parseFloat(import.meta.env.VITE_PLATFORM_FEE_SOL || '0.01');
     const platformFeeLamports_check = Math.floor(platformFeeSOL_check * 1000000000);
     
+    console.log('📊 Cost breakdown:');
+    console.log('  - Mint rent:', minMintRent, 'lamports (', (minMintRent / 1e9).toFixed(6), 'SOL)');
+    console.log('  - ATA rent: 2500000 lamports (0.0025 SOL)');
+    console.log('  - Metadata rent: 5600000 lamports (0.0056 SOL)');
+    console.log('  - Master edition rent: 2900000 lamports (0.0029 SOL)');
+    console.log('  - Platform fee:', platformFeeLamports_check, 'lamports (', platformFeeSOL_check, 'SOL)');
+    console.log('  - Network fees: 5000 lamports (0.000005 SOL)');
+    
     // Estimate total required: mint rent + ATA rent + metadata rent + master edition rent + platform fee + network fees
-    const estimatedTotalRequired = minMintRent + 2500000 + 5600000 + 2900000 + platformFeeLamports_check + 5000; // ~0.013 SOL accounts + platform fee + network
+    const estimatedTotalRequired = minMintRent + 2500000 + 5600000 + 2900000 + platformFeeLamports_check + 5000;
     const requiredSOL = estimatedTotalRequired / 1e9;
     
-    console.log('Required SOL for minting:', requiredSOL.toFixed(4), 'SOL');
-    console.log('Available SOL:', (balance / 1e9).toFixed(4), 'SOL');
+    console.log('💰 Required SOL for minting:', requiredSOL.toFixed(6), 'SOL');
+    console.log('💰 Available SOL:', (balance / 1e9).toFixed(6), 'SOL');
+    console.log('💰 Required lamports:', estimatedTotalRequired);
+    console.log('💰 Available lamports:', balance);
+    console.log('✅ Balance sufficient?', balance >= estimatedTotalRequired);
     
     if (balance < estimatedTotalRequired) {
+      console.error('❌ INSUFFICIENT BALANCE:');
+      console.error('  Required:', estimatedTotalRequired, 'lamports (', requiredSOL.toFixed(6), 'SOL)');
+      console.error('  Available:', balance, 'lamports (', (balance / 1e9).toFixed(6), 'SOL)');
+      console.error('  Shortfall:', estimatedTotalRequired - balance, 'lamports (', ((estimatedTotalRequired - balance) / 1e9).toFixed(6), 'SOL)');
       throw new Error(`Insufficient SOL balance. You need at least ${requiredSOL.toFixed(3)} SOL for minting (${platformFeeSOL_check} SOL platform fee + ~${(requiredSOL - platformFeeSOL_check).toFixed(3)} SOL for accounts and fees).`);
     }
 
