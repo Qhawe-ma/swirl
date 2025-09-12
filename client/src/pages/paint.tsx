@@ -131,8 +131,8 @@ export default function PaintPage() {
               </nav>
             </div>
 
-            {/* Wallet Connection - Positioned in header right */}
-            <div className="flex items-center z-50">
+            {/* Wallet Connection - Positioned in header right corner */}
+            <div className="flex items-center z-50 ml-auto">
               <WalletConnection />
             </div>
           </div>
