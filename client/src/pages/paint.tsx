@@ -78,6 +78,25 @@ export default function PaintPage() {
       <header className="bg-background/95 backdrop-blur-2xl border-b border-border/30 flex-shrink-0 relative shadow-sm">
         <div className="absolute inset-0 bg-gradient-to-r from-primary/3 via-transparent to-primary/3 pointer-events-none"></div>
         
+        {/* Logo - Positioned in true left corner */}
+        <div className="absolute left-2 top-1/2 -translate-y-1/2 z-50" data-testid="logo-corner">
+          <Link href="/" className="relative group cursor-pointer" data-testid="app-logo">
+            <div className="flex items-center gap-0">
+              <img 
+                src="https://res.cloudinary.com/dl8f1ztsy/image/upload/v1757143508/Swirl_Logo_wbpo9t.png" 
+                alt="Logo" 
+                className="w-8 h-8 sm:w-12 sm:h-12"
+                data-testid="img-app-icon"
+              />
+              
+              {/* Brand Name */}
+              <span className="text-xl sm:text-3xl font-bold text-foreground -ml-3" data-testid="text-app-title">
+                Swirl
+              </span>
+            </div>
+          </Link>
+        </div>
+        
         {/* Wallet Connection - Positioned in true right corner */}
         <div className="absolute right-2 top-1/2 -translate-y-1/2 z-50" data-testid="wallet-corner">
           <WalletConnection />
@@ -85,24 +104,6 @@ export default function PaintPage() {
         
         <div className="relative max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
           <div className="flex items-center justify-between h-16 lg:h-18 relative">
-            {/* Logo on the left */}
-            <div className="flex items-center">
-              <Link href="/" className="relative group cursor-pointer" data-testid="app-logo">
-                <div className="flex items-center gap-0">
-                  <img 
-                    src="https://res.cloudinary.com/dl8f1ztsy/image/upload/v1757143508/Swirl_Logo_wbpo9t.png" 
-                    alt="Logo" 
-                    className="w-8 h-8 sm:w-12 sm:h-12"
-                    data-testid="img-app-icon"
-                  />
-                  
-                  {/* Brand Name */}
-                  <span className="text-xl sm:text-3xl font-bold text-foreground -ml-3" data-testid="text-app-title">
-                    Swirl
-                  </span>
-                </div>
-              </Link>
-            </div>
 
             {/* Centered Compact Navigation */}
             <div className="absolute left-1/2 transform -translate-x-1/2 flex items-center">
