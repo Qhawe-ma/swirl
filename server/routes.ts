@@ -1,9 +1,7 @@
 import type { Express } from "express";
 import { createServer, type Server } from "http";
-import { storage } from "./storage";
 
 export async function registerRoutes(app: Express): Promise<Server> {
-  // Firebase configuration endpoint
   app.get("/api/firebase-config", (req, res) => {
     try {
       const firebaseConfig = {
@@ -17,16 +15,14 @@ export async function registerRoutes(app: Express): Promise<Server> {
         measurementId: process.env.VITE_FIREBASE_MEASUREMENT_ID
       };
 
-
-      // Check if all required fields are present
       if (!firebaseConfig.apiKey || !firebaseConfig.projectId) {
         const missingFields = [];
         if (!firebaseConfig.apiKey) missingFields.push('VITE_FIREBASE_API_KEY');
         if (!firebaseConfig.projectId) missingFields.push('VITE_FIREBASE_PROJECT_ID');
         
-        console.error('❌ Missing Firebase environment variables:', missingFields);
-        return res.status(500).json({ 
-          error: `Firebase configuration incomplete - missing required secrets: ${missingFields.join(', ')}` 
+        console.error('Missing Firebase environment variables:', missingFields);
+        return res.status(500).json({
+          error: `Firebase configuration incomplete. Missing: ${missingFields.join(', ')}`,
         });
       }
 
@@ -36,12 +32,6 @@ export async function registerRoutes(app: Express): Promise<Server> {
       res.status(500).json({ error: "Failed to get Firebase configuration" });
     }
   });
-
-  // put application routes here
-  // prefix all routes with /api
-
-  // use storage to perform CRUD operations on the storage interface
-  // e.g. storage.insertUser(user) or storage.getUserByUsername(username)
 
   const httpServer = createServer(app);
 

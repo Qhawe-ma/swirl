@@ -46,10 +46,8 @@ export function DrawingToolbar({
   return (
     <div className="bg-white/98 dark:bg-slate-900/98 backdrop-blur-2xl border border-slate-200/60 dark:border-slate-700/60 h-auto lg:max-h-[calc(100vh-6rem)] overflow-y-auto lg:overflow-y-auto overflow-x-auto rounded-2xl shadow-2xl ring-1 ring-slate-900/5 dark:ring-white/10" data-testid="toolbar-drawing-tools">
 
-      {/* Mobile Layout - Horizontal */}
       <div className="lg:hidden p-2">
         <div className="flex items-center space-x-4 min-w-max">
-          {/* Mode Toggle */}
           <div className="flex space-x-1">
             <Button
               variant={drawingMode === 'brush' ? 'default' : 'outline'}
@@ -80,7 +78,6 @@ export function DrawingToolbar({
             </Button>
           </div>
 
-          {/* Color Selection */}
           <div className="flex items-center space-x-2">
             <div 
               className="w-8 h-8 border-2 border-slate-200 dark:border-slate-700 rounded-lg cursor-pointer shadow-sm"
@@ -103,7 +100,6 @@ export function DrawingToolbar({
             </div>
           </div>
 
-          {/* Brush Size */}
           <div className="flex items-center space-x-2 min-w-[120px]">
             <div className="text-xs font-medium">{brushSize}</div>
             <Slider
@@ -117,7 +113,6 @@ export function DrawingToolbar({
             />
           </div>
 
-          {/* Actions */}
           <div className="flex space-x-1">
             <Button
               variant="outline"
@@ -169,9 +164,7 @@ export function DrawingToolbar({
         </div>
       </div>
 
-      {/* Desktop Layout - Vertical */}
       <div className="hidden lg:block p-4 space-y-4">
-        {/* Clean Drawing Mode */}
         <div className="space-y-3">
           <ToggleGroup
             type="single"
@@ -211,7 +204,6 @@ export function DrawingToolbar({
           </ToggleGroup>
         </div>
 
-        {/* Clean Color Palette */}
         <div className="space-y-3">
           <div className="flex items-center justify-between">
             <label className="text-xs font-bold text-slate-900 dark:text-slate-100">Colors</label>
@@ -266,7 +258,6 @@ export function DrawingToolbar({
           </div>
         </div>
 
-        {/* Clean Brush Size */}
         <div className="space-y-3">
           <div className="flex items-center justify-between">
             <label className="text-xs font-bold text-slate-900 dark:text-slate-100">Size</label>
@@ -304,11 +295,9 @@ export function DrawingToolbar({
           </div>
         </div>
 
-        {/* Clean Actions */}
         <div className="space-y-3">
           <label className="text-xs font-bold text-slate-900 dark:text-slate-100">Actions</label>
           <div className="space-y-2">
-            {/* Undo/Redo Row */}
             <div className="grid grid-cols-2 gap-3">
               <Button 
                 variant="outline"
@@ -335,7 +324,6 @@ export function DrawingToolbar({
                 <span>Redo</span>
               </Button>
             </div>
-            {/* Clear Canvas Row */}
             <AlertDialog>
               <AlertDialogTrigger asChild>
                 <Button 

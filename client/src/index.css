@@ -7,58 +7,45 @@
 @tailwind utilities;
 
 :root {
-  /* Modern neutral background with subtle gradients */
   --background: 220 15% 97%;
   --foreground: 220 15% 9%;
   
-  /* Clean card system with subtle depth */
   --card: 0 0% 100%;
   --card-foreground: 220 15% 9%;
   
-  /* Modern popover system */
   --popover: 0 0% 100%;
   --popover-foreground: 220 15% 9%;
   
-  /* Professional gradient primary colors */
   --primary: 230 100% 60%;
   --primary-foreground: 0 0% 100%;
   
-  /* Sophisticated secondary colors */
   --secondary: 220 15% 95%;
   --secondary-foreground: 220 15% 15%;
   
-  /* Success states with modern green */
   --success: 142 71% 45%;
   --success-foreground: 0 0% 100%;
   
-  /* Clean surface color */
   --surface: 0 0% 100%;
   
-  /* Modern muted colors */
   --muted: 220 15% 95%;
   --muted-foreground: 220 15% 45%;
   
-  /* Subtle accent system */
   --accent: 220 15% 96%;
   --accent-foreground: 220 15% 15%;
   
-  /* Modern destructive colors */
   --destructive: 0 85% 60%;
   --destructive-foreground: 0 0% 100%;
   
-  /* Clean border system */
   --border: 220 15% 90%;
   --input: 220 15% 98%;
   --ring: 230 100% 60%;
   
-  /* Chart colors for data visualization */
   --chart-1: 230 100% 60%;
   --chart-2: 142 71% 45%;
   --chart-3: 45 93% 58%;
   --chart-4: 280 100% 65%;
   --chart-5: 340 85% 60%;
   
-  /* Sidebar design system */
   --sidebar: 220 15% 97%;
   --sidebar-foreground: 220 15% 9%;
   --sidebar-primary: 230 100% 60%;
@@ -68,15 +55,12 @@
   --sidebar-border: 220 15% 88%;
   --sidebar-ring: 230 100% 60%;
   
-  /* Modern typography system */
   --font-sans: 'Inter', system-ui, -apple-system, sans-serif;
   --font-serif: ui-serif, Georgia, serif;
   --font-mono: 'JetBrains Mono', ui-monospace, monospace;
   
-  /* Modern border radius */
   --radius: 0.75rem;
   
-  /* Professional shadow system */
   --shadow-2xs: 0 1px 2px 0 rgb(0 0 0 / 0.05);
   --shadow-xs: 0 1px 3px 0 rgb(0 0 0 / 0.1), 0 1px 2px -1px rgb(0 0 0 / 0.1);
   --shadow-sm: 0 4px 6px -1px rgb(0 0 0 / 0.1), 0 2px 4px -2px rgb(0 0 0 / 0.1);
@@ -86,13 +70,11 @@
   --shadow-xl: 0 25px 50px -12px rgb(0 0 0 / 0.25);
   --shadow-2xl: 0 25px 50px -12px rgb(0 0 0 / 0.25);
   
-  /* Modern spacing and tracking */
   --tracking-normal: -0.01em;
   --spacing: 0.25rem;
 }
 
 .dark {
-  /* Modern dark theme with proper contrast */
   --background: 220 15% 7%;
   --foreground: 220 15% 90%;
   
@@ -262,7 +244,6 @@
   -webkit-font-smoothing: antialiased;
 }
 
-/* Community Gallery Animation */
 @keyframes community-scroll {
   0% {
     transform: translateX(0);
@@ -278,7 +259,6 @@
   width: max-content;
 }
 
-/* Wallet Button Override */
 .wallet-adapter-button {
   background-color: #2563eb !important;
   border: 2px solid #2563eb !important;

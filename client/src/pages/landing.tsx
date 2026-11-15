@@ -2,11 +2,8 @@ import { Link } from 'wouter';
 import { useState, useEffect } from 'react';
 import { getAllMints, MintRecord } from '@/lib/firebase';
 import { Button } from '@/components/ui/button';
-import { Card } from '@/components/ui/card';
-import { WalletConnection } from '@/components/wallet/WalletConnection';
-import { Palette, Sparkles, Zap, Users, ArrowRight, Play, Check, Twitter, Instagram, MessageCircle, ExternalLink } from 'lucide-react';
+import { Users, ArrowRight, Play } from 'lucide-react';
 
-// Community Gallery Component
 function CommunityGallery() {
   const [mints, setMints] = useState<MintRecord[]>([]);
   const [loading, setLoading] = useState(true);
@@ -15,11 +12,9 @@ function CommunityGallery() {
     let unsubscribe: (() => void) | null = null;
 
     const setupFirebaseListener = async () => {
-      console.log('🎯 Community Gallery: Setting up getAllMints subscription');
       
       try {
         unsubscribe = await getAllMints((mintsList) => {
-          console.log('📨 Community Gallery: Received mints callback with', mintsList.length, 'mints');
           setMints(mintsList);
           setLoading(false);
         });
@@ -31,10 +26,8 @@ function CommunityGallery() {
 
     setupFirebaseListener();
 
-    // Cleanup subscription on unmount
     return () => {
       if (unsubscribe && typeof unsubscribe === 'function') {
-        console.log('🧹 Community Gallery: Cleaning up getAllMints subscription');
         try {
           unsubscribe();
         } catch (error) {
@@ -44,13 +37,11 @@ function CommunityGallery() {
     };
   }, []);
 
-  // Show loading state
   if (loading) {
     return (
       <div className="w-full overflow-hidden bg-gradient-to-r from-muted/10 via-background to-muted/10 py-4 border-b border-border/20">
         <div className="relative">
           <div className="flex gap-3 px-4">
-            {/* Loading placeholder cards */}
             {[1, 2, 3, 4, 5].map((index) => (
               <div
                 key={index}
@@ -63,12 +54,10 @@ function CommunityGallery() {
     );
   }
 
-  // Show empty state if no mints
   if (mints.length === 0) {
     return null; // Don't show anything if no mints
   }
 
-  // Duplicate the mints array multiple times to ensure seamless loop with no blank spaces
   const duplicatedMints = [...mints, ...mints, ...mints, ...mints, ...mints, ...mints];
 
   return (
@@ -98,11 +87,9 @@ function CommunityGallery() {
 export default function LandingPage() {
   return (
     <div className="min-h-screen bg-background font-sans">
-      {/* Clean Header with Just Logo */}
       <header className="bg-background flex-shrink-0 relative">
         <div className="relative max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
           <div className="flex justify-center items-center py-4 sm:py-6 lg:py-8">
-            {/* Centered Brand Section */}
             <div className="flex items-center gap-3 sm:gap-4">
               <img 
                 src="https://res.cloudinary.com/dl8f1ztsy/image/upload/v1757143508/Swirl_Logo_wbpo9t.png" 
@@ -118,22 +105,18 @@ export default function LandingPage() {
         </div>
       </header>
 
-      {/* Community Gallery */}
       <CommunityGallery />
 
-      {/* Hero Section */}
       <main className="flex-1">
         <section className="relative overflow-hidden bg-gradient-to-br from-background via-muted/10 to-muted/20 py-2 sm:py-3 lg:py-4">
           <div className="absolute inset-0 bg-gradient-to-br from-primary/5 via-transparent to-primary/5 pointer-events-none"></div>
           
           <div className="relative max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
             <div className="text-center max-w-4xl mx-auto">
-              {/* Hero Title */}
               <h1 className="text-2xl sm:text-3xl lg:text-4xl font-bold text-foreground leading-tight tracking-tight mt-8 mb-12" data-testid="hero-title">
                 Create. Mint. Own. Sell.
               </h1>
               
-              {/* Screenshot Image */}
               <div className="mb-8 mt-16 flex justify-center">
                 <img 
                   src="https://res.cloudinary.com/dl8f1ztsy/image/upload/v1757186526/Screenshot_2025-09-06_212107_wrnzxk.png" 
@@ -143,13 +126,11 @@ export default function LandingPage() {
                 />
               </div>
               
-              {/* Hero Description */}
               <p className="text-lg text-muted-foreground mb-8 max-w-2xl mx-auto" data-testid="hero-description">
                 Create stunning digital artwork with professional drawing tools and mint it as an NFT on Solana. 
                 Your creativity, permanently stored on the blockchain.
               </p>
               
-              {/* CTA Buttons */}
               <div className="flex flex-col sm:flex-row items-center justify-center gap-6 mb-12">
                 <Link href="/create">
                   <Button 
@@ -157,10 +138,8 @@ export default function LandingPage() {
                     className="group w-full sm:w-auto px-12 py-6 text-lg font-bold bg-gradient-to-r from-primary via-primary to-primary/90 hover:from-primary/95 hover:via-primary/95 hover:to-primary text-primary-foreground shadow-lg hover:shadow-xl transition-all duration-500 ease-out motion-safe:hover:scale-[1.03] motion-safe:hover:-translate-y-2 rounded-2xl border-2 border-black relative overflow-hidden active:scale-[0.98] active:translate-y-0"
                     data-testid="button-create-now"
                   >
-                    {/* Shimmer effect */}
                     <div className="absolute inset-0 bg-gradient-to-r from-transparent via-white/30 to-transparent translate-x-[-100%] group-hover:translate-x-[100%] transition-transform duration-700 ease-out"></div>
                     
-                    {/* Click ripple effect */}
                     <div className="absolute inset-0 bg-black/20 rounded-full scale-0 group-active:scale-100 transition-transform duration-300 ease-out origin-center"></div>
                     
                     <span className="relative z-10 flex items-center font-black tracking-wide">
@@ -176,10 +155,8 @@ export default function LandingPage() {
                     className="group w-full sm:w-auto px-10 py-6 text-lg font-bold border-2 border-foreground/20 hover:border-primary/50 bg-background/80 backdrop-blur-sm hover:bg-primary/5 shadow-lg hover:shadow-xl transition-all duration-400 ease-out motion-safe:hover:scale-[1.02] motion-safe:hover:-translate-y-1 rounded-2xl relative overflow-hidden active:scale-[0.98] active:translate-y-0"
                     data-testid="button-view-gallery"
                   >
-                    {/* Subtle shimmer */}
                     <div className="absolute inset-0 bg-gradient-to-r from-transparent via-primary/10 to-transparent translate-x-[-100%] group-hover:translate-x-[100%] transition-transform duration-600 ease-out"></div>
                     
-                    {/* Click effect */}
                     <div className="absolute inset-0 bg-foreground/10 rounded-full scale-0 group-active:scale-100 transition-transform duration-200 ease-out origin-center"></div>
                     
                     <span className="relative z-10 font-black tracking-wide text-foreground group-hover:text-primary transition-colors duration-300">
@@ -192,7 +169,6 @@ export default function LandingPage() {
           </div>
         </section>
 
-        {/* Create With Friends Section */}
         <section className="py-8 sm:py-12 lg:py-16 bg-background">
           <div className="max-w-3xl mx-auto px-4 sm:px-6 lg:px-8">
             <div className="text-center">
@@ -201,13 +177,10 @@ export default function LandingPage() {
                 data-testid="button-create-with-friends"
                 disabled
               >
-                {/* Shimmer effect */}
                 <div className="absolute inset-0 bg-gradient-to-r from-transparent via-white/20 to-transparent translate-x-[-100%] group-hover:translate-x-[100%] transition-transform duration-1000 ease-out"></div>
                 
-                {/* Click effect */}
                 <div className="absolute inset-0 bg-foreground/10 rounded-full scale-0 group-active:scale-100 transition-transform duration-300 ease-out origin-center"></div>
                 
-                {/* Text that changes on hover */}
                 <span className="relative z-10 flex items-center justify-center tracking-wide">
                   <Users className="w-5 h-5 sm:w-6 sm:h-6 lg:w-8 lg:h-8 mr-2 sm:mr-3 transition-all duration-300 group-hover:rotate-12 group-hover:scale-110" />
                   <span className="transition-all duration-300 group-hover:opacity-0 group-hover:scale-95">
@@ -226,7 +199,6 @@ export default function LandingPage() {
           </div>
         </section>
 
-        {/* How to Create Section */}
         <section className="py-16 sm:py-20 lg:py-24 bg-gradient-to-br from-muted/20 via-background to-muted/10">
           <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
             <div className="text-center mb-16">
@@ -239,7 +211,6 @@ export default function LandingPage() {
             </div>
             
             <div className="grid grid-cols-1 md:grid-cols-3 gap-8 lg:gap-12">
-              {/* Step 1 */}
               <div className="text-center" data-testid="step-draw">
                 <div className="mx-auto mb-6">
                   <video 
@@ -259,7 +230,6 @@ export default function LandingPage() {
                 </p>
               </div>
 
-              {/* Step 2 */}
               <div className="text-center" data-testid="step-customize">
                 <div className="mx-auto mb-6">
                   <video 
@@ -279,7 +249,6 @@ export default function LandingPage() {
                 </p>
               </div>
 
-              {/* Step 3 */}
               <div className="text-center" data-testid="step-mint">
                 <div className="mx-auto mb-6">
                   <video 
@@ -300,7 +269,6 @@ export default function LandingPage() {
               </div>
             </div>
 
-            {/* CTA Section */}
             <div className="text-center mt-16">
               <Link href="/create">
                 <Button 
@@ -320,12 +288,10 @@ export default function LandingPage() {
         </section>
       </main>
 
-      {/* Footer */}
       <footer className="bg-background/95 backdrop-blur-sm border-t border-border/10 py-16">
         <div className="max-w-7xl mx-auto px-6 lg:px-8">
           <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-5 gap-12 lg:gap-16">
             
-            {/* Company Info & Description */}
             <div className="lg:col-span-2 space-y-6">
               <div className="flex items-center gap-4">
                 <img 
@@ -341,7 +307,6 @@ export default function LandingPage() {
               </p>
             </div>
 
-            {/* Follow */}
             <div className="space-y-5">
               <h3 className="text-sm font-semibold text-foreground uppercase tracking-wide" data-testid="text-follow-title">Follow</h3>
               <ul className="space-y-4">
@@ -381,7 +346,6 @@ export default function LandingPage() {
               </ul>
             </div>
 
-            {/* Resources */}
             <div className="space-y-5">
               <h3 className="text-sm font-semibold text-foreground uppercase tracking-wide" data-testid="text-resources-title">Resources</h3>
               <ul className="space-y-4">
@@ -415,7 +379,6 @@ export default function LandingPage() {
               </ul>
             </div>
 
-            {/* NFT Marketplace & Products */}
             <div className="space-y-8">
               <div className="space-y-5">
                 <h3 className="text-sm font-semibold text-foreground uppercase tracking-wide" data-testid="text-marketplace-title">NFT Marketplace</h3>
@@ -478,7 +441,6 @@ export default function LandingPage() {
             </div>
           </div>
 
-          {/* Copyright */}
           <div className="border-t border-border/10 mt-16 pt-8">
             <div className="text-center">
               <p className="text-xs text-muted-foreground/70 font-medium tracking-wide" data-testid="text-copyright">

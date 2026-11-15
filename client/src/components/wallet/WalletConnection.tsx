@@ -48,7 +48,6 @@ export function WalletConnection() {
             </div>
           </div>
           
-          {/* Status Indicator */}
           <div className="w-2 h-2 bg-emerald-500 rounded-full ml-3"></div>
         </div>
       )}

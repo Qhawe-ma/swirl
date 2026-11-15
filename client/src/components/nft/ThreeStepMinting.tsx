@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import { useState } from 'react';
 import { useWallet, useConnection } from '@solana/wallet-adapter-react';
 import { WalletMultiButton } from '@solana/wallet-adapter-react-ui';
 import { Button } from "@/components/ui/button";
@@ -68,17 +68,11 @@ export function ThreeStepMinting({ imageData, onMintSuccess, onBack }: ThreeStep
     setProcessingStep('uploading');
 
     try {
-      console.log('🎨 Starting NFT minting process...');
       
-      // Step 1: Upload to IPFS
       const imageBlob = dataURLtoBlob(imageData);
-      console.log('✅ Image blob created, size:', imageBlob.size);
       
-      console.log('📤 Uploading image to IPFS...');
       const imageUri = await uploadToIPFS(imageBlob, 'image');
-      console.log('✅ Image uploaded to:', imageUri);
       
-      // Create metadata
       const metadata = {
         name: nftName.trim(),
         description: nftDescription.trim() || '',
@@ -99,29 +93,21 @@ export function ThreeStepMinting({ imageData, onMintSuccess, onBack }: ThreeStep
         }
       };
       
-      // Upload metadata to IPFS
-      console.log('📤 Uploading metadata to IPFS...');
       const metadataBlob = new Blob([JSON.stringify(metadata)], { type: 'application/json' });
       const metadataUri = await uploadToIPFS(metadataBlob, 'metadata');
-      console.log('✅ Metadata uploaded to:', metadataUri);
       
-      // Step 2: Mint NFT
       setProcessingStep('minting');
       
-      // Show wallet confirmation prompt
       setShowWalletPrompt(true);
       toast({
         title: "Ready to Mint!",
         description: "Please confirm the transaction in your wallet to mint on Solana mainnet.",
       });
       
-      console.log('🚀 Requesting wallet signature for Solana mainnet minting...');
       
-      // Update to confirming step when wallet prompt appears
       setProcessingStep('confirming');
       const walletAdapter = { publicKey, signTransaction };
       
-      // Add timeout for minting process
       const mintWithTimeout = Promise.race([
         mintNFT(connection, walletAdapter, metadataUri, nftName.trim()),
         new Promise((_, reject) => 
@@ -130,25 +116,19 @@ export function ThreeStepMinting({ imageData, onMintSuccess, onBack }: ThreeStep
       ]);
       
       const mintResult = await mintWithTimeout as any;
-      console.log('🎉 NFT minted with address:', mintResult.mintAddress);
       
-      // Hide wallet prompt and show immediate success
       setShowWalletPrompt(false);
       
-      // IMMEDIATE SUCCESS FEEDBACK - Show success right after minting!
       setMintAddress(mintResult.mintAddress);
       setCurrentStep('success');
       onMintSuccess(mintResult.mintAddress);
       
-      // Show immediate success toast
       toast({
         title: "🎉 NFT Minted Successfully!",
         description: `Your artwork is now live on Solana blockchain!`,
         duration: 5000,
       });
       
-      // Step 3: Save record in background (don't block success)
-      console.log('💾 Saving mint record to Firebase in background...');
       saveMintRecord({
         walletAddress: publicKey.toBase58(),
         mintAddress: mintResult.mintAddress,
@@ -156,10 +136,8 @@ export function ThreeStepMinting({ imageData, onMintSuccess, onBack }: ThreeStep
         imageData: imageData,
         metadataUri: metadataUri,
         transactionSignature: mintResult.transactionSignature
-      }).then(() => {
-        console.log('✅ Mint record saved to Firebase');
       }).catch((firebaseError) => {
-        console.error('⚠️ Failed to save to Firebase (NFT still minted):', firebaseError);
+        console.error('Failed to save mint record:', firebaseError);
       });
       
     } catch (error: any) {
@@ -168,7 +146,6 @@ export function ThreeStepMinting({ imageData, onMintSuccess, onBack }: ThreeStep
       let errorTitle = "Minting Failed";
       let errorDescription = "Failed to mint NFT. Please try again.";
       
-      // More specific error handling
       if (error.message?.includes('Minting timeout')) {
         errorTitle = "Transaction Timeout";
         errorDescription = "Minting took too long. Your NFT may still be processing - check your wallet in a few minutes.";
@@ -189,7 +166,6 @@ export function ThreeStepMinting({ imageData, onMintSuccess, onBack }: ThreeStep
         errorDescription = "Solana network issue. Please try again in a moment.";
       }
       
-      // IMMEDIATE ERROR FEEDBACK
       toast({
         title: errorTitle,
         description: errorDescription,
@@ -206,7 +182,6 @@ export function ThreeStepMinting({ imageData, onMintSuccess, onBack }: ThreeStep
   return (
     <div className="fixed inset-0 bg-black/50 backdrop-blur-sm z-50 flex items-center justify-center p-2 sm:p-4">
       <div className="bg-white dark:bg-gray-900 w-full max-w-4xl h-auto max-h-[95vh] overflow-hidden rounded-2xl shadow-xl border border-gray-200 dark:border-gray-700" data-testid="three-step-minting">
-        {/* Header */}
         <div className="border-b border-gray-200 dark:border-gray-700 px-3 sm:px-6 py-3 sm:py-4">
           <div className="flex items-center justify-between">
             <div className="flex items-center space-x-2 sm:space-x-4">
@@ -233,7 +208,6 @@ export function ThreeStepMinting({ imageData, onMintSuccess, onBack }: ThreeStep
               </div>
             </div>
             
-            {/* Step Indicator */}
             <div className="flex items-center space-x-1 sm:space-x-2">
               <div className={`w-6 h-6 sm:w-8 sm:h-8 rounded-full flex items-center justify-center text-xs sm:text-sm font-medium ${
                 currentStep === 'details' ? 'bg-gray-600 text-white' : 'bg-gray-500 text-white'
@@ -255,11 +229,9 @@ export function ThreeStepMinting({ imageData, onMintSuccess, onBack }: ThreeStep
           </div>
         </div>
         
-        {/* Step Content */}
         {currentStep === 'details' && (
           <div className="p-3 sm:p-6 overflow-y-auto max-h-[70vh]">
             <div className="grid grid-cols-1 md:grid-cols-2 gap-4 sm:gap-8">
-              {/* Artwork Preview - Left Side */}
               <div className="space-y-3">
                 <h3 className="text-sm font-medium text-gray-900 dark:text-white">Preview</h3>
                 <div className="relative bg-gray-50 dark:bg-gray-800 border border-gray-200 dark:border-gray-700 rounded-xl p-3 sm:p-4">
@@ -272,7 +244,6 @@ export function ThreeStepMinting({ imageData, onMintSuccess, onBack }: ThreeStep
                 </div>
               </div>
               
-              {/* NFT Details Form - Right Side */}
               <div className="space-y-4 sm:space-y-6">
                 <div className="space-y-4 sm:space-y-6">
                   <div className="space-y-2">
@@ -309,7 +280,6 @@ export function ThreeStepMinting({ imageData, onMintSuccess, onBack }: ThreeStep
                     />
                   </div>
                   
-                  {/* Cost Info */}
                   <div className="p-3 sm:p-4 bg-gray-50 dark:bg-gray-800/50 rounded-xl border border-gray-200 dark:border-gray-700 space-y-3">
                     <div className="flex items-center justify-between">
                       <div className="flex items-center space-x-2 sm:space-x-3">
@@ -347,7 +317,6 @@ export function ThreeStepMinting({ imageData, onMintSuccess, onBack }: ThreeStep
         {currentStep === 'processing' && (
           <div className="p-4 sm:p-8">
             <div className="max-w-md mx-auto text-center space-y-6 sm:space-y-8">
-              {/* Progress Animation */}
               <div className="relative">
                 <div className="w-20 h-20 sm:w-24 sm:h-24 border-4 border-gray-200 rounded-full mx-auto"></div>
                 <div className="absolute inset-0 w-20 h-20 sm:w-24 sm:h-24 border-4 border-gray-500 border-t-transparent rounded-full animate-spin mx-auto"></div>
@@ -361,7 +330,6 @@ export function ThreeStepMinting({ imageData, onMintSuccess, onBack }: ThreeStep
                 </div>
               </div>
               
-              {/* Step Information */}
               <div className="space-y-3 sm:space-y-4">
                 <h3 className="text-lg sm:text-xl font-bold text-gray-900 dark:text-white">
                   {processingStep === 'uploading' && 'Uploading to IPFS'}
@@ -377,7 +345,6 @@ export function ThreeStepMinting({ imageData, onMintSuccess, onBack }: ThreeStep
                   {processingStep === 'saving' && 'Saving your NFT details...'}
                 </p>
                 
-                {/* Progress Steps */}
                 <div className="flex justify-center space-x-4 pt-4">
                   <div className={`flex items-center space-x-2 ${processingStep === 'uploading' ? 'text-gray-600' : (processingStep === 'minting' || processingStep === 'confirming' || processingStep === 'saving') ? 'text-gray-500' : 'text-gray-400'}`}>
                     {processingStep === 'uploading' ? (
@@ -410,7 +377,6 @@ export function ThreeStepMinting({ imageData, onMintSuccess, onBack }: ThreeStep
                 </div>
               </div>
               
-              {/* Dynamic Alerts */}
               {processingStep === 'confirming' && showWalletPrompt ? (
                 <Alert className="bg-gray-50 dark:bg-gray-800/50 border-gray-200 dark:border-gray-700 animate-pulse">
                   <AlertDescription className="text-gray-800 dark:text-gray-200 text-sm">
@@ -431,7 +397,6 @@ export function ThreeStepMinting({ imageData, onMintSuccess, onBack }: ThreeStep
         {currentStep === 'success' && (
           <div className="p-8">
             <div className="max-w-md mx-auto text-center space-y-8">
-              {/* Success Animation */}
               <div className="relative">
                 <div className="w-24 h-24 bg-gray-500 rounded-full mx-auto flex items-center justify-center">
                   <Trophy className="w-12 h-12 text-white" />
@@ -459,7 +424,6 @@ export function ThreeStepMinting({ imageData, onMintSuccess, onBack }: ThreeStep
           </div>
         )}
         
-        {/* Footer */}
         {currentStep === 'details' && (
           <div className="border-t border-gray-200 dark:border-gray-700 px-6 py-4">
             <div className="flex items-center justify-between">

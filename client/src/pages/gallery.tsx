@@ -42,7 +42,6 @@ function NFTDetailModal({ mint }: { mint: MintRecord }) {
       </DialogHeader>
       
       <div className="grid grid-cols-1 lg:grid-cols-2 gap-4 sm:gap-6">
-        {/* NFT Image */}
         <div className="space-y-3 sm:space-y-4">
           <div className="aspect-square overflow-hidden rounded-lg border-2 border-border">
             <img 
@@ -54,9 +53,7 @@ function NFTDetailModal({ mint }: { mint: MintRecord }) {
           </div>
         </div>
         
-        {/* NFT Details */}
         <div className="space-y-4 sm:space-y-6">
-          {/* Basic Info */}
           <div className="space-y-3">
             <div>
               <h3 className="text-xs sm:text-sm font-medium text-muted-foreground mb-1">Token Name</h3>
@@ -69,7 +66,6 @@ function NFTDetailModal({ mint }: { mint: MintRecord }) {
             </div>
           </div>
           
-          {/* Creator Info */}
           <div className="space-y-3 p-3 sm:p-4 bg-muted/30 rounded-lg">
             <h3 className="text-xs sm:text-sm font-medium text-muted-foreground">Creator</h3>
             <div className="flex items-center justify-between gap-2">
@@ -90,7 +86,6 @@ function NFTDetailModal({ mint }: { mint: MintRecord }) {
             </div>
           </div>
           
-          {/* Mint Address */}
           <div className="space-y-3 p-3 sm:p-4 bg-muted/30 rounded-lg">
             <h3 className="text-xs sm:text-sm font-medium text-muted-foreground">Mint Address</h3>
             <div className="flex items-center justify-between gap-2">
@@ -111,7 +106,6 @@ function NFTDetailModal({ mint }: { mint: MintRecord }) {
             </div>
           </div>
           
-          {/* Actions */}
           <div className="space-y-3">
             <Button 
               asChild
@@ -183,10 +177,8 @@ function MintGrid({ mints, loading }: { mints: MintRecord[], loading: boolean })
               className="bg-card rounded-lg border hover:shadow-lg hover:shadow-primary/20 hover:border-primary/30 transition-all duration-200 group cursor-pointer relative"
               data-testid={`mint-card-${mint.id}`}
             >
-              {/* Hover overlay */}
               <div className="absolute inset-0 bg-primary/5 opacity-0 group-hover:opacity-100 transition-opacity duration-200 rounded-lg pointer-events-none"></div>
               
-              {/* NFT Image */}
               <div className="aspect-square overflow-hidden rounded-t-lg relative">
                 <img 
                   src={mint.imageData} 
@@ -196,7 +188,6 @@ function MintGrid({ mints, loading }: { mints: MintRecord[], loading: boolean })
                   decoding="async"
                   data-testid={`img-mint-${mint.id}`}
                 />
-                {/* Hover indicator */}
                 <div className="absolute inset-0 bg-black/20 opacity-0 group-hover:opacity-100 transition-opacity duration-200 flex items-center justify-center">
                   <div className="bg-white/90 backdrop-blur-sm rounded-full p-3 shadow-lg">
                     <Search className="h-4 w-4 text-gray-700" />
@@ -204,7 +195,6 @@ function MintGrid({ mints, loading }: { mints: MintRecord[], loading: boolean })
                 </div>
               </div>
           
-              {/* Mint Info */}
               <div className="p-1.5 sm:p-2">
                 <div className="flex items-start justify-between mb-1">
                   <h3 className="font-semibold text-[10px] sm:text-xs truncate flex-1" data-testid={`text-mint-name-${mint.id}`}>
@@ -215,7 +205,6 @@ function MintGrid({ mints, loading }: { mints: MintRecord[], loading: boolean })
                   </Badge>
                 </div>
                 
-                {/* Creator Address - Hidden on very small screens */}
                 <div className="hidden sm:flex items-center justify-between mb-1">
                   <span className="text-[10px] text-muted-foreground">Creator:</span>
                   <div className="flex items-center space-x-1">
@@ -235,12 +224,10 @@ function MintGrid({ mints, loading }: { mints: MintRecord[], loading: boolean })
                   </div>
                 </div>
                 
-                {/* Date */}
                 <div className="text-[8px] sm:text-[10px] text-muted-foreground mb-1 sm:mb-2" data-testid={`text-mint-date-${mint.id}`}>
                   {formatDate(mint.timestamp)}
                 </div>
                 
-                {/* Actions - Simplified for mobile */}
                 <div className="flex items-center justify-between">
                   <Button 
                     variant="ghost" 
@@ -287,7 +274,6 @@ export default function GalleryPage() {
   const [filteredAllMints, setFilteredAllMints] = useState<MintRecord[]>([]);
   const [filteredUserMints, setFilteredUserMints] = useState<MintRecord[]>([]);
 
-  // Set page title for SEO
   useEffect(() => {
     document.title = "NFT Gallery | Swirl";
     return () => {
@@ -296,13 +282,10 @@ export default function GalleryPage() {
   }, []);
 
   useEffect(() => {
-    console.log('🎯 Gallery useEffect: Setting up getAllMints subscription');
     
     let unsubscribeAll: (() => void) | null = null;
     
-    // Subscribe to all mints (async)
     getAllMints((mints) => {
-      console.log('📨 Gallery: Received mints callback with', mints.length, 'mints');
       setAllMints(mints);
       setLoadingAll(false);
     }).then(unsubscribe => {
@@ -312,14 +295,11 @@ export default function GalleryPage() {
       setLoadingAll(false);
     });
 
-    // Fallback timeout in case Firebase is slow or stuck
     const timeout = setTimeout(() => {
-      console.log('⏰ Gallery: Timeout reached, setting loading to false');
       setLoadingAll(false);
     }, 10000); // 10 second timeout
 
     return () => {
-      console.log('🧹 Gallery: Cleaning up getAllMints subscription');
       clearTimeout(timeout);
       if (unsubscribeAll) {
         unsubscribeAll();
@@ -339,7 +319,6 @@ export default function GalleryPage() {
     
     let unsubscribeUser: (() => void) | null = null;
     
-    // Subscribe to user mints (async)
     getUserMints(walletAddress, (mints) => {
       setUserMints(mints);
       setLoadingUser(false);
@@ -357,7 +336,6 @@ export default function GalleryPage() {
     };
   }, [publicKey]);
 
-  // Filter mints based on search query
   useEffect(() => {
     const filterMints = (mints: MintRecord[]) => {
       if (!searchQuery.trim()) return mints;
@@ -374,7 +352,6 @@ export default function GalleryPage() {
 
   return (
     <div className="min-h-screen bg-background">
-      {/* Header */}
       <div className="border-b bg-card/50 backdrop-blur-sm sticky top-0 z-10">
         <div className="container mx-auto px-2 sm:px-4 py-3 sm:py-4">
           <div className="flex items-center justify-between">
@@ -397,9 +374,7 @@ export default function GalleryPage() {
         </div>
       </div>
 
-      {/* Content */}
       <div className="container mx-auto px-2 sm:px-4 py-4 sm:py-8">
-        {/* Search Bar */}
         <div className="max-w-md mx-auto mb-4 sm:mb-8 px-2 sm:px-0">
           <div className="relative">
             <Search className="absolute left-3 top-1/2 transform -translate-y-1/2 text-muted-foreground h-4 w-4" />

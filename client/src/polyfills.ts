@@ -1,4 +1,4 @@
-// Browser polyfills for Node.js globals - Define process first
+// @solana/web3.js reads process and Buffer off the global object.
 if (typeof globalThis.process === 'undefined') {
   (globalThis as any).process = {
     env: {},

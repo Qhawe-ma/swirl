@@ -51,10 +51,8 @@ export function PaintCanvas({
     
     if (!ctx) return;
 
-    // Save current canvas content before resizing
     const previousContent = canvasElement.width > 0 ? canvasElement.toDataURL() : null;
     
-    // Dynamic canvas sizing based on format
     const container = canvasElement.parentElement;
     if (container) {
       const containerRect = container.getBoundingClientRect();
@@ -64,21 +62,17 @@ export function PaintCanvas({
       let canvasWidth, canvasHeight;
       
       if (canvasFormat === 'square') {
-        // Perfect square canvas - use much more space
         const minSize = Math.min(availableWidth, availableHeight);
         const squareSize = minSize * 0.95; // Use 95% of available space for better sizing
         canvasWidth = squareSize;
         canvasHeight = squareSize;
       } else {
-        // Rectangle canvas (16:9 aspect ratio) - use much more space
         const aspectRatio = 16 / 9;
         
         if (availableWidth / availableHeight > aspectRatio) {
-          // Height is the limiting factor
           canvasHeight = availableHeight * 0.99;
           canvasWidth = canvasHeight * aspectRatio;
         } else {
-          // Width is the limiting factor
           canvasWidth = availableWidth * 0.99;
           canvasHeight = canvasWidth / aspectRatio;
         }
@@ -87,18 +81,14 @@ export function PaintCanvas({
       canvasElement.width = canvasWidth;
       canvasElement.height = canvasHeight;
       
-      // Set white background
       ctx.fillStyle = '#ffffff';
       ctx.fillRect(0, 0, canvasWidth, canvasHeight);
       
-      // Prioritize initialImageData (saved artwork) over previousContent
       const imageToLoad = initialImageData || (previousContent && previousContent !== 'data:,' ? previousContent : null);
       if (imageToLoad) {
         const img = new Image();
         img.onload = () => {
-          // Scale the image to fit the new canvas size
           ctx.drawImage(img, 0, 0, canvasWidth, canvasHeight);
-          // Set history with the loaded image
           const newState = canvasElement.toDataURL();
           setHistory([newState]);
           setHistoryIndex(0);
@@ -106,13 +96,11 @@ export function PaintCanvas({
         };
         img.src = imageToLoad;
       } else {
-        // Only set blank history if no image to load
         const initialData = canvasElement.toDataURL();
         setHistory([initialData]);
         setHistoryIndex(0);
       }
       
-      // Enable smooth drawing
       ctx.imageSmoothingEnabled = true;
       ctx.imageSmoothingQuality = 'high';
     }
@@ -120,18 +108,16 @@ export function PaintCanvas({
     setCanvas(canvasElement);
     setContext(ctx);
     
-    // Use setTimeout to avoid calling setState during render
+    // Defer so this effect does not set parent state during render.
     setTimeout(() => {
       onUndoRedoChange(false, false);
     }, 0);
   }, [canvasFormat, initialImageData]);
 
-  // Add keyboard event listeners for Ctrl+Z undo
   useEffect(() => {
     const handleKeyDown = (e: KeyboardEvent) => {
       if ((e.ctrlKey || e.metaKey) && e.key === 'z' && !e.shiftKey) {
         e.preventDefault();
-        // Trigger undo by calling the undo function
         if (canvas && context && historyIndex > 0) {
           const newIndex = historyIndex - 1;
           const imageData = history[newIndex];
@@ -152,7 +138,6 @@ export function PaintCanvas({
     return () => window.removeEventListener('keydown', handleKeyDown);
   }, [canvas, context, history, historyIndex, onUndoRedoChange]);
 
-  // Update brush properties for smooth drawing
   useEffect(() => {
     if (!context) return;
 
@@ -170,21 +155,18 @@ export function PaintCanvas({
       context.fillStyle = selectedColor;
     }
     
-    // Enhanced settings for shapes
     if (['rectangle', 'circle', 'triangle'].includes(drawingMode)) {
       context.lineWidth = Math.max(brushSize / 3, 2);
       context.lineCap = 'round';
       context.lineJoin = 'round';
     }
     
-    // Settings for fill tool
     if (drawingMode === 'fill') {
       context.globalCompositeOperation = 'source-over';
       context.fillStyle = selectedColor;
     }
   }, [context, selectedColor, brushSize, drawingMode]);
 
-  // Handle undo
   useEffect(() => {
     if (!shouldUndo || !canvas || !context || historyIndex <= 0) return;
 
@@ -202,7 +184,6 @@ export function PaintCanvas({
     img.src = imageData;
   }, [shouldUndo, canvas, context, history, historyIndex, onUndoRedoChange, onActionComplete]);
 
-  // Handle redo
   useEffect(() => {
     if (!shouldRedo || !canvas || !context || historyIndex >= history.length - 1) return;
 
@@ -220,14 +201,12 @@ export function PaintCanvas({
     img.src = imageData;
   }, [shouldRedo, canvas, context, history, historyIndex, onUndoRedoChange, onActionComplete]);
 
-  // Handle clear
   useEffect(() => {
     if (!shouldClear || !canvas || !context) return;
 
     context.fillStyle = '#ffffff';
     context.fillRect(0, 0, canvas.width, canvas.height);
     
-    // Reset history
     const newState = canvas.toDataURL();
     setHistory([newState]);
     setHistoryIndex(0);
@@ -249,10 +228,8 @@ export function PaintCanvas({
       const newHistory = prev.slice(0, historyIndex + 1);
       newHistory.push(newState);
       
-      // MEMORY OPTIMIZATION: Limit history to prevent browser crashes under high load
-      const MAX_HISTORY_STATES = 20; // Limit to 20 undo states for memory efficiency
+      const MAX_HISTORY_STATES = 20; // each entry is a full PNG data URL
       if (newHistory.length > MAX_HISTORY_STATES) {
-        // Remove oldest states, keeping the most recent ones
         const trimmedHistory = newHistory.slice(-MAX_HISTORY_STATES);
         setHistoryIndex(trimmedHistory.length - 1);
         
@@ -270,7 +247,6 @@ export function PaintCanvas({
     });
   };
 
-  // Get coordinates from mouse or touch event with pixel-perfect accuracy
   const getCoordinates = (e: React.MouseEvent<HTMLCanvasElement> | React.TouchEvent<HTMLCanvasElement>) => {
     if (!canvas) return { x: 0, y: 0 };
     
@@ -286,18 +262,15 @@ export function PaintCanvas({
       clientY = e.clientY;
     }
     
-    // Calculate exact pixel coordinates with high precision and no restrictions
     const canvasX = (clientX - rect.left) * (canvas.width / rect.width);
     const canvasY = (clientY - rect.top) * (canvas.height / rect.height);
     
-    // Return coordinates without any boundary limitations
     return {
       x: canvasX,
       y: canvasY
     };
   };
 
-  // Improved flood fill algorithm for paint bucket tool
   const floodFill = (startX: number, startY: number, fillColor: string) => {
     if (!context || !canvas) return;
     
@@ -309,7 +282,6 @@ export function PaintCanvas({
     const imageData = context.getImageData(0, 0, canvas.width, canvas.height);
     const data = imageData.data;
     
-    // Convert fill color to RGB
     const tempCanvas = document.createElement('canvas');
     tempCanvas.width = tempCanvas.height = 1;
     const tempCtx = tempCanvas.getContext('2d')!;
@@ -321,20 +293,17 @@ export function PaintCanvas({
     const fillB = tempData[2];
     const fillA = 255; // Always use full opacity
     
-    // Get the target color at the clicked point
     const targetIndex = (y * canvas.width + x) * 4;
     const targetR = data[targetIndex];
     const targetG = data[targetIndex + 1];
     const targetB = data[targetIndex + 2];
     const targetA = data[targetIndex + 3];
     
-    // If the target color is the same as fill color, don't fill
     if (targetR === fillR && targetG === fillG && targetB === fillB && targetA === fillA) {
       return;
     }
     
-    // Use a more robust color matching with tolerance for anti-aliased edges
-    const colorTolerance = 5; // Small tolerance for similar colors
+    const colorTolerance = 5; // anti-aliased edges are not an exact match
     
     const colorsMatch = (r1: number, g1: number, b1: number, a1: number, r2: number, g2: number, b2: number, a2: number) => {
       return Math.abs(r1 - r2) <= colorTolerance && 
@@ -343,7 +312,6 @@ export function PaintCanvas({
              Math.abs(a1 - a2) <= colorTolerance;
     };
     
-    // Scanline flood fill algorithm for better performance and completeness
     const stack: number[] = [];
     stack.push(x, y);
     
@@ -359,16 +327,13 @@ export function PaintCanvas({
       const currentB = data[currentIndex + 2];
       const currentA = data[currentIndex + 3];
       
-      // Skip if this pixel doesn't match the target color
       if (!colorsMatch(currentR, currentG, currentB, currentA, targetR, targetG, targetB, targetA)) {
         continue;
       }
       
-      // Find the leftmost and rightmost bounds of this scanline
       let leftX = currentX;
       let rightX = currentX;
       
-      // Expand left
       while (leftX > 0) {
         const leftIndex = (currentY * canvas.width + (leftX - 1)) * 4;
         const leftR = data[leftIndex];
@@ -380,7 +345,6 @@ export function PaintCanvas({
         leftX--;
       }
       
-      // Expand right
       while (rightX < canvas.width - 1) {
         const rightIndex = (currentY * canvas.width + (rightX + 1)) * 4;
         const rightR = data[rightIndex];
@@ -392,7 +356,6 @@ export function PaintCanvas({
         rightX++;
       }
       
-      // Fill the entire scanline
       for (let fillX = leftX; fillX <= rightX; fillX++) {
         const fillIndex = (currentY * canvas.width + fillX) * 4;
         data[fillIndex] = fillR;
@@ -401,9 +364,7 @@ export function PaintCanvas({
         data[fillIndex + 3] = fillA;
       }
       
-      // Add scanlines above and below to the stack
       for (let fillX = leftX; fillX <= rightX; fillX++) {
-        // Check above
         if (currentY > 0) {
           const aboveIndex = ((currentY - 1) * canvas.width + fillX) * 4;
           const aboveR = data[aboveIndex];
@@ -416,7 +377,6 @@ export function PaintCanvas({
           }
         }
         
-        // Check below
         if (currentY < canvas.height - 1) {
           const belowIndex = ((currentY + 1) * canvas.width + fillX) * 4;
           const belowR = data[belowIndex];
@@ -431,7 +391,6 @@ export function PaintCanvas({
       }
     }
     
-    // Apply the changes
     context.putImageData(imageData, 0, 0);
   };
 
@@ -455,7 +414,6 @@ export function PaintCanvas({
         context.ellipse(centerX, centerY, radiusX, radiusY, 0, 0, 2 * Math.PI);
         break;
       case 'triangle':
-        // Make triangle bigger and more proportional
         const triangleWidth = Math.abs(width) * 1.2; // 20% bigger
         const triangleHeight = Math.abs(height) * 1.2; // 20% bigger
         
@@ -484,19 +442,15 @@ export function PaintCanvas({
     const { x, y } = getCoordinates(e);
     
     if (['rectangle', 'circle', 'triangle'].includes(drawingMode)) {
-      // For shapes, save the starting point and current canvas state
       setStartPoint({ x, y });
       setCurrentImageData(canvas.toDataURL());
     } else if (drawingMode === 'fill') {
-      // For fill tool, perform flood fill immediately
       floodFill(x, y, selectedColor);
       saveState();
     } else {
-      // For brush/eraser, start drawing immediately with precise positioning
       setLastPoint({ x, y });
       context.beginPath();
       
-      // For 1px brush, draw a small dot with anti-aliasing
       if (brushSize <= 1) {
         context.save();
         context.lineWidth = 1;
@@ -526,14 +480,12 @@ export function PaintCanvas({
     const { x, y } = getCoordinates(e);
     
     if (['rectangle', 'circle', 'triangle'].includes(drawingMode) && startPoint) {
-      // Clear canvas and redraw the saved state
       if (currentImageData) {
         const img = new Image();
         img.onload = () => {
           context.clearRect(0, 0, canvas.width, canvas.height);
           context.drawImage(img, 0, 0);
           
-          // Draw preview shape with semi-transparent style
           context.save();
           context.globalAlpha = 0.7;
           context.strokeStyle = selectedColor;
@@ -553,16 +505,13 @@ export function PaintCanvas({
     
     if (!lastPoint) return;
     
-    // Draw smooth continuous line for brush/eraser with improved accuracy
     if (drawingMode === 'eraser') {
       context.globalCompositeOperation = 'destination-out';
     } else {
       context.globalCompositeOperation = 'source-over';
     }
     
-    // For 1px brush, use smooth line drawing with anti-aliasing
     if (brushSize <= 1) {
-      // Use sub-pixel precision with anti-aliasing for smooth 1px lines
       context.save();
       context.lineWidth = 1;
       context.lineCap = 'round';
@@ -570,7 +519,6 @@ export function PaintCanvas({
       context.imageSmoothingEnabled = true;
       context.imageSmoothingQuality = 'high';
       
-      // Draw a smooth line from last point to current point
       context.beginPath();
       context.moveTo(lastPoint.x, lastPoint.y);
       context.lineTo(x, y);
@@ -598,14 +546,12 @@ export function PaintCanvas({
     if (!isDrawing) return;
     
     if (['rectangle', 'circle', 'triangle'].includes(drawingMode) && startPoint && e && context && canvas) {
-      // Clear canvas and redraw the saved state
       if (currentImageData) {
         const img = new Image();
         img.onload = () => {
           context.clearRect(0, 0, canvas.width, canvas.height);
           context.drawImage(img, 0, 0);
           
-          // Draw the final shape with solid style
           context.strokeStyle = selectedColor;
           context.lineWidth = Math.max(brushSize / 3, 2);
           context.lineCap = 'round';
@@ -631,9 +577,7 @@ export function PaintCanvas({
 
   return (
     <div className="h-full flex flex-col bg-white/98 dark:bg-slate-900/98 backdrop-blur-2xl border border-slate-200/60 dark:border-slate-700/60 rounded-2xl shadow-2xl overflow-hidden" data-testid="card-paint-canvas">
-      {/* Canvas Header with Shape Tools */}
       <div className="flex items-center justify-between bg-gradient-to-r from-slate-50/90 via-white/95 to-slate-50/90 dark:from-slate-800/90 dark:via-slate-900/95 dark:to-slate-800/90 border-b border-slate-200/50 dark:border-slate-700/50 px-2 sm:px-4 py-2 backdrop-blur-xl">
-        {/* Shape Tools */}
         <div className="flex items-center space-x-1 sm:space-x-2">
           <span className="text-xs font-medium text-muted-foreground mr-1 sm:mr-2 hidden sm:inline">Shapes:</span>
           <button
@@ -686,7 +630,6 @@ export function PaintCanvas({
           </button>
         </div>
         
-        {/* Canvas Format Selection */}
         <div className="flex items-center space-x-1 px-1.5 sm:px-2 py-1 sm:py-1.5 bg-muted/50 border border-border/40 rounded-lg">
           <span className="text-xs font-medium text-muted-foreground mr-1 sm:mr-2 hidden sm:inline">Format:</span>
           <button
@@ -715,7 +658,6 @@ export function PaintCanvas({
           </button>
         </div>
         
-        {/* Save Button */}
         <Button
           onClick={handleSave}
           className="bg-white/90 dark:bg-slate-800/90 hover:bg-slate-50 dark:hover:bg-slate-700 text-slate-900 dark:text-slate-100 shadow-md hover:shadow-lg transition-all duration-200 px-2 sm:px-4 py-2 rounded-lg font-semibold text-xs sm:text-sm border border-slate-200/80 dark:border-slate-600/80 hover:border-slate-300 dark:hover:border-slate-500 touch-manipulation"
@@ -731,12 +673,9 @@ export function PaintCanvas({
         </Button>
       </div>
       
-      {/* Professional Canvas Drawing Area */}
       <div className="flex-1 p-1 bg-gradient-to-br from-slate-50/40 via-white/20 to-slate-100/30 dark:from-slate-900/40 dark:via-slate-800/20 dark:to-slate-900/30">
         <div className="relative h-full w-full group flex items-center justify-center">
-          {/* Dynamic Canvas Container */}
           <div className={`${canvasFormat === 'square' ? 'aspect-square w-[min(90vw,85vh)] sm:w-[min(85vw,85vh)] max-w-[90%] sm:max-w-[85%] max-h-[85%]' : 'aspect-video w-[min(95vw,85vh)] max-w-[95%] max-h-[85%]'} bg-white dark:bg-slate-50 border-2 border-slate-200/80 dark:border-slate-700/80 rounded-2xl overflow-hidden shadow-2xl ring-1 ring-slate-900/5 dark:ring-white/10 transition-all duration-300 group-hover:shadow-3xl group-hover:ring-slate-900/10`}>
-            {/* Subtle Grid Pattern */}
             <div 
               className="absolute inset-0 opacity-[0.03] dark:opacity-[0.08] pointer-events-none" 
               style={{
@@ -748,7 +687,6 @@ export function PaintCanvas({
               }}
             ></div>
             
-            {/* Canvas Element */}
             <canvas 
               ref={canvasRef}
               className="drawing-canvas cursor-crosshair block w-full h-full relative z-10 transition-all duration-200"
@@ -775,13 +713,11 @@ export function PaintCanvas({
             />
           </div>
           
-          {/* Professional Corner Frame Indicators */}
           <div className="absolute -top-1 -left-1 w-6 h-6 border-l-3 border-t-3 border-primary/40 rounded-tl-xl pointer-events-none transition-all duration-300 group-hover:border-primary/60"></div>
           <div className="absolute -top-1 -right-1 w-6 h-6 border-r-3 border-t-3 border-primary/40 rounded-tr-xl pointer-events-none transition-all duration-300 group-hover:border-primary/60"></div>
           <div className="absolute -bottom-1 -left-1 w-6 h-6 border-l-3 border-b-3 border-primary/40 rounded-bl-xl pointer-events-none transition-all duration-300 group-hover:border-primary/60"></div>
           <div className="absolute -bottom-1 -right-1 w-6 h-6 border-r-3 border-b-3 border-primary/40 rounded-br-xl pointer-events-none transition-all duration-300 group-hover:border-primary/60"></div>
           
-          {/* Floating Action Hint */}
           <div className="absolute top-4 left-1/2 transform -translate-x-1/2 opacity-0 group-hover:opacity-100 transition-all duration-300 pointer-events-none">
             <div className="bg-slate-900/90 dark:bg-white/90 text-white dark:text-slate-900 text-xs font-semibold px-3 py-1.5 rounded-full backdrop-blur-sm">
               <span className="hidden sm:inline">Click and drag to create</span>
